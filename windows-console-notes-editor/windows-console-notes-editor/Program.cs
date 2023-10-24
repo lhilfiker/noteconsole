@@ -19,6 +19,7 @@
             Console.WriteLine("*      Willkommen zurück!      *");
             Console.WriteLine("********************************");
             Console.WriteLine("Drücke 'R' für kürzlich verwendete Notizen.");
+            Console.WriteLine("Drücke 'S' um eine Datei aus deinem Computer auszuwählen");
             Console.WriteLine("Drücke 'N' für eine neue Notiz.");
 
             ConsoleKeyInfo keyInfo;
@@ -37,6 +38,10 @@
                 {
                     Console.Clear();
                     Console.WriteLine("Neue Notiz wird erstellt...");
+                }
+                else if (keyInfo.Key == ConsoleKey.S)
+                {
+                    FilePicker();
                 }
                 else
                 {
