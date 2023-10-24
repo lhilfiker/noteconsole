@@ -78,6 +78,7 @@
                     }
                     Thread.Sleep(1000);
                     filepath = filePath;
+                    break;
                 }
                 else if (keyInfo.Key == ConsoleKey.S)
                 {
@@ -93,12 +94,15 @@
                     {
                         AddToChache($"last = {filepath}|:|");
                     }
+                    break;
                 }
                 else
                 {
                     Console.WriteLine("Ungültige Eingabe. Drücke 'R' oder 'N'.");
                 }
-            } while (keyInfo.Key != ConsoleKey.R && keyInfo.Key != ConsoleKey.N);
+            } while (true);
+
+            FileManager(filepath);
         }
 
         static void Manager(string path)

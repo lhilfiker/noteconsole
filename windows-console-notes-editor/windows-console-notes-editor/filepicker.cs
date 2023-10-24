@@ -28,6 +28,7 @@ namespace windows_console_notes_editor
         }
 
         static string path;
+        static bool stopResizen = false;
         static int currentSelection = 0;
         static int startrender = 0;
         static List<string> data = new();
@@ -110,6 +111,7 @@ namespace windows_console_notes_editor
                             }
                             else
                             {
+                                stopResizen = true;
                                 return path;
                             }
 
@@ -145,6 +147,7 @@ namespace windows_console_notes_editor
                             }
                             else
                             {
+                                stopResizen = true;
                                 return path;
                             }
                             break;
@@ -171,6 +174,7 @@ namespace windows_console_notes_editor
                 return null;
                 
             }
+            stopResizen = true;
             return null;
         }
 
@@ -183,7 +187,7 @@ namespace windows_console_notes_editor
             int buffer = Console.WindowHeight;
             maxheightConsole = buffer;
             maxwidthConsole = Console.WindowWidth;
-            while (true)
+            while (!stopResizen)
             {
                 if (buffer != Console.WindowHeight)
                 {
@@ -195,6 +199,7 @@ namespace windows_console_notes_editor
                 System.Threading.Thread.Sleep(500);
             }
         }
+
 
         static void FilePickRender()
         {
