@@ -198,36 +198,21 @@ namespace windows_console_notes_editor
 
         static void FilePickRender()
         {
-            List<string> buffer = new();
+            List<(string Text, ConsoleColor Color)> buffer = new();
 
             try
             {
                 //Header
-                if (path == "")
+                var combinedText = $"{Path.Combine(path, data[currentSelection])}";
+
+                if (combinedText.Length > maxwidthConsole)
                 {
-                    var combinedText = $"{Path.Combine(path, data[currentSelection])}";
-                    if (combinedText.Length > maxwidthConsole)
-                    {
-                        // Truncate the path to fit the console width with selectionText
-                        var availableSpace = maxwidthConsole - combinedText.Length - 5; // 5 for "[tab] " space and to avoid clutter
-                        combinedText = $"{combinedText.Substring(0, Math.Max(0, availableSpace))}...";
-                    }
-
-                    buffer.Add(combinedText);
+                    // Truncate the path to fit the console width with selectionText
+                    var availableSpace = maxwidthConsole - combinedText.Length - 5; // 5 for space and to avoid clutter
+                    combinedText = $"{combinedText.Substring(0, Math.Max(0, availableSpace))}...";
                 }
-                else
-                {
-                    var combinedText = $"{Path.Combine(path, data[currentSelection])}";
 
-                    if (combinedText.Length > maxwidthConsole)
-                    {
-                        // Truncate the path to fit the console width with selectionText
-                        var availableSpace = maxwidthConsole - combinedText.Length - 5; // 5 for "[tab] " space and to avoid clutter
-                        combinedText = $"{combinedText.Substring(0, Math.Max(0, availableSpace))}...";
-                    }
-
-                    buffer.Add(combinedText);
-                }
+                buffer.Add((combinedText, ConsoleColor.Yellow));
 
                 int linesLeft = maxheightConsole - 4;
                 //Files/Folders
@@ -239,36 +224,46 @@ namespace windows_console_notes_editor
                         string displayText = data[index];
                         if (index == currentSelection)
                         {
-                            buffer.Add("--> " + displayText);
+                            buffer.Add(("--> " + displayText, ConsoleColor.Yellow));  
                         }
                         else
                         {
-                            buffer.Add("    " + displayText);
+                            if (File.Exists(Path.Combine(path, data[index])))
+                            {
+                                buffer.Add(("    " + displayText, ConsoleColor.Cyan));
+                            }  
+                            else
+                            {
+                                buffer.Add(("    " + displayText, ConsoleColor.DarkCyan));
+                            }
                         }
                     }
                 }
 
                 //Scroll Indication
+                ConsoleColor scrollColor = ConsoleColor.Yellow;
                 if (data.Count() - startrender > maxheightConsole - 3 && startrender == 0)
                 {
-                    buffer.Add(">>>");
+                    buffer.Add((">>>", scrollColor));
                 }
                 else if (data.Count() - startrender > maxheightConsole - 3 && startrender != 0)
                 {
-                    buffer.Add(">><");
+                    buffer.Add((">><", scrollColor));
                 }
                 else if (startrender != 0)
                 {
-                    buffer.Add("<<<");
+                    buffer.Add(("<<<", scrollColor));
                 }
 
                 // Display the entire buffer at once
                 Console.Clear();
-                foreach (var entry in buffer)
+                foreach (var (text, color) in buffer)
                 {
-                    string adjustedText = AdjustTextToFit(entry, maxwidthConsole);
+                    string adjustedText = AdjustTextToFit(text, maxwidthConsole);
+                    Console.ForegroundColor = color;
                     Console.WriteLine(adjustedText);
                 }
+                Console.ResetColor();
             }
             catch (Exception er)
             {
@@ -285,6 +280,7 @@ namespace windows_console_notes_editor
                 FilePickRender();
             }
         }
+
 
         static string AdjustTextToFit(string? text, int maxWidth)
         {
