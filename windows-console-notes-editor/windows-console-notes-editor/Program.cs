@@ -88,11 +88,11 @@
                     //Save it in lastaccessed
                     if (GetValueForKey(cacheData, "last") != null)
                     {
-                        AddToChache($"last = {filepath}|:|");
+                        ChangeCacheValue("last", (GetValueForKey(cacheData, "last") + filepath + "|:|"));
                     }
                     else
                     {
-                        ChangeCacheValue("last", GetValueForKey(cacheData, "last") + "|:|" + filepath);
+                        AddToChache($"last = {filepath}|:|");
                     }
                 }
                 else

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,9 +11,10 @@ namespace windows_console_notes_editor
     internal partial class Program
     {
         static string cacheData;
+        static string cachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor", "chache");
         static void LoadCache()
         {
-            string chachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor", "chache");
+            string chachePath = cachePath;
             if (File.Exists(chachePath)) //Load the chache
             {
                 cacheData = File.ReadAllText(chachePath);
@@ -30,7 +32,7 @@ namespace windows_console_notes_editor
         }
         static void ChangeCacheValue(string key, string newValue)
         {
-            string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor", "cache");
+            string configPath = cachePath;
 
             // Check if the file exists
             if (!File.Exists(configPath))
@@ -45,9 +47,9 @@ namespace windows_console_notes_editor
             string pattern = $"{key} *= *[^\\n]*"; // This pattern will match "key = value" pattern in the config file
             string replacement = $"{key} = {newValue}";
             configData = Regex.Replace(configData, pattern, replacement);
-
+            
             // Write the updated data back to the file
-            File.WriteAllText(configPath, cacheData);
+            File.WriteAllText(configPath, configData);
         }
 
         public static void AddToChache(string data)
