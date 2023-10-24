@@ -57,6 +57,15 @@
                     filepath = FilePicker();
                     Console.Clear();
                     Console.WriteLine($"{filepath} is opening...");
+                    //Save it in lastaccessed
+                    if (GetValueForKey(cacheData, "last") != null)
+                    {
+                        AddToChache($"last = {filepath}|:|");
+                    }
+                    else
+                    {
+                        ChangeCacheValue("last", GetValueForKey(cacheData, "last") + "|:|" + filepath);
+                    }
                 }
                 else
                 {
