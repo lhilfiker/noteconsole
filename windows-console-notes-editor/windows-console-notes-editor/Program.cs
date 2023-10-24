@@ -33,11 +33,39 @@
                 {
                     Console.Clear();
                     Console.WriteLine("Kürzlich verwendete Notizen werden geladen...");
+                    Thread.Sleep(1000);
                 }
                 else if (keyInfo.Key == ConsoleKey.N)
                 {
                     Console.Clear();
                     Console.WriteLine("Neue Notiz wird erstellt...");
+                    Thread.Sleep(1000);
+                    Console.Clear();
+                    Console.WriteLine("Erstelle eine neue Notiz.");
+                    string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    Console.Write("Gib den Namen der neuen Notiz ein: ");
+                    string fileName = Console.ReadLine();
+
+                    string filePath = Path.Combine(documentsPath, fileName);
+
+                    if (File.Exists(filePath))
+                    {
+                        Console.WriteLine($"Die Datei '{fileName}' existiert bereits.");
+                    }
+                    else
+                    {
+                        try
+                        {
+                            File.Create(filePath).Close();
+                            Console.WriteLine($"Die Datei '{fileName}' wurde erfolgreich erstellt.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Fehler beim Erstellen der Datei: {ex.Message}");
+                        }
+                    }
+                    Thread.Sleep(1000);
+                    FilePicker();
                 }
                 else if (keyInfo.Key == ConsoleKey.S)
                 {
@@ -52,7 +80,7 @@
 
         static void Manager(string path)
         {
-
+            
         }
         static void FileRender(string content, int startrender, int x, int y)
         {
