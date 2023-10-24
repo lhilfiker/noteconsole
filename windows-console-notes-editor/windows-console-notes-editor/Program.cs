@@ -4,6 +4,19 @@
     {
         static void Main(string[] args)
         {
+            //Loading Cache
+            LoadCache();
+            List<string> lastaccessed = new();
+            if (GetValueForKey(cacheData, "last") != null)
+            {
+                lastaccessed = GetValueForKey(cacheData, "last").Split("|:|").ToList();
+            }
+            else
+            {
+                lastaccessed.Add("Nothing in here. Sorry");
+            }
+
+            string filepath;
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
@@ -69,7 +82,18 @@
                 }
                 else if (keyInfo.Key == ConsoleKey.S)
                 {
-                    FilePicker();
+                    filepath = FilePicker();
+                    Console.Clear();
+                    Console.WriteLine($"{filepath} is opening...");
+                    //Save it in lastaccessed
+                    if (GetValueForKey(cacheData, "last") != null)
+                    {
+                        AddToChache($"last = {filepath}|:|");
+                    }
+                    else
+                    {
+                        ChangeCacheValue("last", GetValueForKey(cacheData, "last") + "|:|" + filepath);
+                    }
                 }
                 else
                 {
