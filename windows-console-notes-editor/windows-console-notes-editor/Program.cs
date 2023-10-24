@@ -46,15 +46,17 @@
                 {
                     Console.Clear();
                     Console.WriteLine("Kürzlich verwendete Notizen werden geladen...");
-                    Thread.Sleep(1000);
+                    Console.Clear();
+
                 }
                 else if (keyInfo.Key == ConsoleKey.N)
                 {
                     Console.Clear();
                     Console.WriteLine("Neue Notiz wird erstellt...");
-                    Thread.Sleep(1000);
                     Console.Clear();
-                    Console.WriteLine("Erstelle eine neue Notiz.");
+                    Console.WriteLine("********************************");
+                    Console.WriteLine("*   Erstelle eine neue Notiz   *");
+                    Console.WriteLine("********************************");
                     string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     Console.Write("Gib den Namen der neuen Notiz ein: ");
                     string fileName = Console.ReadLine();
@@ -78,7 +80,7 @@
                         }
                     }
                     Thread.Sleep(1000);
-                    FilePicker();
+                    filepath = filePath;
                 }
                 else if (keyInfo.Key == ConsoleKey.S)
                 {
