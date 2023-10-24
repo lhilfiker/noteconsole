@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            string filepath;
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
@@ -41,7 +42,9 @@
                 }
                 else if (keyInfo.Key == ConsoleKey.S)
                 {
-                    FilePicker();
+                    filepath = FilePicker();
+                    Console.Clear();
+                    Console.WriteLine($"{filepath} is opening...");
                 }
                 else
                 {
