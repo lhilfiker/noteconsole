@@ -51,9 +51,6 @@
                 }
                 else if (keyInfo.Key == ConsoleKey.N)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Neue Notiz wird erstellt...");
-                    Console.Clear();
                     Console.WriteLine("********************************");
                     Console.WriteLine("*   Erstelle eine neue Notiz   *");
                     Console.WriteLine("********************************");
