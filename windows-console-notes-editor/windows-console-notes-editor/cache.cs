@@ -10,7 +10,7 @@ namespace windows_console_notes_editor
     internal partial class Program
     {
         static string cacheData;
-        public static void LoadCache()
+        static void LoadCache()
         {
             string chachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor", "chache");
             if (File.Exists(chachePath)) //Load the chache
@@ -55,6 +55,34 @@ namespace windows_console_notes_editor
             cacheData = cacheData + "\n" + data;
             string chachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor", "chache");
             File.WriteAllText(chachePath, cacheData);
+        }
+
+        static string GetValueForKey(string content, string key)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(content))
+                {
+                    return null;
+                }
+                string[] lines = content.Split('\n');
+                foreach (var line in lines)
+                {
+                    if (line.StartsWith(key))
+                    {
+                        string[] parts = line.Split('=');
+                        if (parts.Length == 2)
+                        {
+                            return parts[1].Trim();
+                        }
+                    }
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

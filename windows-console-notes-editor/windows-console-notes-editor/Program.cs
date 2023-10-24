@@ -4,6 +4,18 @@
     {
         static void Main(string[] args)
         {
+            //Loading Cache
+            LoadCache();
+            List<string> lastaccessed = new();
+            if (GetValueForKey(cacheData, "last") != null)
+            {
+                lastaccessed = GetValueForKey(cacheData, "last").Split("|:|").ToList();
+            }
+            else
+            {
+                lastaccessed.Add("Nothing in here. Sorry");
+            }
+
             string filepath;
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
