@@ -25,9 +25,16 @@ namespace windows_console_notes_editor
                 int maxwidth = Console.WindowWidth;
                 int maxheight = Console.WindowHeight;
 
-                List<string> formatedtext = new();
-                formatedtext = FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight);
+                (List<string> formatedtext, int startLine, int startChar) = FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight);
                 FileRender(formatedtext);
+
+                int displayedCursorX = cursorx - startChar;
+                int displayedCursorY = cursory - startLine;
+
+                displayedCursorX = Math.Min(Math.Max(displayedCursorX, 0), maxwidth - 1);
+                displayedCursorY = Math.Min(Math.Max(displayedCursorY, 0), maxheight - 1);
+
+                Console.SetCursorPosition(displayedCursorX, displayedCursorY);
 
                 ConsoleKeyInfo pressedKey = Console.ReadKey();
 
@@ -67,7 +74,7 @@ namespace windows_console_notes_editor
 
 
 
-        static List<string> FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight)
+        static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight)
         {
             List<string> lines = filecontent.Split('\n').ToList();
             List<string> formattedLines = new List<string>();
@@ -92,13 +99,13 @@ namespace windows_console_notes_editor
             }
 
             int endLine = Math.Min(lines.Count, startLine + maxheight -1);
+            int startChar = 0;
 
             for (int i = startLine; i < endLine; i++)
             {
                 string line = lines[i];
 
                 // Calculate start character for horizontal scrolling
-                int startChar;
                 if (line.Length > maxwidth)
                 {
                     if (i == y)
@@ -119,7 +126,7 @@ namespace windows_console_notes_editor
                 formattedLines.Add(line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar)));
             }
 
-            return formattedLines;
+            return (formattedLines, startLine, startChar);
         }
 
 
