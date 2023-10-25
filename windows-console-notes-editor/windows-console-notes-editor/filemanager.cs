@@ -25,30 +25,42 @@ namespace windows_console_notes_editor
                 int maxwidth = Console.WindowWidth;
                 int maxheight = Console.WindowHeight;
 
-                List<string> formatedtext = FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight);
+                List<string> formatedtext = new();
+                formatedtext = FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight);
                 FileRender(formatedtext);
 
                 ConsoleKeyInfo pressedKey = Console.ReadKey();
 
+                int currentLineLength;
+
                 switch (pressedKey.Key)
                 {
                     case ConsoleKey.DownArrow:
-                        if (cursory < maxline - 1)
+                        if (cursory < maxline)
                         {
                             cursory++;
-                            cursorx = Math.Min(cursorx, GetMaxCharacter(filecontent, cursory) - 1);
+                            currentLineLength = GetMaxCharacter(filecontent, cursory);
+                            cursorx = Math.Min(cursorx, currentLineLength);
                         }
                         break;
                     case ConsoleKey.LeftArrow:
-                        if (cursorx > 0) cursorx--;
+                        cursorx = Math.Max(0, cursorx - 1);
                         break;
                     case ConsoleKey.RightArrow:
-                        if (cursorx < maxcharacter - 1) cursorx++;
+                        currentLineLength = GetMaxCharacter(filecontent, cursory);
+                        cursorx = Math.Min(cursorx + 1, currentLineLength);
                         break;
                     case ConsoleKey.UpArrow:
-                        if (cursory > 0) cursory--;
+                        if (cursory > 0)
+                        {
+                            cursory--;
+                            currentLineLength = GetMaxCharacter(filecontent, cursory);
+                            cursorx = Math.Min(cursorx, currentLineLength);
+                        }
                         break;
                 }
+
+
             }
         }
 
@@ -60,23 +72,51 @@ namespace windows_console_notes_editor
             List<string> lines = filecontent.Split('\n').ToList();
             List<string> formattedLines = new List<string>();
 
-            int startLine = Math.Max(0, y - (maxheight / 2));
+            // Ensure y is wihin boundaries
+            y = Math.Min(y, lines.Count - 1);
 
-            for (int i = startLine; i < lines.Count && i < startLine + maxheight; i++)
+            // Calculate start line fr vertical scrollng
+            int midPoint = maxheight / 2;
+            int startLine;
+            if (y < midPoint)
+            {
+                startLine = 0;
+            }
+            else if (y >= lines.Count - midPoint)
+            {
+                startLine = Math.Max(0, lines.Count - maxheight);
+            }
+            else
+            {
+                startLine = y - midPoint;
+            }
+
+            int endLine = Math.Min(lines.Count, startLine + maxheight -1);
+
+            for (int i = startLine; i < endLine; i++)
             {
                 string line = lines[i];
-                int start = 0;
+
+                // Calculate start character for horizontal scrolling
+                int startChar;
                 if (line.Length > maxwidth)
                 {
                     if (i == y)
                     {
-                        start = Math.Max(0, x - (maxwidth / 2));
-                        start = Math.Min(start, line.Length - maxwidth);  // Ensure start doesn't go too far right
+                        startChar = Math.Max(0, x - (maxwidth / 2));
+                        startChar = Math.Min(startChar, line.Length - maxwidth);
+                    }
+                    else
+                    {
+                        startChar = 0;
                     }
                 }
-                int lengthToTake = Math.Min(maxwidth, line.Length - start);  // Calculate the correct length to take
-                formattedLines.Add(line.Substring(start, lengthToTake));
+                else
+                {
+                    startChar = 0;
+                }
 
+                formattedLines.Add(line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar)));
             }
 
             return formattedLines;
@@ -85,10 +125,11 @@ namespace windows_console_notes_editor
 
         static void FileRender(List<string> text)
         {
+            Console.Clear();
             Console.SetCursorPosition(0, 0);
             foreach (string line in text)
             {
-                Console.WriteLine(line.PadRight(Console.WindowWidth, ' '));
+                Console.WriteLine(line);
             }
         }
 
