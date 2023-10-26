@@ -72,17 +72,15 @@ namespace windows_console_notes_editor
         }
 
 
-
-
         static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight)
         {
             List<string> lines = filecontent.Split('\n').ToList();
             List<string> formattedLines = new List<string>();
 
-            // Ensure y is wihin boundaries
+            // Ensure y is within boundaries
             y = Math.Min(y, lines.Count - 1);
 
-            // Calculate start line fr vertical scrollng
+            // Calculate start line for vertical scrolling
             int midPoint = maxheight / 2;
             int startLine;
             if (y < midPoint)
@@ -98,20 +96,18 @@ namespace windows_console_notes_editor
                 startLine = y - midPoint;
             }
 
-            int endLine = Math.Min(lines.Count, startLine + maxheight -1);
+            int endLine = Math.Min(lines.Count, startLine + maxheight - 1);
             int startChar = 0;
 
             for (int i = startLine; i < endLine; i++)
             {
                 string line = lines[i];
-
-                // Calculate start character for horizontal scrolling
+                // Start line for horizontal scrolling
                 if (line.Length > maxwidth)
                 {
                     if (i == y)
                     {
-                        startChar = Math.Max(0, x - (maxwidth / 2));
-                        startChar = Math.Min(startChar, line.Length - maxwidth);
+                        startChar = Math.Max(0, Math.Min(x - (maxwidth - 5), line.Length - maxwidth));
                     }
                     else
                     {
