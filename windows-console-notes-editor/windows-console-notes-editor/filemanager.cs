@@ -65,6 +65,9 @@ namespace windows_console_notes_editor
                             cursorx = Math.Min(cursorx, currentLineLength);
                         }
                         break;
+                    case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
+                        File.WriteAllText(filepath, filecontent);
+                        break;
                     case ConsoleKey.Backspace:
                         if (cursorx > 0)
                         {
