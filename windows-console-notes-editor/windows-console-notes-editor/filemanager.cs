@@ -65,12 +65,41 @@ namespace windows_console_notes_editor
                             cursorx = Math.Min(cursorx, currentLineLength);
                         }
                         break;
+                    case ConsoleKey.Backspace:
+                        if (cursorx > 0)
+                        {
+                            int index = GetIndex(filecontent, cursorx, cursory);
+                            filecontent = filecontent.Remove(index - 1, 1);
+                            cursorx--;
+                        }
+                        break;
+                    case ConsoleKey.Spacebar:
+                        int spaceIndex = GetIndex(filecontent, cursorx, cursory);
+                        filecontent = filecontent.Insert(spaceIndex, " ");
+                        cursorx++;
+                        break;
+                    default:
+                        char keyChar = pressedKey.KeyChar;
+                        int charIndex = GetIndex(filecontent, cursorx, cursory);
+                        filecontent = filecontent.Insert(charIndex, keyChar.ToString());
+                        cursorx++;
+                        break;
                 }
-
 
             }
         }
 
+        static int GetIndex(string filecontent, int cursorx, int cursory)
+        {
+            string[] lines = filecontent.Split('\n');
+            int index = 0;
+            for (int i = 0; i < cursory; i++)
+            {
+                index += lines[i].Length + 1;
+            }
+            index += cursorx;
+            return index;
+        }
 
         static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight)
         {
@@ -107,7 +136,7 @@ namespace windows_console_notes_editor
                 {
                     if (i == y)
                     {
-                        startChar = Math.Max(0, Math.Min(x - (maxwidth - 5), line.Length - maxwidth));
+                        startChar = Math.Max(0, Math.Min(x - (maxwidth), line.Length - maxwidth));
                     }
                     else
                     {
