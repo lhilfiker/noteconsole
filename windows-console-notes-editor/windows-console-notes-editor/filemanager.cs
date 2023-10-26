@@ -69,6 +69,16 @@ namespace windows_console_notes_editor
                         File.WriteAllText(filepath, filecontent);
                         break;
                     case ConsoleKey.Escape:
+                        Console.Clear();
+                        if (filecontent != File.ReadAllText(filepath))
+                        {
+                            Console.WriteLine("SSave changes? (Y/N)");
+                            ConsoleKeyInfo saveKey = Console.ReadKey();
+                            if (saveKey.Key == ConsoleKey.Y)
+                            {
+                                File.WriteAllText(filepath, filecontent);
+                            }
+                        }   
                         return;
                     case ConsoleKey.Backspace:
                         if (cursorx > 0)
