@@ -68,6 +68,8 @@ namespace windows_console_notes_editor
                     case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                         File.WriteAllText(filepath, filecontent);
                         break;
+                    case ConsoleKey.Escape:
+                        return;
                     case ConsoleKey.Backspace:
                         if (cursorx > 0)
                         {

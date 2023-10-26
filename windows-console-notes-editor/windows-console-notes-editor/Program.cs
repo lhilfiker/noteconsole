@@ -17,92 +17,96 @@
             }
 
             string filepath;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.Clear();
-
-            Console.WriteLine("             _                                 _      ");
-            Console.WriteLine("            | |                               | |     ");
-            Console.WriteLine(" _ __   ___ | |_ ___  ___ ___  _ __  ___  ___ | | ___ ");
-            Console.WriteLine("| '_ \\ / _ \\| __/ _ \\/ __/ _ \\| '_ \\/ __|/ _ \\| |/ _ \\");
-            Console.WriteLine("| | | | (_) | ||  __/ (_| (_) | | | \\__ \\ (_) | |  __/");
-            Console.WriteLine("|_| |_|\\___/ \\__\\___|\\___\\___/|_| |_|___/\\___/|_|\\___|");
-            Console.WriteLine("                                                      ");
-            Console.WriteLine("********************************");
-            Console.WriteLine("*      Willkommen zurück!      *");
-            Console.WriteLine("********************************");
-            Console.WriteLine("Drücke 'R' für kürzlich verwendete Notizen.");
-            Console.WriteLine("Drücke 'S' um eine Datei aus deinem Computer auszuwählen");
-            Console.WriteLine("Drücke 'N' für eine neue Notiz.");
-
-            ConsoleKeyInfo keyInfo;
-
-            do
+            
+            while (true)
             {
-                keyInfo = Console.ReadKey();
-                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.Clear();
 
-                if (keyInfo.Key == ConsoleKey.R)
+                Console.WriteLine("             _                                 _      ");
+                Console.WriteLine("            | |                               | |     ");
+                Console.WriteLine(" _ __   ___ | |_ ___  ___ ___  _ __  ___  ___ | | ___ ");
+                Console.WriteLine("| '_ \\ / _ \\| __/ _ \\/ __/ _ \\| '_ \\/ __|/ _ \\| |/ _ \\");
+                Console.WriteLine("| | | | (_) | ||  __/ (_| (_) | | | \\__ \\ (_) | |  __/");
+                Console.WriteLine("|_| |_|\\___/ \\__\\___|\\___\\___/|_| |_|___/\\___/|_|\\___|");
+                Console.WriteLine("                                                      ");
+                Console.WriteLine("********************************");
+                Console.WriteLine("*      Willkommen zurück!      *");
+                Console.WriteLine("********************************");
+                Console.WriteLine("Drücke 'R' für kürzlich verwendete Notizen.");
+                Console.WriteLine("Drücke 'S' um eine Datei aus deinem Computer auszuwählen");
+                Console.WriteLine("Drücke 'N' für eine neue Notiz.");
+
+                ConsoleKeyInfo keyInfo;
+
+                do
                 {
-                    Console.Clear();
-                    Console.WriteLine("Kürzlich verwendete Notizen werden geladen...");
-                    Console.Clear();
+                    keyInfo = Console.ReadKey();
+                    Console.WriteLine();
 
-                }
-                else if (keyInfo.Key == ConsoleKey.N)
-                {
-                    Console.WriteLine("********************************");
-                    Console.WriteLine("*   Erstelle eine neue Notiz   *");
-                    Console.WriteLine("********************************");
-                    string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    Console.Write("Gib den Namen der neuen Notiz ein: ");
-                    string fileName = Console.ReadLine();
-
-                    string filePath = Path.Combine(documentsPath, fileName);
-
-                    if (File.Exists(filePath))
+                    if (keyInfo.Key == ConsoleKey.R)
                     {
-                        Console.WriteLine($"Die Datei '{fileName}' existiert bereits.");
+                        Console.Clear();
+                        Console.WriteLine("Kürzlich verwendete Notizen werden geladen...");
+                        Console.Clear();
+
+                    }
+                    else if (keyInfo.Key == ConsoleKey.N)
+                    {
+                        Console.WriteLine("********************************");
+                        Console.WriteLine("*   Erstelle eine neue Notiz   *");
+                        Console.WriteLine("********************************");
+                        string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                        Console.Write("Gib den Namen der neuen Notiz ein: ");
+                        string fileName = Console.ReadLine();
+
+                        string filePath = Path.Combine(documentsPath, fileName);
+
+                        if (File.Exists(filePath))
+                        {
+                            Console.WriteLine($"Die Datei '{fileName}' existiert bereits.");
+                        }
+                        else
+                        {
+                            try
+                            {
+                                File.Create(filePath).Close();
+                                Console.WriteLine($"Die Datei '{fileName}' wurde erfolgreich erstellt.");
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Fehler beim Erstellen der Datei: {ex.Message}");
+                            }
+                        }
+                        Thread.Sleep(1000);
+                        filepath = filePath;
+                        break;
+                    }
+                    else if (keyInfo.Key == ConsoleKey.S)
+                    {
+                        filepath = FilePicker();
+                        Console.Clear();
+                        Console.WriteLine($"{filepath} is opening...");
+                        //Save it in lastaccessed
+                        if (GetValueForKey(cacheData, "last") != null)
+                        {
+                            ChangeCacheValue("last", (GetValueForKey(cacheData, "last") + filepath + "|:|"));
+                        }
+                        else
+                        {
+                            AddToChache($"last = {filepath}|:|");
+                        }
+                        break;
                     }
                     else
                     {
-                        try
-                        {
-                            File.Create(filePath).Close();
-                            Console.WriteLine($"Die Datei '{fileName}' wurde erfolgreich erstellt.");
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"Fehler beim Erstellen der Datei: {ex.Message}");
-                        }
+                        Console.WriteLine("Ungültige Eingabe. Drücke 'R' oder 'N'.");
                     }
-                    Thread.Sleep(1000);
-                    filepath = filePath;
-                    break;
-                }
-                else if (keyInfo.Key == ConsoleKey.S)
-                {
-                    filepath = FilePicker();
-                    Console.Clear();
-                    Console.WriteLine($"{filepath} is opening...");
-                    //Save it in lastaccessed
-                    if (GetValueForKey(cacheData, "last") != null)
-                    {
-                        ChangeCacheValue("last", (GetValueForKey(cacheData, "last") + filepath + "|:|"));
-                    }
-                    else
-                    {
-                        AddToChache($"last = {filepath}|:|");
-                    }
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Ungültige Eingabe. Drücke 'R' oder 'N'.");
-                }
-            } while (true);
+                } while (true);
 
-            FileManager(filepath);
+                FileManager(filepath);
+            }
         }
 
         static void Manager(string path)
