@@ -55,8 +55,9 @@ namespace windows_console_notes_editor
                         break;
                     case ConsoleKey.RightArrow:
                         currentLineLength = GetMaxCharacter(filecontent, cursory);
-                        cursorx = Math.Min(cursorx + 1, currentLineLength);
+                        cursorx = Math.Min(cursorx + 1, currentLineLength -1);
                         break;
+
                     case ConsoleKey.UpArrow:
                         if (cursory > 0)
                         {
@@ -78,16 +79,13 @@ namespace windows_console_notes_editor
                             {
                                 File.WriteAllText(filepath, filecontent);
                             }
-                        }   
+                        }
                         return;
                     case ConsoleKey.Backspace:
-                        if (cursorx > 0)
-                        {
-                            int index = GetIndex(filecontent, cursorx, cursory);
-                            filecontent = filecontent.Remove(index - 1, 1);
-                            cursorx--;
-                        }
+                        
                         break;
+
+
                     case ConsoleKey.Spacebar:
                         int spaceIndex = GetIndex(filecontent, cursorx, cursory);
                         filecontent = filecontent.Insert(spaceIndex, " ");
@@ -100,7 +98,9 @@ namespace windows_console_notes_editor
                         cursorx++;
                         break;
                 }
-
+                //Make sure cursor is within boundaries
+                currentLineLength = GetMaxCharacter(filecontent, cursory);
+                cursorx = Math.Min(cursorx, currentLineLength - 1);
             }
         }
 
