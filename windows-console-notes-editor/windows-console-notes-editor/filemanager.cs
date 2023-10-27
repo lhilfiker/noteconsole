@@ -83,6 +83,7 @@ namespace windows_console_notes_editor
                             }
                         }
                         return;
+                    case ConsoleKey.Backspace:
                     case ConsoleKey.Delete:
                         //If cursor is not == 0, then remove the character before it and move the cursor back
 
