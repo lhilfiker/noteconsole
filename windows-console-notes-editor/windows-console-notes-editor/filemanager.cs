@@ -18,28 +18,27 @@ namespace windows_console_notes_editor
 
             Console.CursorVisible = true;
 
+            List<int> maxCharactersPerLine = new List<int>();
+            Console.Clear();
+            Console.WriteLine("Loading...");
+            // Precompute max characters for each line
+            foreach (var line in filecontent.Split('\n'))
+            {
+                maxCharactersPerLine.Add(line.Length);
+            }
+
             while (true)
             {
-                int maxline = GetMaxLine(filecontent);
-                int maxcharacter = GetMaxCharacter(filecontent, cursory);
+                int maxline = maxCharactersPerLine.Count();
+                int maxcharacter = maxCharactersPerLine[cursory];
                 int maxwidth = Console.WindowWidth;
                 int maxheight = Console.WindowHeight;
-                
-                int currentLineLength = GetMaxCharacter(filecontent, cursory);
-                if (cursorx == currentLineLength)
-                {
-                    int insertIndex = GetIndex(filecontent, cursorx, cursory);
-                    filecontent = filecontent.Insert(insertIndex, " ");
-                }
 
                 (List<string> formatedtext, int startLine, int startChar) = FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight);
                 FileRender(formatedtext);
 
-                int displayedCursorX = cursorx - startChar;
-                int displayedCursorY = cursory - startLine;
-
-                displayedCursorX = Math.Min(Math.Max(displayedCursorX, 0), maxwidth - 1);
-                displayedCursorY = Math.Min(Math.Max(displayedCursorY, 0), maxheight - 1);
+                int displayedCursorX = Math.Min(Math.Max(cursorx - startChar, 0), maxwidth - 1);
+                int displayedCursorY = Math.Min(Math.Max(cursory - startLine, 0), maxheight - 1);
 
                 Console.SetCursorPosition(displayedCursorX, displayedCursorY);
 
@@ -52,24 +51,21 @@ namespace windows_console_notes_editor
                         if (cursory < maxline)
                         {
                             cursory++;
-                            currentLineLength = GetMaxCharacter(filecontent, cursory);
-                            cursorx = Math.Min(cursorx, currentLineLength);
+                            cursorx = Math.Min(cursorx, maxcharacter);
                         }
                         break;
                     case ConsoleKey.LeftArrow:
                         cursorx = Math.Max(0, cursorx - 1);
                         break;
                     case ConsoleKey.RightArrow:
-                        currentLineLength = GetMaxCharacter(filecontent, cursory);
-                        cursorx = Math.Min(cursorx + 1, currentLineLength -1);
+                        cursorx = Math.Min(cursorx + 1, maxcharacter - 1);
                         break;
 
                     case ConsoleKey.UpArrow:
                         if (cursory > 0)
                         {
                             cursory--;
-                            currentLineLength = GetMaxCharacter(filecontent, cursory);
-                            cursorx = Math.Min(cursorx, currentLineLength);
+                            cursorx = Math.Min(cursorx, maxcharacter);
                         }
                         break;
                     case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
@@ -88,7 +84,14 @@ namespace windows_console_notes_editor
                         }
                         return;
                     case ConsoleKey.Delete:
-                        
+                        //If cursor is not == 0, then remove the character before it and move the cursor back
+
+                        if (cursorx != 0)
+                        {
+                            int deleteIndex = GetIndex(filecontent, cursorx, cursory);
+                            filecontent = filecontent.Remove(deleteIndex - 1, 1);
+                            cursorx--;
+                        }
                         break;
 
                     case ConsoleKey.Enter:
@@ -98,6 +101,8 @@ namespace windows_console_notes_editor
                         filecontent = filecontent.Insert(enterIndex + 1, line);
                         cursorx = 0;
                         cursory++;
+                        maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
+                        maxCharactersPerLine[cursory -1] = GetMaxCharacter(filecontent, cursory - 1);
                         break;
 
                     case ConsoleKey.Spacebar:
@@ -110,11 +115,11 @@ namespace windows_console_notes_editor
                         int charIndex = GetIndex(filecontent, cursorx, cursory);
                         filecontent = filecontent.Insert(charIndex, keyChar.ToString());
                         cursorx++;
+                        maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
                         break;
                 }
                 //Make sure cursor is within boundaries
-                currentLineLength = GetMaxCharacter(filecontent, cursory);
-                cursorx = Math.Min(cursorx, currentLineLength - 1);
+                cursorx = Math.Min(cursorx, maxcharacter - 1);
             }
         }
 
