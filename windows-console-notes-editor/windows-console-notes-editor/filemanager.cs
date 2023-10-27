@@ -93,6 +93,19 @@ namespace windows_console_notes_editor
                             filecontent = filecontent.Remove(deleteIndex - 1, 1);
                             cursorx--;
                         }
+                        // Append the current line to the line above so there is only one line.
+                        else if (cursory != 0)
+                        {
+                            int deleteIndex = GetIndex(filecontent, cursorx, cursory);
+                            string line2 = filecontent.Substring(deleteIndex);
+                            filecontent = filecontent.Remove(deleteIndex);
+                            filecontent = filecontent.Insert(deleteIndex - 1, line2);
+                            cursory--;
+                            cursorx = maxCharactersPerLine[cursory];
+                            maxCharactersPerLine.RemoveAt(cursory + 1);
+                            maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                        }
+
                         break;
 
                     case ConsoleKey.Enter:
