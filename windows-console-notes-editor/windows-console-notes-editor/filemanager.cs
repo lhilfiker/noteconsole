@@ -123,6 +123,28 @@ namespace windows_console_notes_editor
                         filecontent = filecontent.Insert(spaceIndex, " ");
                         cursorx++;
                         break;
+                    case ConsoleKey.Tab:
+                    case ConsoleKey.Home:
+                    case ConsoleKey.End:
+                    case ConsoleKey.PageUp:
+                    case ConsoleKey.PageDown:
+                    case ConsoleKey.Insert:
+                    case ConsoleKey.F1:
+                    case ConsoleKey.F2:
+                    case ConsoleKey.F3:
+                    case ConsoleKey.F4:
+                    case ConsoleKey.F5:
+                    case ConsoleKey.F6:
+                    case ConsoleKey.F7:
+                    case ConsoleKey.F8:
+                    case ConsoleKey.F9:
+                    case ConsoleKey.F10:
+                    case ConsoleKey.F11:
+                    case ConsoleKey.F12:
+                    case ConsoleKey.Pause:
+                        // Do nothing for these special keys to prevent unwanted behavior
+                        break;
+
                     default:
                         char keyChar = pressedKey.KeyChar;
                         int charIndex = GetIndex(filecontent, cursorx, cursory);
