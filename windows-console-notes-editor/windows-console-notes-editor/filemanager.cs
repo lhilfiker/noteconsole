@@ -24,6 +24,13 @@ namespace windows_console_notes_editor
                 int maxcharacter = GetMaxCharacter(filecontent, cursory);
                 int maxwidth = Console.WindowWidth;
                 int maxheight = Console.WindowHeight;
+                
+                int currentLineLength = GetMaxCharacter(filecontent, cursory);
+                if (cursorx == currentLineLength)
+                {
+                    int insertIndex = GetIndex(filecontent, cursorx, cursory);
+                    filecontent = filecontent.Insert(insertIndex, " ");
+                }
 
                 (List<string> formatedtext, int startLine, int startChar) = FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight);
                 FileRender(formatedtext);
@@ -38,7 +45,6 @@ namespace windows_console_notes_editor
 
                 ConsoleKeyInfo pressedKey = Console.ReadKey();
 
-                int currentLineLength;
 
                 switch (pressedKey.Key)
                 {
@@ -81,9 +87,10 @@ namespace windows_console_notes_editor
                             }
                         }
                         return;
-                    case ConsoleKey.Backspace:
+                    case ConsoleKey.Delete:
                         
                         break;
+
                     case ConsoleKey.Enter:
                         int enterIndex = GetIndex(filecontent, cursorx, cursory);
                         string line = filecontent.Substring(enterIndex);
@@ -92,7 +99,6 @@ namespace windows_console_notes_editor
                         cursorx = 0;
                         cursory++;
                         break;
-
 
                     case ConsoleKey.Spacebar:
                         int spaceIndex = GetIndex(filecontent, cursorx, cursory);
@@ -115,14 +121,29 @@ namespace windows_console_notes_editor
         static int GetIndex(string filecontent, int cursorx, int cursory)
         {
             string[] lines = filecontent.Split('\n');
+
+            // Ensure cursory is within the number of lines
+            if (cursory >= lines.Length)
+            {
+                cursory = lines.Length - 1;
+            }
+
+            // Ensure cursorx is within the length of the line at cursory
+            if (cursory >= 0 && cursorx > lines[cursory].Length)
+            {
+                cursorx = lines[cursory].Length;
+            }
+
             int index = 0;
             for (int i = 0; i < cursory; i++)
             {
-                index += lines[i].Length + 1;
+                index += lines[i].Length + 1;  // +1 for the '\n' character
             }
             index += cursorx;
+
             return index;
         }
+
 
         static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight)
         {
