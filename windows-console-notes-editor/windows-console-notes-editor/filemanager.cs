@@ -48,7 +48,7 @@ namespace windows_console_notes_editor
                 switch (pressedKey.Key)
                 {
                     case ConsoleKey.DownArrow:
-                        if (cursory < maxline)
+                        if (cursory < maxline - 1)
                         {
                             cursory++;
                             cursorx = Math.Min(cursorx, maxcharacter);
@@ -148,7 +148,6 @@ namespace windows_console_notes_editor
 
             return index;
         }
-
 
         static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight)
         {
