@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using TextCopy;
 
 namespace windows_console_notes_editor
 {
@@ -149,7 +150,14 @@ namespace windows_console_notes_editor
                     case ConsoleKey.PrintScreen:
                         //Here comes the print logic
                         break;
-
+                    case ConsoleKey.V when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
+                        // Paste functionality
+                        string clipboardText = TextCopy.ClipboardService.GetText();
+                        int pasteIndex = GetIndex(filecontent, cursorx, cursory);
+                        filecontent = filecontent.Insert(pasteIndex, clipboardText);
+                        cursorx += clipboardText.Length;
+                        maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                        break;
                     default: // Default case is a character key
                         char keyChar = pressedKey.KeyChar;
                         int charIndex = GetIndex(filecontent, cursorx, cursory);
