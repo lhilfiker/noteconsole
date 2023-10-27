@@ -47,7 +47,7 @@ namespace windows_console_notes_editor
 
                 switch (pressedKey.Key)
                 {
-                    case ConsoleKey.DownArrow:
+                    case ConsoleKey.DownArrow: //Movement
                         if (cursory < maxline - 1)
                         {
                             cursory++;
@@ -68,10 +68,10 @@ namespace windows_console_notes_editor
                             cursorx = Math.Min(cursorx, maxcharacter);
                         }
                         break;
-                    case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
+                    case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Save
                         File.WriteAllText(filepath, filecontent);
                         break;
-                    case ConsoleKey.Escape:
+                    case ConsoleKey.Escape: // Go to welcome screen
                         Console.Clear();
                         if (filecontent != File.ReadAllText(filepath))
                         {
@@ -83,7 +83,7 @@ namespace windows_console_notes_editor
                             }
                         }
                         return;
-                    case ConsoleKey.Backspace:
+                    case ConsoleKey.Backspace: //Delete
                     case ConsoleKey.Delete:
                         //If cursor is not == 0, then remove the character before it and move the cursor back
 
@@ -108,7 +108,7 @@ namespace windows_console_notes_editor
 
                         break;
 
-                    case ConsoleKey.Enter:
+                    case ConsoleKey.Enter: // NewLine
                         int enterIndex = GetIndex(filecontent, cursorx, cursory);
                         string line = filecontent.Substring(enterIndex);
                         filecontent = filecontent.Insert(enterIndex, "\n");
@@ -118,7 +118,7 @@ namespace windows_console_notes_editor
                         maxCharactersPerLine[cursory -1] = GetMaxCharacter(filecontent, cursory - 1);
                         break;
 
-                    case ConsoleKey.Spacebar:
+                    case ConsoleKey.Spacebar: // Space
                         int spaceIndex = GetIndex(filecontent, cursorx, cursory);
                         filecontent = filecontent.Insert(spaceIndex, " ");
                         cursorx++;
@@ -145,7 +145,7 @@ namespace windows_console_notes_editor
                         // Do nothing for these special keys to prevent unwanted behavior
                         break;
 
-                    default:
+                    default: // Default case is a character key
                         char keyChar = pressedKey.KeyChar;
                         int charIndex = GetIndex(filecontent, cursorx, cursory);
                         filecontent = filecontent.Insert(charIndex, keyChar.ToString());
