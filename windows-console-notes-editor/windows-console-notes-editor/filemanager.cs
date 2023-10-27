@@ -48,6 +48,20 @@ namespace windows_console_notes_editor
 
                 switch (pressedKey.Key)
                 {
+                    case ConsoleKey.LeftArrow when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Move to start of line
+                        cursorx = 0;
+                        break;
+                    case ConsoleKey.RightArrow when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of line
+                        cursorx = maxcharacter;
+                        break;
+                    case ConsoleKey.UpArrow when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Move to start of file
+                        cursory = 0;
+                        cursorx = 0;
+                        break;
+                    case ConsoleKey.DownArrow when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of file
+                        cursory = maxline - 1;
+                        cursorx = maxcharacter;
+                        break;
                     case ConsoleKey.DownArrow: //Movement
                         if (cursory < maxline - 1)
                         {
