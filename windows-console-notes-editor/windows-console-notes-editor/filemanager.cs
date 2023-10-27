@@ -84,7 +84,15 @@ namespace windows_console_notes_editor
                         }
                         return;
                     case ConsoleKey.Delete:
-                        
+                        //If cursor is not == 0, then remove the character before it and move the cursor back
+
+                        if (cursorx != 0)
+                        {
+                            int deleteIndex = GetIndex(filecontent, cursorx, cursory);
+                            filecontent = filecontent.Remove(deleteIndex - 1, 1);
+                            cursorx--;
+                        }
+                        break;
 
                     case ConsoleKey.Enter:
                         int enterIndex = GetIndex(filecontent, cursorx, cursory);
@@ -109,7 +117,10 @@ namespace windows_console_notes_editor
                         break;
                 }
                 //Make sure cursor is within boundaries
-                cursorx = Math.Min(cursorx, maxcharacter - 1);
+                if (cursorx > maxCharactersPerLine[cursory])
+                {
+                    cursorx = maxCharactersPerLine[cursory];
+                }
             }
         }
 
