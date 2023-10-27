@@ -145,6 +145,11 @@ namespace windows_console_notes_editor
                         // Do nothing for these special keys to prevent unwanted behavior
                         break;
 
+                    case ConsoleKey.P when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
+                    case ConsoleKey.PrintScreen:
+                        //Here comes the print logic
+                        break;
+
                     default: // Default case is a character key
                         char keyChar = pressedKey.KeyChar;
                         int charIndex = GetIndex(filecontent, cursorx, cursory);
