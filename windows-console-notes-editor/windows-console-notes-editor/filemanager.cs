@@ -113,6 +113,7 @@ namespace windows_console_notes_editor
                         string line = filecontent.Substring(enterIndex);
                         filecontent = filecontent.Insert(enterIndex, "\n");
                         cursory++;
+                        cursorx = 0;
                         maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
                         maxCharactersPerLine[cursory -1] = GetMaxCharacter(filecontent, cursory - 1);
                         break;
