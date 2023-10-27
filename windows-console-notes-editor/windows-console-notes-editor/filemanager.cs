@@ -84,6 +84,14 @@ namespace windows_console_notes_editor
                     case ConsoleKey.Backspace:
                         
                         break;
+                    case ConsoleKey.Enter:
+                        int enterIndex = GetIndex(filecontent, cursorx, cursory);
+                        string line = filecontent.Substring(enterIndex);
+                        filecontent = filecontent.Insert(enterIndex, "\n");
+                        filecontent = filecontent.Insert(enterIndex + 1, line);
+                        cursorx = 0;
+                        cursory++;
+                        break;
 
 
                     case ConsoleKey.Spacebar:
