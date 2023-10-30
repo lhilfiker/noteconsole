@@ -111,10 +111,16 @@ namespace windows_console_notes_editor
                             }
                             else
                             {
-                                stopResizen = true;
-                                return path;
+                                if (IsFileAllowedToOpen(path))
+                                {
+                                    stopResizen = true;
+                                    return path;
+                                }
+                                else
+                                {
+                                    path = GetParentDirectory(path);
+                                }
                             }
-
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.LeftArrow):
                             path = GetParentDirectory(path);
@@ -147,8 +153,15 @@ namespace windows_console_notes_editor
                             }
                             else
                             {
-                                stopResizen = true;
-                                return path;
+                                if (IsFileAllowedToOpen(path))
+                                {
+                                    stopResizen = true;
+                                    return path;
+                                }
+                                else
+                                {
+                                    path = GetParentDirectory(path);
+                                }
                             }
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.R):
@@ -177,6 +190,12 @@ namespace windows_console_notes_editor
             stopResizen = true;
             return null;
         }
+        static bool IsFileAllowedToOpen(string filePath)
+        {
+            string extension = Path.GetExtension(filePath).ToLower();
+            if (extension == ".txt" || extension == ".md" || extension == ".html" || extension == ".css" || extension == ".json" || extension == ".xml" || extension == ".csv" || extension == ".log" || extension == ".sql" || extension == ".yml" || extension == ".yaml" || extension == ".conf" || extension == ".cfg" || extension == ".ini" || extension == ".properties" || extension == ".bat" || extension == ".sh" || extension == ".php" || extension == ".js" || extension == ".py" || extension == ".pl") return true;
+            return false;
+        }
 
         static int maxheightConsole;
         static int maxwidthConsole;
@@ -190,7 +209,7 @@ namespace windows_console_notes_editor
             while (!stopResizen)
             {
                 if (buffer != Console.WindowHeight)
-                {
+                {   
                     buffer = Console.WindowHeight;
                     maxheightConsole = buffer;
                     maxwidthConsole = Console.WindowWidth;
