@@ -71,7 +71,14 @@ namespace windows_console_notes_editor
                         int pasteIndex = GetIndex(filecontent, cursorx, cursory);
                         filecontent = filecontent.Insert(pasteIndex, clipboardText);
                         cursorx += clipboardText.Length;
-                        maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                        maxCharactersPerLine.Clear();
+                        Console.Clear();
+                        Console.WriteLine("Pasting...");
+                        // Precompute max characters for each line
+                        foreach (var line in filecontent.Split('\n'))
+                        {
+                            maxCharactersPerLine.Add(line.Length);
+                        }
                     }
 
                     else if (pressedKey.Key == ConsoleKey.C) {
