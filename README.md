@@ -17,7 +17,7 @@
 The Console-Based Notes App is a command-line tool designed for note management, catering to developers, 
 writers, and anyone who appreciates the simplicity of console-based applications.
 
-# Features
+## Features
 
 - 📁 | Select a file to open from a file picker (PC files)
 - 📁 | Create a new file and select a folder with folder picker
