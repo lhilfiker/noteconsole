@@ -153,7 +153,23 @@
                         //Save it in lastaccessed
                         if (GetValueForKey(cacheData, "last") != null)
                         {
-                            ChangeCacheValue("last", (GetValueForKey(cacheData, "last") + filepath + "|:|"));
+                            List<string> recentFiles = GetValueForKey(cacheData, "last")?.Split("|:|").ToList() ?? new List<string>();
+                            if (recentFiles.Contains(filepath)) // If the path is in the cache already move it to the top
+                            {
+                                recentFiles.RemoveAll(item => item == filepath); 
+                                recentFiles.Insert(0, filepath);
+                                string updatedLastAccessed = "";
+                                foreach (string path in recentFiles)
+                                {
+                                    updatedLastAccessed += path + "|:|";
+                                }
+                                ChangeCacheValue("last", updatedLastAccessed);
+
+                            }
+                            else
+                            {
+                                ChangeCacheValue("last", filepath + "|:|" + (GetValueForKey(cacheData, "last")));    
+                            }
                         }
                         else
                         {
@@ -221,6 +237,19 @@
                 }
                 else if (key == ConsoleKey.Enter)
                 {
+                    if (recentFiles.Contains(
+                            recentFiles[selectedIndex])) // If the path is in the cache already move it to the top
+                    {
+                        recentFiles.RemoveAll(item => item == recentFiles[selectedIndex]); 
+                        recentFiles.Insert(0, recentFiles[selectedIndex]);
+                        string updatedLastAccessed = "";
+                        foreach (string path in recentFiles)
+                        {
+                            updatedLastAccessed += path + "|:|";
+                        }
+                        ChangeCacheValue("last", updatedLastAccessed);
+
+                    }
                     return recentFiles[selectedIndex];
                 }
                 else if (key == ConsoleKey.Escape)
