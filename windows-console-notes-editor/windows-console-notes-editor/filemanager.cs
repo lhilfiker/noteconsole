@@ -252,7 +252,7 @@ namespace windows_console_notes_editor
                             Process.Start(psi);
                             Console.WriteLine("File has been sent to the printer.");
                             break;
-                        case ConsoleKey.V when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
+                        case ConsoleKey.V when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt):
                             // Paste functionality
                             string clipboardText = TextCopy.ClipboardService.GetText();
                             int pasteIndex = GetIndex(filecontent, cursorx, cursory);
@@ -261,7 +261,7 @@ namespace windows_console_notes_editor
                             maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
                             break;
 
-                        case ConsoleKey.C when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control) && isSelection:
+                        case ConsoleKey.C when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt) && isSelection:
                             ClipboardService.SetText(GetSelectedText(filecontent));
                             isSelection = false;
                             break;
