@@ -40,7 +40,7 @@ namespace windows_console_notes_editor
             // Precompute max characters for each line
             foreach (var line in filecontent.Split('\n'))
             {
-                maxCharactersPerLine.Add(line.Length);
+                maxCharactersPerLine.Add(line.Length + 1);
             }
 
             while (true)
@@ -77,13 +77,17 @@ namespace windows_console_notes_editor
                         // Precompute max characters for each line
                         foreach (var line in filecontent.Split('\n'))
                         {
-                            maxCharactersPerLine.Add(line.Length);
+                            maxCharactersPerLine.Add(line.Length + 1);
                         }
                     }
 
                     else if (pressedKey.Key == ConsoleKey.C) {
+                        if (cursorx > maxCharactersPerLine[cursory])
+                        {
+                            cursorx = maxCharactersPerLine[cursory];
+                        }
                         ClipboardService.SetText(GetSelectedText(filecontent));
-                    isSelection = false;
+                        isSelection = false;
                     }
 
                     else if (!isSelection)
