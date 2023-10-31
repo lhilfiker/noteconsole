@@ -98,6 +98,7 @@ namespace windows_console_notes_editor
                         maxCharactersPerLine.Clear();
                         Console.Clear();
                         Console.WriteLine("Pasting...");
+                        maxCharactersPerLine.Clear();
                         // Precompute max characters for each line
                         foreach (var line in filecontent.Split('\n'))
                         {
@@ -224,27 +225,47 @@ namespace windows_console_notes_editor
                             return;
                         case ConsoleKey.Backspace: //Delete
                         case ConsoleKey.Delete:
-                            //If cursor is not == 0, then remove the character before it and move the cursor back
-
-                            if (cursorx != 0)
+                            if (isSelection) // Check if selection is true
                             {
-                                int deleteIndex = GetIndex(filecontent, cursorx, cursory);
-                                filecontent = filecontent.Remove(deleteIndex - 1, 1);
-                                cursorx--;
-                            }
-                            // Append the current line to the line above so there is only one line.
-                            else if (cursory != 0)
-                            {
-                                int deleteIndex = GetIndex(filecontent, cursorx, cursory);
-                                string line2 = filecontent.Substring(deleteIndex);
-                                filecontent = filecontent.Remove(deleteIndex);
-                                filecontent = filecontent.Insert(deleteIndex - 1, line2);
-                                cursory--;
-                                cursorx = maxCharactersPerLine[cursory];
-                                maxCharactersPerLine.RemoveAt(cursory + 1);
-                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
-                            }
+                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
+                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
 
+                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+
+                                cursorx = selectionStartX;
+                                cursory = selectionStartY;
+                                
+                                // Precompute max characters for each line
+                                maxCharactersPerLine.Clear();
+                                foreach (var lineincontent in filecontent.Split('\n'))
+                                {
+                                    maxCharactersPerLine.Add(lineincontent.Length + 1);
+                                }
+
+                                isSelection = false;
+                            }
+                            else
+                            {
+                                // Existing logic
+                                if (cursorx != 0)
+                                {
+                                    int deleteIndex = GetIndex(filecontent, cursorx, cursory);
+                                    filecontent = filecontent.Remove(deleteIndex - 1, 1);
+                                    cursorx--;
+                                }
+                                // Append the current line to the line above so there is only one line.
+                                else if (cursory != 0)
+                                {
+                                    int deleteIndex = GetIndex(filecontent, cursorx, cursory);
+                                    string line2 = filecontent.Substring(deleteIndex);
+                                    filecontent = filecontent.Remove(deleteIndex);
+                                    filecontent = filecontent.Insert(deleteIndex - 1, line2);
+                                    cursory--;
+                                    cursorx = maxCharactersPerLine[cursory];
+                                    maxCharactersPerLine.RemoveAt(cursory + 1);
+                                    maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                                }
+                            }
                             break;
 
                         case ConsoleKey.Enter: // NewLine
