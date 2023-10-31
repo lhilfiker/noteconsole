@@ -269,19 +269,63 @@ namespace windows_console_notes_editor
                             break;
 
                         case ConsoleKey.Enter: // NewLine
-                            int enterIndex = GetIndex(filecontent, cursorx, cursory);
-                            string line = filecontent.Substring(enterIndex);
-                            filecontent = filecontent.Insert(enterIndex, "\n");
-                            cursory++;
-                            cursorx = 0;
-                            maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
-                            maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1);
+                            if (isSelection) // Check if selection is true
+                            {
+                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
+                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+
+                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+
+                                cursorx = selectionStartX;
+                                cursory = selectionStartY;
+                                
+                                // Precompute max characters for each line
+                                maxCharactersPerLine.Clear();
+                                foreach (var lineincontent in filecontent.Split('\n'))
+                                {
+                                    maxCharactersPerLine.Add(lineincontent.Length + 1);
+                                }
+
+                                isSelection = false;
+                            }
+                            else
+                            {
+                                int enterIndex = GetIndex(filecontent, cursorx, cursory);
+                                string line = filecontent.Substring(enterIndex);
+                                filecontent = filecontent.Insert(enterIndex, "\n");
+                                cursory++;
+                                cursorx = 0;
+                                maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
+                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1);    
+                            }
                             break;
 
                         case ConsoleKey.Spacebar: // Space
-                            int spaceIndex = GetIndex(filecontent, cursorx, cursory);
-                            filecontent = filecontent.Insert(spaceIndex, " ");
-                            cursorx++;
+                            if (isSelection) // Check if selection is true
+                            {
+                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
+                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+
+                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+
+                                cursorx = selectionStartX;
+                                cursory = selectionStartY;
+                                
+                                // Precompute max characters for each line
+                                maxCharactersPerLine.Clear();
+                                foreach (var lineincontent in filecontent.Split('\n'))
+                                {
+                                    maxCharactersPerLine.Add(lineincontent.Length + 1);
+                                }
+
+                                isSelection = false;
+                            }
+                            else
+                            {
+                                int spaceIndex = GetIndex(filecontent, cursorx, cursory);
+                                filecontent = filecontent.Insert(spaceIndex, " ");
+                                cursorx++;    
+                            }
                             break;
                         case ConsoleKey.Tab:
                         case ConsoleKey.Home:
@@ -337,11 +381,37 @@ namespace windows_console_notes_editor
                             break;
                         default: // Default case is a character key
                             char keyChar = pressedKey.KeyChar;
-                            int charIndex = GetIndex(filecontent, cursorx, cursory);
-                            filecontent = filecontent.Insert(charIndex, keyChar.ToString());
-                            cursorx++;
-                            maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+    
+                            if (isSelection) // Check if selection is true
+                            {
+                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
+                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+        
+                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+
+                                filecontent = filecontent.Insert(startIndex, keyChar.ToString());
+
+                                cursorx = selectionStartX + 1;
+                                cursory = selectionStartY;
+
+                                // Precompute max characters for each line
+                                maxCharactersPerLine.Clear();
+                                foreach (var lineincontent in filecontent.Split('\n'))
+                                {
+                                    maxCharactersPerLine.Add(lineincontent.Length + 1);
+                                }
+
+                                isSelection = false;
+                            }
+                            else
+                            {
+                                int charIndex = GetIndex(filecontent, cursorx, cursory);
+                                filecontent = filecontent.Insert(charIndex, keyChar.ToString());
+                                cursorx++;
+                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                            }
                             break;
+
                     }
                     //Make sure cursor is within boundaries
                     if (cursorx > maxCharactersPerLine[cursory])
