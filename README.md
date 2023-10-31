@@ -43,4 +43,4 @@ Contributions are welcome.
 Whether you want to fix a bug, add a new feature, or improve the documentation, feel free to submit a pull request. 
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
