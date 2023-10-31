@@ -12,6 +12,27 @@ namespace windows_console_notes_editor
 {
     internal partial class Program
     {
+        private static List<string> sidePanelContent = new()
+        {
+            "┌────────────────────────────────────┐",
+            "| Hello,                             |",
+            "| Ctrl S to save                     |",
+            "| P to print                         |",
+            "| Esc to exit                        |",
+            "| Alt C to copy                      |",
+            "| Alt V to paste                     |",
+            "| Alt S for selection mode           |",
+            "|                                    |",
+            "|                                    |",
+            "|                                    |",
+            "|                                    |",
+            "|                                    |",
+            "|                                    |",
+            "|                                    |",
+            "|                                    |",
+            "└────────────────────────────────────┘"
+
+        };
         static bool isSelection = false;
         static int selectionStartX;
         static int selectionStartY;
@@ -31,6 +52,7 @@ namespace windows_console_notes_editor
             }
             int cursorx = 0;
             int cursory = 0;
+            bool sidePanel = false;
 
             Console.CursorVisible = true;
 
@@ -50,7 +72,7 @@ namespace windows_console_notes_editor
                 int maxwidth = Console.WindowWidth;
                 int maxheight = Console.WindowHeight;
 
-                (List<string> formatedtext, int startLine, int startChar) = FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight);
+                (List<string> formatedtext, int startLine, int startChar) = FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight, sidePanel);
                 FileRender(formatedtext);
 
                 int displayedCursorX = Math.Min(Math.Max(cursorx - startChar, 0), maxwidth - 1);
@@ -279,6 +301,17 @@ namespace windows_console_notes_editor
                             Process.Start(psi);
                             Console.WriteLine("File has been sent to the printer.");
                             break;
+                        
+                        case ConsoleKey.P:
+                            if (sidePanel)
+                            {
+                                sidePanel = false;
+                            }
+                            else
+                            {
+                                sidePanel = true;
+                            }
+                            break;
                         default: // Default case is a character key
                             char keyChar = pressedKey.KeyChar;
                             int charIndex = GetIndex(filecontent, cursorx, cursory);
@@ -396,7 +429,7 @@ namespace windows_console_notes_editor
             return index;
         }
 
-        static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight)
+        static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight, bool sidePanel)
         {
             List<string> lines = filecontent.Split('\n').ToList();
             List<string> formattedLines = new List<string>();
@@ -444,6 +477,34 @@ namespace windows_console_notes_editor
                 }
 
                 formattedLines.Add(line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar)));
+            }
+            // If Sidepanl is activated replace right side with the panel
+            if (sidePanel)
+            {
+                while (formattedLines.Count < maxheight - 2)
+                {
+                    formattedLines.Add("");
+                }
+
+                for (int i = 0; i < formattedLines.Count; i++)
+                {
+                    if (i >= sidePanelContent.Count) // Check if we're beyond the count of sidePanelContent
+                    {
+                        break; // Exit the loop if we are
+                    }
+
+                    int totalContentLength = formattedLines[i].Length + sidePanelContent[i].Length;
+                    int paddingLength = maxwidth - totalContentLength; // Calculate the number of spaces required
+
+                    if (paddingLength < 0) // If content is longer than maxwidth
+                    {
+                        formattedLines[i] = formattedLines[i].Substring(0, maxwidth - sidePanelContent[i].Length); 
+                        paddingLength = 0; // Reset padding length to 0
+                    }
+
+                    // Append spaces and sidePanelContent
+                    formattedLines[i] = formattedLines[i] + new string(' ', paddingLength) + sidePanelContent[i];
+                }
             }
 
             return (formattedLines, startLine, startChar);
