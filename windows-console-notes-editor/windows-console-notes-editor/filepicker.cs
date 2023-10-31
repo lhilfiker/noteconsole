@@ -181,6 +181,9 @@ namespace windows_console_notes_editor
                                 return path;
                             }
                             break;
+                        case var _ when (pressedKey.Key == ConsoleKey.Escape):
+                            return "";
+                            break;
 
                     }
                     FilePickRender(folderselection);

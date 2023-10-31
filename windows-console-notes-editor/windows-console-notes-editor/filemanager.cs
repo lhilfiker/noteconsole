@@ -13,7 +13,15 @@ namespace windows_console_notes_editor
     {
         public static void FileManager(string filepath)
         {
-            string filecontent = File.ReadAllText(filepath);
+            string filecontent = "";
+            try
+            {
+                filecontent = File.ReadAllText(filepath);
+            }
+            catch
+            {
+                return;
+            }
             int cursorx = 0;
             int cursory = 0;
 

@@ -16,7 +16,7 @@
                 lastaccessed.Add("Nothing in here. Sorry");
             }
 
-            string filepath;
+            string filepath = "";
             
             while (true)
             {
@@ -83,6 +83,7 @@
                         Console.WriteLine("*   Erstelle eine neue Notiz   *");
                         Console.WriteLine("********************************");
                         string documentsPath = FilePicker(true);
+                        if (documentsPath == "") break;
                         Console.WriteLine($"A new file will be created in {documentsPath}");
                         Console.Write("Gib den Namen der neuen Notiz ein: ");
                         string fileName = Console.ReadLine();
@@ -111,6 +112,7 @@
                     else if (keyInfo.Key == ConsoleKey.S)
                     {
                         filepath = FilePicker(false);
+                        if (filepath == "") break;
                         Console.Clear();
                         Console.WriteLine($"{filepath} is opening...");
                         //Save it in lastaccessed
@@ -129,7 +131,10 @@
                         Console.WriteLine("Ungültige Eingabe. Drücke 'R', 'S' oder 'N'.");
                     }
                 } while (true);
-
+                if (filepath == null)
+                {
+                    continue;
+                }
                 FileManager(filepath);
             }
         }
