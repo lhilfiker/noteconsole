@@ -316,17 +316,38 @@ namespace windows_console_notes_editor
                 // If it's the start and end line of the selection
                 if (i == trueStartY && i == trueEndY)
                 {
-                    selectedText.Append(lines[i].Substring(trueStartX, trueEndX - trueStartX + 1));
+                    if (lines[i].Length >= trueEndX + 1)
+                    {
+                        selectedText.Append(lines[i].Substring(trueStartX, trueEndX - trueStartX + 1));
+                    }
+                    else if (lines[i].Length > trueStartX)
+                    {
+                        selectedText.Append(lines[i].Substring(trueStartX));
+                    }
                 }
                 // If it's the start line of the selection
                 else if (i == trueStartY)
                 {
-                    selectedText.Append(lines[i].Substring(trueStartX));
+                    if (lines[i].Length > trueStartX)
+                    {
+                        selectedText.Append(lines[i].Substring(trueStartX));
+                    }
+                    else
+                    {
+                        selectedText.Append(lines[i]);
+                    }
                 }
                 // If it's the end line of the selection
                 else if (i == trueEndY)
                 {
-                    selectedText.Append(lines[i].Substring(0, trueEndX + 1));
+                    if (lines[i].Length >= trueEndX + 1)
+                    {
+                        selectedText.Append(lines[i].Substring(0, trueEndX + 1));
+                    }
+                    else
+                    {
+                        selectedText.Append(lines[i]);
+                    }
                 }
                 // Any line in between
                 else
@@ -340,11 +361,14 @@ namespace windows_console_notes_editor
                     selectedText.Append('\n');
                 }
             }
+
             Console.Clear();
-            Console.WriteLine($"{selectedText.ToString()} will be copied. Press Enter to continoue");
+            Console.WriteLine($"{selectedText.ToString()} will be copied. \nPress Enter to continue");
             Console.ReadLine();
+
             return selectedText.ToString();
         }
+
 
         static int GetIndex(string filecontent, int cursorx, int cursory)
         {
