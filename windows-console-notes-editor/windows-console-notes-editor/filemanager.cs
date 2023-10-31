@@ -571,13 +571,13 @@ namespace windows_console_notes_editor
 
                 formattedLines.Add(line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar)));
             }
+            while (formattedLines.Count < maxheight - 2)
+            {
+                formattedLines.Add("");
+            }
             // If Sidepanl is activated replace right side with the panel
             if (sidePanel)
             {
-                while (formattedLines.Count < maxheight - 2)
-                {
-                    formattedLines.Add("");
-                }
 
                 for (int i = 0; i < formattedLines.Count; i++)
                 {
@@ -610,6 +610,14 @@ namespace windows_console_notes_editor
             foreach (string line in text)
             {
                 Console.WriteLine(line);
+            }
+
+            if (isSelection)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.Write("[Selection Mode]");
+                Console.ResetColor();
             }
         }
 
