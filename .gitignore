@@ -396,3 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+windows-console-notes-editor/.idea/.idea.windows-console-notes-editor/.idea/vcs.xml
+windows-console-notes-editor/.idea/.idea.windows-console-notes-editor/.idea/indexLayout.xml
+windows-console-notes-editor/.idea/.idea.windows-console-notes-editor/.idea/projectSettingsUpdater.xml
+windows-console-notes-editor/.idea/.idea.windows-console-notes-editor/.idea/workspace.xml

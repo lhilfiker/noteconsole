@@ -107,6 +107,22 @@
                         Console.Write("Gib den Namen der neuen Notiz ein: ");
                         string fileName = Console.ReadLine();
 
+                        //Check if an extension got added.
+                        string fileExtension = Path.GetExtension(fileName);
+                        if (fileExtension == ".txt" || fileExtension == ".md" || fileExtension == ".html" ||
+                            fileExtension == ".css" ||
+                            fileExtension == ".json" || fileExtension == ".xml" || fileExtension == ".csv" ||
+                            fileExtension == ".log" ||
+                            fileExtension == ".sql" || fileExtension == ".yml" || fileExtension == ".yaml" ||
+                            fileExtension == ".conf" || fileExtension == ".cfg" || fileExtension == ".ini" ||
+                            fileExtension == ".properties" || fileExtension == ".bat" || fileExtension == ".sh" ||
+                            fileExtension == ".php" || fileExtension == ".js" || fileExtension == ".py" ||
+                            fileExtension == ".pl") ;
+                        else
+                        {
+                            fileName += ".txt"; // Add .txt if non provided
+                        }
+
                         string filePath = Path.Combine(documentsPath, fileName);
 
                         if (File.Exists(filePath))
