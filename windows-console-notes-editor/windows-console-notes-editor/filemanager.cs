@@ -63,7 +63,23 @@ namespace windows_console_notes_editor
 
                 if (pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt))
                 {
-                    if (!isSelection)
+                    
+                    if (pressedKey.Key == ConsoleKey.V)
+                    {
+                        // Paste functionality
+                        string clipboardText = TextCopy.ClipboardService.GetText();
+                        int pasteIndex = GetIndex(filecontent, cursorx, cursory);
+                        filecontent = filecontent.Insert(pasteIndex, clipboardText);
+                        cursorx += clipboardText.Length;
+                        maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                    }
+
+                    else if (pressedKey.Key == ConsoleKey.C) {
+                        ClipboardService.SetText(GetSelectedText(filecontent));
+                    isSelection = false;
+                    }
+
+                    else if (!isSelection)
                     {
                         isSelection = true;
                         selectionStartX = cursorx;
@@ -252,19 +268,6 @@ namespace windows_console_notes_editor
                             Process.Start(psi);
                             Console.WriteLine("File has been sent to the printer.");
                             break;
-                        case ConsoleKey.V when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt):
-                            // Paste functionality
-                            string clipboardText = TextCopy.ClipboardService.GetText();
-                            int pasteIndex = GetIndex(filecontent, cursorx, cursory);
-                            filecontent = filecontent.Insert(pasteIndex, clipboardText);
-                            cursorx += clipboardText.Length;
-                            maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
-                            break;
-
-                        case ConsoleKey.C when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt) && isSelection:
-                            ClipboardService.SetText(GetSelectedText(filecontent));
-                            isSelection = false;
-                            break;
                         default: // Default case is a character key
                             char keyChar = pressedKey.KeyChar;
                             int charIndex = GetIndex(filecontent, cursorx, cursory);
@@ -326,7 +329,9 @@ namespace windows_console_notes_editor
                     selectedText.Append('\n');
                 }
             }
-
+            Console.Clear();
+            Console.WriteLine($"{selectedText.ToString()} will be copied. Press Enter to continoue");
+            Console.ReadLine();
             return selectedText.ToString();
         }
 
