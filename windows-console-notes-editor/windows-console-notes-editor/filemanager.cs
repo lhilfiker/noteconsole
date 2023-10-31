@@ -15,22 +15,24 @@ namespace windows_console_notes_editor
         private static List<string> sidePanelContent = new()
         {
             "┌────────────────────────────────────┐",
-            "| Hello,                             |",
-            "| Ctrl S to save                     |",
-            "| P to print                         |",
-            "| Esc to exit                        |",
-            "| Alt C to copy                      |",
-            "| Alt V to paste                     |",
-            "| Alt S for selection mode           |",
+            "|            Note Editor             |",
+            "|────────────────────────────────────|",
+            "| Hello!                             |",
             "|                                    |",
-            "|                                    |",
-            "|                                    |",
-            "|                                    |",
+            "| Ctrl + S - Save                    |",
+            "| P - Print                          |",
+            "| Esc - Exit                         |",
+            "|────────────────────────────────────|",
+            "| Edit Commands:                     |",
+            "|   Alt + C - Copy                   |",
+            "|   Alt + V - Paste                  |",
+            "|   Alt + S - Selection Mode         |",
             "|                                    |",
             "|                                    |",
             "|                                    |",
             "|                                    |",
             "└────────────────────────────────────┘"
+
 
         };
         static bool isSelection = false;
@@ -488,9 +490,9 @@ namespace windows_console_notes_editor
 
                 for (int i = 0; i < formattedLines.Count; i++)
                 {
-                    if (i >= sidePanelContent.Count) // Check if we're beyond the count of sidePanelContent
+                    if (i >= sidePanelContent.Count) // Check if were beyond the length of sidepanel
                     {
-                        break; // Exit the loop if we are
+                        break;
                     }
 
                     int totalContentLength = formattedLines[i].Length + sidePanelContent[i].Length;
@@ -499,10 +501,9 @@ namespace windows_console_notes_editor
                     if (paddingLength < 0) // If content is longer than maxwidth
                     {
                         formattedLines[i] = formattedLines[i].Substring(0, maxwidth - sidePanelContent[i].Length); 
-                        paddingLength = 0; // Reset padding length to 0
+                        paddingLength = 0; 
                     }
-
-                    // Append spaces and sidePanelContent
+                    
                     formattedLines[i] = formattedLines[i] + new string(' ', paddingLength) + sidePanelContent[i];
                 }
             }
