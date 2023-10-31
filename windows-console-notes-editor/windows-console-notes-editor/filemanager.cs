@@ -6,6 +6,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using TextCopy;
+using System.Diagnostics;
 
 namespace windows_console_notes_editor
 {
@@ -234,7 +235,22 @@ namespace windows_console_notes_editor
 
                         case ConsoleKey.P when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                         case ConsoleKey.PrintScreen:
-                            //Here comes the print logic
+                            // Here comes the print logic
+                            string path = "print_file.txt";
+                            File.WriteAllText(path, filecontent);
+
+                            // Use a system command to print the file
+                            ProcessStartInfo psi = new ProcessStartInfo()
+                            {
+                                FileName = "print",
+                                Verb = "PrintTo",
+                                Arguments = path,
+                                CreateNoWindow = true,
+                                UseShellExecute = true,
+                            };
+
+                            Process.Start(psi);
+                            Console.WriteLine("File has been sent to the printer.");
                             break;
                         case ConsoleKey.V when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                             // Paste functionality
