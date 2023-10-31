@@ -22,9 +22,9 @@ namespace windows_console_notes_editor
 {
     internal partial class Program
     {
-        static string FilePicker()
+        static string FilePicker(bool folderselection)
         {
-            return Picker();
+            return Picker(folderselection);
         }
 
         static string path;
@@ -34,7 +34,7 @@ namespace windows_console_notes_editor
         static List<string> data = new();
         static List<DriveInfo> removableDrives = new();
 
-        static string Picker()
+        static string Picker(bool folderselection)
         {
 
             try
@@ -47,7 +47,7 @@ namespace windows_console_notes_editor
                 ConsoleKeyInfo pressedKey;
                 // Inital fetching Path Data
                 FetchFolderData();
-                FilePickRender();
+                FilePickRender(folderselection);
                 while (!File.Exists(path))
                 {
                     pressedKey = Console.ReadKey(intercept: true);
@@ -111,7 +111,7 @@ namespace windows_console_notes_editor
                             }
                             else
                             {
-                                if (IsFileAllowedToOpen(path))
+                                if (IsFileAllowedToOpen(path) && !folderselection)
                                 {
                                     stopResizen = true;
                                     return path;
@@ -153,7 +153,7 @@ namespace windows_console_notes_editor
                             }
                             else
                             {
-                                if (IsFileAllowedToOpen(path))
+                                if (IsFileAllowedToOpen(path) && !folderselection)
                                 {
                                     stopResizen = true;
                                     return path;
@@ -166,7 +166,7 @@ namespace windows_console_notes_editor
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.R):
                             FetchFolderData();
-                            FilePickRender();
+                            FilePickRender(folderselection);
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.Home):
                             path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -174,10 +174,18 @@ namespace windows_console_notes_editor
                             currentSelection = 0;
                             FetchFolderData();
                             break;
+                        case var _ when (pressedKey.Key == ConsoleKey.N):
+                            if (folderselection)
+                            {
+                                stopResizen = true;
+                                return path;
+                            }
+                            break;
 
                     }
-                    FilePickRender();
+                    FilePickRender(folderselection);
                 }
+                stopResizen = true;
                 return path;
             }
             catch (Exception e)
@@ -213,14 +221,14 @@ namespace windows_console_notes_editor
                     buffer = Console.WindowHeight;
                     maxheightConsole = buffer;
                     maxwidthConsole = Console.WindowWidth;
-                    FilePickRender();
+                    FilePickRender(false);
                 }
                 System.Threading.Thread.Sleep(500);
             }
         }
 
 
-        static void FilePickRender()
+        static void FilePickRender(bool folderselection)
         {
             List<(string Text, ConsoleColor Color)> buffer = new();
 
@@ -279,6 +287,12 @@ namespace windows_console_notes_editor
                     buffer.Add(("<<<", scrollColor));
                 }
 
+                //Information when selecting folder
+                if (folderselection)
+                {
+                    buffer.Add(("Press 'N' to create the file in this folder.", ConsoleColor.White));
+                }
+
                 // Display the entire buffer at once
                 Console.Clear();
                 foreach (var (text, color) in buffer)
@@ -301,7 +315,7 @@ namespace windows_console_notes_editor
                 }
                 path = GetParentDirectory(path);
                 FetchFolderData();
-                FilePickRender();
+                FilePickRender(folderselection);
             }
         }
 

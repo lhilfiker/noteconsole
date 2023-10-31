@@ -82,7 +82,8 @@
                         Console.WriteLine("********************************");
                         Console.WriteLine("*   Erstelle eine neue Notiz   *");
                         Console.WriteLine("********************************");
-                        string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                        string documentsPath = FilePicker(true);
+                        Console.WriteLine($"A new file will be created in {documentsPath}");
                         Console.Write("Gib den Namen der neuen Notiz ein: ");
                         string fileName = Console.ReadLine();
 
@@ -109,7 +110,7 @@
                     }
                     else if (keyInfo.Key == ConsoleKey.S)
                     {
-                        filepath = FilePicker();
+                        filepath = FilePicker(false);
                         Console.Clear();
                         Console.WriteLine($"{filepath} is opening...");
                         //Save it in lastaccessed
