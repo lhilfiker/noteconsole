@@ -24,21 +24,38 @@
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.Clear();
 
-                Console.WriteLine("                                             _                                 _      ");
-                Console.WriteLine("                                            | |                               | |     ");
-                Console.WriteLine("                                 _ __   ___ | |_ ___  ___ ___  _ __  ___  ___ | | ___ ");
-                Console.WriteLine("                                | '_ \\ / _ \\| __/ _ \\/ __/ _ \\| '_ \\/ __|/ _ \\| |/ _ \\");
-                Console.WriteLine("                                | | | | (_) | ||  __/ (_| (_) | | | \\__ \\ (_) | |  __/");
-                Console.WriteLine("                                |_| |_|\\___/ \\__\\___|\\___\\___/|_| |_|___/\\___/|_|\\___|");
-                Console.WriteLine("");
-                Console.WriteLine("                                           ********************************");
-                Console.WriteLine("                                           **        Welcome back!       **");
-                Console.WriteLine("                                           ********************************");
-                Console.WriteLine("");
-                Console.WriteLine("                                           Press 'R' for recently used notes");
-                Console.WriteLine("                                         Press 'S' to pick a file from your PC");
-                Console.WriteLine("                                            Press 'N' to create a new note");
+                int consoleWidth = Console.WindowWidth;
+                int consoleHeight = Console.WindowHeight;
 
+                // Define the content
+                string[] content = {
+                    "             _                                 _      ",
+                    "            | |                               | |     ",
+                    " _ __   ___ | |_ ___  ___ ___  _ __  ___  ___ | | ___ ",
+                    "| '_ \\ / _ \\| __/ _ \\/ __/ _ \\| '_ \\/ __|/ _ \\| |/ _ \\",
+                    "| | | | (_) | ||  __/ (_| (_) | | | \\__ \\ (_) | |  __/",
+                    "|_| |_|\\___/ \\__\\___|\\___\\___/|_| |_|___/\\___/|_|\\___|",
+                    "",
+                    "********************************",
+                    "**        Welcome back!       **",
+                    "********************************",
+                    "",
+                    "Press 'R' for recently used notes",
+                    "Press 'S' to pick a file from your PC",
+                    "Press 'N' to create a new note"
+                };
+
+                // Calculate vertical center
+                int verticalCenter = (consoleHeight - content.Length) / 2;
+
+                // Print content centered horizontally and vertically
+                for (int i = 0; i < content.Length; i++)
+                {
+                    string line = content[i];
+                    int horizontalPadding = (consoleWidth - line.Length) / 2;
+                    Console.SetCursorPosition(horizontalPadding, verticalCenter + i);
+                    Console.WriteLine(line);
+                }
 
                 ConsoleKeyInfo keyInfo;
 
