@@ -636,19 +636,5 @@ namespace windows_console_notes_editor
                 return 0;
             }
         }
-
-        static int GetMaxLine(string filecontent)
-        {
-            try
-            {
-                string[] lines = filecontent.Split('\n');
-                int numberOfLines = lines.Length;
-                return numberOfLines;
-            }
-            catch
-            {
-                return 0;
-            }
-        }
     }
 }
