@@ -231,6 +231,15 @@ namespace windows_console_notes_editor
                                 int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
                                 int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
 
+                                if (startIndex > endIndex) // If selecting behind the start change values
+                                {
+                                    int buffer = endIndex;
+                                    endIndex = startIndex;
+                                    startIndex = buffer;
+                                    selectionStartX = selectionEndX;
+                                    selectionStartY = selectionEndY;
+                                }
+
                                 filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
 
                                 cursorx = selectionStartX;
@@ -274,6 +283,15 @@ namespace windows_console_notes_editor
                             {
                                 int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
                                 int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+                                
+                                if (startIndex > endIndex) // If selecting behind the start change values
+                                {
+                                    int buffer = endIndex;
+                                    endIndex = startIndex;
+                                    startIndex = buffer;
+                                    selectionStartX = selectionEndX;
+                                    selectionStartY = selectionEndY;
+                                }
 
                                 filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
 
@@ -306,6 +324,15 @@ namespace windows_console_notes_editor
                             {
                                 int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
                                 int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+                                
+                                if (startIndex > endIndex) // If selecting behind the start change values
+                                {
+                                    int buffer = endIndex;
+                                    endIndex = startIndex;
+                                    startIndex = buffer;
+                                    selectionStartX = selectionEndX;
+                                    selectionStartY = selectionEndY;
+                                }
 
                                 filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
 
@@ -387,6 +414,15 @@ namespace windows_console_notes_editor
                             {
                                 int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
                                 int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+                                
+                                if (startIndex > endIndex) // If selecting behind the start change values
+                                {
+                                    int buffer = endIndex;
+                                    endIndex = startIndex;
+                                    startIndex = buffer;
+                                    selectionStartX = selectionEndX;
+                                    selectionStartY = selectionEndY;
+                                }
         
                                 filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
 
