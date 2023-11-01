@@ -22,6 +22,7 @@ namespace windows_console_notes_editor
             "| Ctrl + S - Save                    |",
             "| P - Print                          |",
             "| Esc - Exit                         |",
+            "| E - Encrypt                        |",
             "|────────────────────────────────────|",
             "| Edit Commands:                     |",
             "|   Alt + C - Copy                   |",
