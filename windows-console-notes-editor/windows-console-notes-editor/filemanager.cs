@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection.Metadata;
+﻿using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 using TextCopy;
-using System.Diagnostics;
 
 namespace windows_console_notes_editor
 {
@@ -15,7 +9,7 @@ namespace windows_console_notes_editor
         private static List<string> sidePanelContent = new()
         {
             "┌────────────────────────────────────┐",
-            "|            Note Editor             |",
+            "|            noteconsole             |",
             "|────────────────────────────────────|",
             "| Hello!                             |",
             "|                                    |",
@@ -33,9 +27,8 @@ namespace windows_console_notes_editor
             "|                                    |",
             "|                                    |",
             "└────────────────────────────────────┘"
-
-
         };
+
         static bool isSelection = false;
         static int selectionStartX;
         static int selectionStartY;
@@ -53,6 +46,7 @@ namespace windows_console_notes_editor
             {
                 return;
             }
+
             int cursorx = 0;
             int cursory = 0;
             bool sidePanel = false;
@@ -75,7 +69,8 @@ namespace windows_console_notes_editor
                 int maxwidth = Console.WindowWidth;
                 int maxheight = Console.WindowHeight;
 
-                (List<string> formatedtext, int startLine, int startChar) = FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight, sidePanel);
+                (List<string> formatedtext, int startLine, int startChar) =
+                    FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight, sidePanel);
                 FileRender(formatedtext);
 
                 int displayedCursorX = Math.Min(Math.Max(cursorx - startChar, 0), maxwidth - 1);
@@ -88,7 +83,6 @@ namespace windows_console_notes_editor
 
                 if (pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt))
                 {
-                    
                     if (pressedKey.Key == ConsoleKey.V)
                     {
                         // Paste functionality
@@ -107,11 +101,13 @@ namespace windows_console_notes_editor
                         }
                     }
 
-                    else if (pressedKey.Key == ConsoleKey.C) {
+                    else if (pressedKey.Key == ConsoleKey.C)
+                    {
                         if (cursorx > maxCharactersPerLine[cursory])
                         {
                             cursorx = maxCharactersPerLine[cursory];
                         }
+
                         ClipboardService.SetText(GetSelectedText(filecontent));
                         isSelection = false;
                     }
@@ -133,23 +129,28 @@ namespace windows_console_notes_editor
                 {
                     switch (pressedKey.Key)
                     {
-                        case ConsoleKey.LeftArrow when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Move to start of line
+                        case ConsoleKey.LeftArrow
+                            when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Move to start of line
                             if (!isSelection) cursorx = 0;
                             else
                             {
                                 cursorx = 0;
                                 selectionEndX = 0;
                             }
+
                             break;
-                        case ConsoleKey.RightArrow when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of line
+                        case ConsoleKey.RightArrow
+                            when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of line
                             if (!isSelection) cursorx = maxcharacter;
                             else
                             {
                                 cursorx = maxcharacter;
                                 selectionEndX = maxcharacter;
                             }
+
                             break;
-                        case ConsoleKey.UpArrow when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Move to start of file
+                        case ConsoleKey.UpArrow
+                            when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Move to start of file
                             if (!isSelection)
                             {
                                 cursory = 0;
@@ -162,8 +163,10 @@ namespace windows_console_notes_editor
                                 selectionEndX = 0;
                                 selectionEndY = 0;
                             }
+
                             break;
-                        case ConsoleKey.DownArrow when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of file
+                        case ConsoleKey.DownArrow
+                            when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of file
                             cursory = maxline - 1;
                             cursorx = maxcharacter;
                             if (isSelection)
@@ -171,6 +174,7 @@ namespace windows_console_notes_editor
                                 selectionEndX = cursorx;
                                 selectionEndY = cursory;
                             }
+
                             break;
                         case ConsoleKey.DownArrow: //Movement
                             if (cursory < maxline - 1)
@@ -182,6 +186,7 @@ namespace windows_console_notes_editor
                                     selectionEndY = cursory;
                                 }
                             }
+
                             break;
                         case ConsoleKey.LeftArrow:
                             cursorx = Math.Max(0, cursorx - 1);
@@ -189,6 +194,7 @@ namespace windows_console_notes_editor
                             {
                                 selectionEndX = cursorx;
                             }
+
                             break;
                         case ConsoleKey.RightArrow:
                             cursorx = Math.Min(cursorx + 1, maxcharacter - 1);
@@ -196,6 +202,7 @@ namespace windows_console_notes_editor
                             {
                                 selectionEndX = cursorx;
                             }
+
                             break;
 
                         case ConsoleKey.UpArrow:
@@ -208,6 +215,7 @@ namespace windows_console_notes_editor
                                     selectionEndY = cursory;
                                 }
                             }
+
                             break;
                         case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Save
                             File.WriteAllText(filepath, filecontent);
@@ -223,6 +231,7 @@ namespace windows_console_notes_editor
                                     File.WriteAllText(filepath, filecontent);
                                 }
                             }
+
                             return;
                         case ConsoleKey.Backspace: //Delete
                         case ConsoleKey.Delete:
@@ -244,7 +253,7 @@ namespace windows_console_notes_editor
 
                                 cursorx = selectionStartX;
                                 cursory = selectionStartY;
-                                
+
                                 // Precompute max characters for each line
                                 maxCharactersPerLine.Clear();
                                 foreach (var lineincontent in filecontent.Split('\n'))
@@ -276,6 +285,7 @@ namespace windows_console_notes_editor
                                     maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
                                 }
                             }
+
                             break;
 
                         case ConsoleKey.Enter: // NewLine
@@ -283,7 +293,7 @@ namespace windows_console_notes_editor
                             {
                                 int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
                                 int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
-                                
+
                                 if (startIndex > endIndex) // If selecting behind the start change values
                                 {
                                     int buffer = endIndex;
@@ -297,7 +307,7 @@ namespace windows_console_notes_editor
 
                                 cursorx = selectionStartX;
                                 cursory = selectionStartY;
-                                
+
                                 // Precompute max characters for each line
                                 maxCharactersPerLine.Clear();
                                 foreach (var lineincontent in filecontent.Split('\n'))
@@ -315,8 +325,9 @@ namespace windows_console_notes_editor
                                 cursory++;
                                 cursorx = 0;
                                 maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
-                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1);    
+                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1);
                             }
+
                             break;
 
                         case ConsoleKey.Spacebar: // Space
@@ -324,7 +335,7 @@ namespace windows_console_notes_editor
                             {
                                 int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
                                 int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
-                                
+
                                 if (startIndex > endIndex) // If selecting behind the start change values
                                 {
                                     int buffer = endIndex;
@@ -338,7 +349,7 @@ namespace windows_console_notes_editor
 
                                 cursorx = selectionStartX;
                                 cursory = selectionStartY;
-                                
+
                                 // Precompute max characters for each line
                                 maxCharactersPerLine.Clear();
                                 foreach (var lineincontent in filecontent.Split('\n'))
@@ -352,8 +363,9 @@ namespace windows_console_notes_editor
                             {
                                 int spaceIndex = GetIndex(filecontent, cursorx, cursory);
                                 filecontent = filecontent.Insert(spaceIndex, " ");
-                                cursorx++;    
+                                cursorx++;
                             }
+
                             break;
                         case ConsoleKey.Tab:
                         case ConsoleKey.Home:
@@ -396,7 +408,7 @@ namespace windows_console_notes_editor
                             Process.Start(psi);
                             Console.WriteLine("File has been sent to the printer.");
                             break;
-                        
+
                         case ConsoleKey.P:
                             if (sidePanel)
                             {
@@ -406,15 +418,16 @@ namespace windows_console_notes_editor
                             {
                                 sidePanel = true;
                             }
+
                             break;
                         default: // Default case is a character key
                             char keyChar = pressedKey.KeyChar;
-    
+
                             if (isSelection) // Check if selection is true
                             {
                                 int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
                                 int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
-                                
+
                                 if (startIndex > endIndex) // If selecting behind the start change values
                                 {
                                     int buffer = endIndex;
@@ -423,7 +436,7 @@ namespace windows_console_notes_editor
                                     selectionStartX = selectionEndX;
                                     selectionStartY = selectionEndY;
                                 }
-        
+
                                 filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
 
                                 filecontent = filecontent.Insert(startIndex, keyChar.ToString());
@@ -447,9 +460,10 @@ namespace windows_console_notes_editor
                                 cursorx++;
                                 maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
                             }
-                            break;
 
+                            break;
                     }
+
                     //Make sure cursor is within boundaries
                     if (cursorx > maxCharactersPerLine[cursory])
                     {
@@ -552,14 +566,16 @@ namespace windows_console_notes_editor
             int index = 0;
             for (int i = 0; i < cursory; i++)
             {
-                index += lines[i].Length + 1;  // +1 for the '\n' character
+                index += lines[i].Length + 1; // +1 for the '\n' character
             }
+
             index += cursorx;
 
             return index;
         }
 
-        static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight, bool sidePanel)
+        static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight,
+            bool sidePanel)
         {
             List<string> lines = filecontent.Split('\n').ToList();
             List<string> formattedLines = new List<string>();
@@ -608,14 +624,15 @@ namespace windows_console_notes_editor
 
                 formattedLines.Add(line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar)));
             }
+
             while (formattedLines.Count < maxheight - 2)
             {
                 formattedLines.Add("");
             }
+
             // If Sidepanl is activated replace right side with the panel
             if (sidePanel)
             {
-
                 for (int i = 0; i < formattedLines.Count; i++)
                 {
                     if (i >= sidePanelContent.Count) // Check if were beyond the length of sidepanel
@@ -628,10 +645,10 @@ namespace windows_console_notes_editor
 
                     if (paddingLength < 0) // If content is longer than maxwidth
                     {
-                        formattedLines[i] = formattedLines[i].Substring(0, maxwidth - sidePanelContent[i].Length); 
-                        paddingLength = 0; 
+                        formattedLines[i] = formattedLines[i].Substring(0, maxwidth - sidePanelContent[i].Length);
+                        paddingLength = 0;
                     }
-                    
+
                     formattedLines[i] = formattedLines[i] + new string(' ', paddingLength) + sidePanelContent[i];
                 }
             }
@@ -657,7 +674,6 @@ namespace windows_console_notes_editor
                 Console.ResetColor();
             }
         }
-
 
 
         static int GetMaxCharacter(string filecontent, int line)
