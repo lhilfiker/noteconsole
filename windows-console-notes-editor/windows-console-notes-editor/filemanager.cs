@@ -576,7 +576,7 @@ namespace windows_console_notes_editor
             }
             else if (y >= lines.Count - midPoint)
             {
-                startLine = Math.Max(0, lines.Count - maxheight);
+                startLine = Math.Max(0, lines.Count - maxheight + 1);
             }
             else
             {
