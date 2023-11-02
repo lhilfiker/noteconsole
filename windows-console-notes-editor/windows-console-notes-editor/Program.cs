@@ -80,9 +80,6 @@
                 }
                 else if (keyInfo.Key == ConsoleKey.N)
                 {
-                    Console.WriteLine("********************************");
-                    Console.WriteLine("*   Erstelle eine neue Notiz   *");
-                    Console.WriteLine("********************************");
                     string documentsPath = FilePicker(true);
                     if (documentsPath == "") break;
                     Console.WriteLine($"A new file will be created in {documentsPath}");
@@ -110,17 +107,19 @@
                     if (File.Exists(filePath))
                     {
                         Console.WriteLine($"Die Datei '{fileName}' existiert bereits.");
+                        Thread.Sleep(1000);
+                        continue;
                     }
                     else
                     {
                         try
                         {
                             File.Create(filePath).Close();
-                            Console.WriteLine($"Die Datei '{fileName}' wurde erfolgreich erstellt.");
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine($"Fehler beim Erstellen der Datei: {ex.Message}");
+                            Thread.Sleep(1000);
                         }
                     }
 
@@ -158,10 +157,6 @@
                     {
                         AddToChache($"last = {filepath}|:|");
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Ungültige Eingabe. Drücke 'R', 'S' oder 'N'.");
                 }
 
                 if (filepath == null || filepath == "")
