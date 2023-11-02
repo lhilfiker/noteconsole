@@ -17,7 +17,7 @@
             }
 
             string filepath = "";
-            
+
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.White;
@@ -28,7 +28,8 @@
                 int consoleHeight = Console.WindowHeight;
 
                 // Define the content
-                string[] content = {
+                string[] content =
+                {
                     "             _                                 _      ",
                     "            | |                               | |     ",
                     " _ __   ___ | |_ ___  ___ ___  _ __  ___  ___ | | ___ ",
@@ -59,133 +60,115 @@
 
                 ConsoleKeyInfo keyInfo;
 
-                do
+                keyInfo = Console.ReadKey();
+                Console.WriteLine();
+
+                if (keyInfo.Key == ConsoleKey.R)
                 {
-                    keyInfo = Console.ReadKey();
-                    Console.WriteLine();
-
-                    if (keyInfo.Key == ConsoleKey.R)
+                    try
                     {
-                        try
+                        filepath = DisplayRecentFiles();
+                        if (filepath == null || filepath == "")
                         {
-                            filepath = DisplayRecentFiles();
-                            if (filepath == null || filepath == "")
-                            {
-                                throw new Exception();
-                            }
-                            break;
-                        }
-                        catch
-                        {
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.BackgroundColor = ConsoleColor.Black;
-                            Console.Clear();
-
-                            Console.WriteLine("             _                                 _      ");
-                            Console.WriteLine("            | |                               | |     ");
-                            Console.WriteLine(" _ __   ___ | |_ ___  ___ ___  _ __  ___  ___ | | ___ ");
-                            Console.WriteLine("| '_ \\ / _ \\| __/ _ \\/ __/ _ \\| '_ \\/ __|/ _ \\| |/ _ \\");
-                            Console.WriteLine("| | | | (_) | ||  __/ (_| (_) | | | \\__ \\ (_) | |  __/");
-                            Console.WriteLine("|_| |_|\\___/ \\__\\___|\\___\\___/|_| |_|___/\\___/|_|\\___|");
-                            Console.WriteLine("                                                      ");
-                            Console.WriteLine("********************************");
-                            Console.WriteLine("*      Willkommen zurück!      *");
-                            Console.WriteLine("********************************");
-                            Console.WriteLine("Drücke 'R' für kürzlich verwendete Notizen.");
-                            Console.WriteLine("Drücke 'S' um eine Datei aus deinem Computer auszuwählen");
-                            Console.WriteLine("Drücke 'N' für eine neue Notiz.");
+                            throw new Exception();
                         }
                     }
-                    else if (keyInfo.Key == ConsoleKey.N)
+                    catch
                     {
-                        Console.WriteLine("********************************");
-                        Console.WriteLine("*   Erstelle eine neue Notiz   *");
-                        Console.WriteLine("********************************");
-                        string documentsPath = FilePicker(true);
-                        if (documentsPath == "") break;
-                        Console.WriteLine($"A new file will be created in {documentsPath}");
-                        Console.Write("Gib den Namen der neuen Notiz ein: ");
-                        string fileName = Console.ReadLine();
-
-                        //Check if an extension got added.
-                        string fileExtension = Path.GetExtension(fileName);
-                        if (fileExtension == ".txt" || fileExtension == ".md" || fileExtension == ".html" ||
-                            fileExtension == ".css" ||
-                            fileExtension == ".json" || fileExtension == ".xml" || fileExtension == ".csv" ||
-                            fileExtension == ".log" ||
-                            fileExtension == ".sql" || fileExtension == ".yml" || fileExtension == ".yaml" ||
-                            fileExtension == ".conf" || fileExtension == ".cfg" || fileExtension == ".ini" ||
-                            fileExtension == ".properties" || fileExtension == ".bat" || fileExtension == ".sh" ||
-                            fileExtension == ".php" || fileExtension == ".js" || fileExtension == ".py" ||
-                            fileExtension == ".pl") ;
-                        else
-                        {
-                            fileName += ".txt"; // Add .txt if non provided
-                        }
-
-                        string filePath = Path.Combine(documentsPath, fileName);
-
-                        if (File.Exists(filePath))
-                        {
-                            Console.WriteLine($"Die Datei '{fileName}' existiert bereits.");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                File.Create(filePath).Close();
-                                Console.WriteLine($"Die Datei '{fileName}' wurde erfolgreich erstellt.");
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"Fehler beim Erstellen der Datei: {ex.Message}");
-                            }
-                        }
-                        filepath = filePath;
-                        break;
+                        continue;
                     }
-                    else if (keyInfo.Key == ConsoleKey.S)
-                    {
-                        filepath = FilePicker(false);
-                        if (filepath == "") break;
-                        Console.Clear();
-                        Console.WriteLine($"{filepath} is opening...");
-                        //Save it in lastaccessed
-                        if (GetValueForKey(cacheData, "last") != null)
-                        {
-                            List<string> recentFiles = GetValueForKey(cacheData, "last")?.Split("|:|").ToList() ?? new List<string>();
-                            if (recentFiles.Contains(filepath)) // If the path is in the cache already move it to the top
-                            {
-                                recentFiles.RemoveAll(item => item == filepath); 
-                                recentFiles.Insert(0, filepath);
-                                string updatedLastAccessed = "";
-                                foreach (string path in recentFiles)
-                                {
-                                    updatedLastAccessed += path + "|:|";
-                                }
-                                ChangeCacheValue("last", updatedLastAccessed);
+                }
+                else if (keyInfo.Key == ConsoleKey.N)
+                {
+                    Console.WriteLine("********************************");
+                    Console.WriteLine("*   Erstelle eine neue Notiz   *");
+                    Console.WriteLine("********************************");
+                    string documentsPath = FilePicker(true);
+                    if (documentsPath == "") break;
+                    Console.WriteLine($"A new file will be created in {documentsPath}");
+                    Console.Write("Gib den Namen der neuen Notiz ein: ");
+                    string fileName = Console.ReadLine();
 
-                            }
-                            else
-                            {
-                                ChangeCacheValue("last", filepath + "|:|" + (GetValueForKey(cacheData, "last")));    
-                            }
-                        }
-                        else
-                        {
-                            AddToChache($"last = {filepath}|:|");
-                        }
-                        break;
+                    //Check if an extension got added.
+                    string fileExtension = Path.GetExtension(fileName);
+                    if (fileExtension == ".txt" || fileExtension == ".md" || fileExtension == ".html" ||
+                        fileExtension == ".css" ||
+                        fileExtension == ".json" || fileExtension == ".xml" || fileExtension == ".csv" ||
+                        fileExtension == ".log" ||
+                        fileExtension == ".sql" || fileExtension == ".yml" || fileExtension == ".yaml" ||
+                        fileExtension == ".conf" || fileExtension == ".cfg" || fileExtension == ".ini" ||
+                        fileExtension == ".properties" || fileExtension == ".bat" || fileExtension == ".sh" ||
+                        fileExtension == ".php" || fileExtension == ".js" || fileExtension == ".py" ||
+                        fileExtension == ".pl") ;
+                    else
+                    {
+                        fileName += ".txt"; // Add .txt if non provided
+                    }
+
+                    string filePath = Path.Combine(documentsPath, fileName);
+
+                    if (File.Exists(filePath))
+                    {
+                        Console.WriteLine($"Die Datei '{fileName}' existiert bereits.");
                     }
                     else
                     {
-                        Console.WriteLine("Ungültige Eingabe. Drücke 'R', 'S' oder 'N'.");
+                        try
+                        {
+                            File.Create(filePath).Close();
+                            Console.WriteLine($"Die Datei '{fileName}' wurde erfolgreich erstellt.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Fehler beim Erstellen der Datei: {ex.Message}");
+                        }
                     }
-                } while (true);
-                if (filepath == null)
+
+                    filepath = filePath;
+                }
+                else if (keyInfo.Key == ConsoleKey.S)
+                {
+                    filepath = FilePicker(false);
+                    if (filepath == "") break;
+                    Console.Clear();
+                    Console.WriteLine($"{filepath} is opening...");
+                    //Save it in lastaccessed
+                    if (GetValueForKey(cacheData, "last") != null)
+                    {
+                        List<string> recentFiles = GetValueForKey(cacheData, "last")?.Split("|:|").ToList() ??
+                                                   new List<string>();
+                        if (recentFiles.Contains(filepath)) // If the path is in the cache already move it to the top
+                        {
+                            recentFiles.RemoveAll(item => item == filepath);
+                            recentFiles.Insert(0, filepath);
+                            string updatedLastAccessed = "";
+                            foreach (string path in recentFiles)
+                            {
+                                updatedLastAccessed += path + "|:|";
+                            }
+
+                            ChangeCacheValue("last", updatedLastAccessed);
+                        }
+                        else
+                        {
+                            ChangeCacheValue("last", filepath + "|:|" + (GetValueForKey(cacheData, "last")));
+                        }
+                    }
+                    else
+                    {
+                        AddToChache($"last = {filepath}|:|");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ungültige Eingabe. Drücke 'R', 'S' oder 'N'.");
+                }
+
+                if (filepath == null || filepath == "")
                 {
                     continue;
                 }
+
                 FileManager(filepath);
             }
         }
@@ -240,16 +223,17 @@
                     if (recentFiles.Contains(
                             recentFiles[selectedIndex])) // If the path is in the cache already move it to the top
                     {
-                        recentFiles.RemoveAll(item => item == recentFiles[selectedIndex]); 
+                        recentFiles.RemoveAll(item => item == recentFiles[selectedIndex]);
                         recentFiles.Insert(0, recentFiles[selectedIndex]);
                         string updatedLastAccessed = "";
                         foreach (string path in recentFiles)
                         {
                             updatedLastAccessed += path + "|:|";
                         }
-                        ChangeCacheValue("last", updatedLastAccessed);
 
+                        ChangeCacheValue("last", updatedLastAccessed);
                     }
+
                     return recentFiles[selectedIndex];
                 }
                 else if (key == ConsoleKey.Escape)
