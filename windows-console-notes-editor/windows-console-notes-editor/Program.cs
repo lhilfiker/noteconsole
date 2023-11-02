@@ -217,19 +217,13 @@
                 else if (key == ConsoleKey.Enter)
                 {
                     string selectedFile = recentFiles[selectedIndex];
-                    if (recentFiles.Contains(
-                            recentFiles[selectedIndex])) // If the path is in the cache already move it to the top
-                    {
-                        recentFiles.RemoveAll(item => item == recentFiles[selectedIndex]);
-                        recentFiles.Insert(0, recentFiles[selectedIndex]);
-                        string updatedLastAccessed = "";
-                        foreach (string path in recentFiles)
-                        {
-                            updatedLastAccessed += path + "|:|";
-                        }
 
-                        ChangeCacheValue("last", updatedLastAccessed);
-                    }
+                    // Move the selected file to the top
+                    recentFiles.Remove(selectedFile);
+                    recentFiles.Insert(0, selectedFile);
+
+                    string updatedLastAccessed = string.Join("|:|", recentFiles);
+                    ChangeCacheValue("last", updatedLastAccessed);
 
                     return selectedFile;
                 }
