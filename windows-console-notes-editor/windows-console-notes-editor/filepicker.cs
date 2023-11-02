@@ -1,32 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Diagnostics;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Text.RegularExpressions;
-using System.IO.Compression;
-using System.ComponentModel;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Xml.XPath;
-using System.Xml;
-using System.Linq.Expressions;
-using System.ComponentModel.Design;
-using System.Runtime.InteropServices;
-
-namespace windows_console_notes_editor
+﻿namespace windows_console_notes_editor
 {
     internal partial class Program
     {
-        static string FilePicker(bool folderselection)
-        {
-            return Picker(folderselection);
-        }
-
         static string path;
         static bool stopResizen = false;
         static int currentSelection = 0;
@@ -34,9 +9,16 @@ namespace windows_console_notes_editor
         static List<string> data = new();
         static List<DriveInfo> removableDrives = new();
 
+        static int maxheightConsole;
+        static int maxwidthConsole;
+
+        static string FilePicker(bool folderselection)
+        {
+            return Picker(folderselection);
+        }
+
         static string Picker(bool folderselection)
         {
-
             try
             {
                 path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -46,7 +28,7 @@ namespace windows_console_notes_editor
                 // Other variables
                 ConsoleKeyInfo pressedKey;
                 // Inital fetching Path Data
-                FetchFolderData();
+                FetchFolderData(folderselection);
                 FilePickRender(folderselection);
                 while (!File.Exists(path))
                 {
@@ -64,27 +46,33 @@ namespace windows_console_notes_editor
                             {
                                 startrender = 0;
                             }
+
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.UpArrow || pressedKey.Key == ConsoleKey.PageUp):
                             if (currentSelection != 0)
                             {
                                 currentSelection--;
                             }
+
                             if (startrender == currentSelection && startrender != 0)
                             {
                                 startrender--;
                             }
+
                             Thread.Sleep(20);
                             break;
-                        case var _ when (pressedKey.Key == ConsoleKey.DownArrow || pressedKey.Key == ConsoleKey.PageDown):
+                        case var _
+                            when (pressedKey.Key == ConsoleKey.DownArrow || pressedKey.Key == ConsoleKey.PageDown):
                             if (currentSelection + 2 < data.Count)
                             {
                                 currentSelection++;
                             }
+
                             if (currentSelection + 2 - startrender >= maxheightConsole - 3)
                             {
                                 startrender++;
                             }
+
                             Thread.Sleep(20);
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.RightArrow):
@@ -107,7 +95,7 @@ namespace windows_console_notes_editor
                             {
                                 startrender = 0;
                                 currentSelection = 0;
-                                FetchFolderData();
+                                FetchFolderData(folderselection);
                             }
                             else
                             {
@@ -121,12 +109,13 @@ namespace windows_console_notes_editor
                                     path = GetParentDirectory(path);
                                 }
                             }
+
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.LeftArrow):
                             path = GetParentDirectory(path);
                             startrender = 0;
                             currentSelection = 0;
-                            FetchFolderData();
+                            FetchFolderData(folderselection);
 
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.Enter):
@@ -149,7 +138,7 @@ namespace windows_console_notes_editor
                             {
                                 startrender = 0;
                                 currentSelection = 0;
-                                FetchFolderData();
+                                FetchFolderData(folderselection);
                             }
                             else
                             {
@@ -163,16 +152,17 @@ namespace windows_console_notes_editor
                                     path = GetParentDirectory(path);
                                 }
                             }
+
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.R):
-                            FetchFolderData();
+                            FetchFolderData(folderselection);
                             FilePickRender(folderselection);
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.Home):
                             path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
                             startrender = 0;
                             currentSelection = 0;
-                            FetchFolderData();
+                            FetchFolderData(folderselection);
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.N):
                             if (folderselection)
@@ -180,36 +170,40 @@ namespace windows_console_notes_editor
                                 stopResizen = true;
                                 return path;
                             }
+
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.Escape):
                             return "";
                             break;
-
                     }
+
                     FilePickRender(folderselection);
                 }
+
                 stopResizen = true;
                 return path;
             }
             catch (Exception e)
             {
-                
                 Console.WriteLine($"An unknown error occurred: \n{e.Message}\nStack-Trace:\n {e.StackTrace}");
                 return null;
-                
             }
+
             stopResizen = true;
             return null;
         }
+
         static bool IsFileAllowedToOpen(string filePath)
         {
             string extension = Path.GetExtension(filePath).ToLower();
-            if (extension == ".txt" || extension == ".md" || extension == ".html" || extension == ".css" || extension == ".json" || extension == ".xml" || extension == ".csv" || extension == ".log" || extension == ".sql" || extension == ".yml" || extension == ".yaml" || extension == ".conf" || extension == ".cfg" || extension == ".ini" || extension == ".properties" || extension == ".bat" || extension == ".sh" || extension == ".php" || extension == ".js" || extension == ".py" || extension == ".pl") return true;
+            if (extension == ".txt" || extension == ".md" || extension == ".html" || extension == ".css" ||
+                extension == ".json" || extension == ".xml" || extension == ".csv" || extension == ".log" ||
+                extension == ".sql" || extension == ".yml" || extension == ".yaml" || extension == ".conf" ||
+                extension == ".cfg" || extension == ".ini" || extension == ".properties" || extension == ".bat" ||
+                extension == ".sh" || extension == ".php" || extension == ".js" || extension == ".py" ||
+                extension == ".pl") return true;
             return false;
         }
-
-        static int maxheightConsole;
-        static int maxwidthConsole;
 
         // Gets the maximum window size
         static void GetMaxWindowSize()
@@ -220,12 +214,13 @@ namespace windows_console_notes_editor
             while (!stopResizen)
             {
                 if (buffer != Console.WindowHeight)
-                {   
+                {
                     buffer = Console.WindowHeight;
                     maxheightConsole = buffer;
                     maxwidthConsole = Console.WindowWidth;
                     FilePickRender(false);
                 }
+
                 System.Threading.Thread.Sleep(500);
             }
         }
@@ -259,14 +254,14 @@ namespace windows_console_notes_editor
                         string displayText = data[index];
                         if (index == currentSelection)
                         {
-                            buffer.Add(("--> " + displayText, ConsoleColor.Yellow));  
+                            buffer.Add(("--> " + displayText, ConsoleColor.Yellow));
                         }
                         else
                         {
                             if (File.Exists(Path.Combine(path, data[index])))
                             {
                                 buffer.Add(("    " + displayText, ConsoleColor.Cyan));
-                            }  
+                            }
                             else
                             {
                                 buffer.Add(("    " + displayText, ConsoleColor.DarkCyan));
@@ -304,20 +299,24 @@ namespace windows_console_notes_editor
                     Console.ForegroundColor = color;
                     Console.WriteLine(adjustedText);
                 }
+
                 Console.ResetColor();
             }
             catch (Exception er)
             {
                 Console.Clear();
-                Console.WriteLine("Error Encountered\r\nYou may not have the necessary permissions for this folder or file. Please:\r\n\r\n    Check your permissions.\r\n    Consider running the program as an administrator.\r\n\r\nIf you believe this is a different issue, press [e] to retrieve the error code.");
+                Console.WriteLine(
+                    "Error Encountered\r\nYou may not have the necessary permissions for this folder or file. Please:\r\n\r\n    Check your permissions.\r\n    Consider running the program as an administrator.\r\n\r\nIf you believe this is a different issue, press [e] to retrieve the error code.");
                 if (Console.ReadKey().Key == ConsoleKey.E)
                 {
                     Console.Clear();
-                    Console.WriteLine($"Here is your error code. If this isn't a permission error, please submit a bug report at https://github.com/RebelCoderJames/console-windows-notes-editor/issues.\nThank you.\n\n{er}");
+                    Console.WriteLine(
+                        $"Here is your error code. If this isn't a permission error, please submit a bug report at https://github.com/RebelCoderJames/console-windows-notes-editor/issues.\nThank you.\n\n{er}");
                     Thread.Sleep(100000);
                 }
+
                 path = GetParentDirectory(path);
-                FetchFolderData();
+                FetchFolderData(folderselection);
                 FilePickRender(folderselection);
             }
         }
@@ -358,10 +357,11 @@ namespace windows_console_notes_editor
             {
                 return path;
             }
+
             return path;
         }
 
-        public static void FetchFolderData()
+        public static void FetchFolderData(bool folderpicker)
         {
             data.Clear();
             try
@@ -383,6 +383,7 @@ namespace windows_console_notes_editor
                         {
                         }
                     }
+
                     data.Add("");
                     data.Add("");
                 }
@@ -393,10 +394,14 @@ namespace windows_console_notes_editor
                         data.Add(Path.GetFileName(directory));
                     }
 
-                    foreach (var file in Directory.GetFiles(path))
+                    if (!folderpicker)
                     {
-                        data.Add(Path.GetFileName(file));
+                        foreach (var file in Directory.GetFiles(path))
+                        {
+                            data.Add(Path.GetFileName(file));
+                        }
                     }
+
                     data.Add("");
                     data.Add("");
                 }
@@ -406,6 +411,5 @@ namespace windows_console_notes_editor
                 Console.WriteLine($"An error occurred: {e.Message}");
             }
         }
-
     }
 }
