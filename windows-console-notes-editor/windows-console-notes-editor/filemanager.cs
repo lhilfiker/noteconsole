@@ -87,18 +87,21 @@ namespace windows_console_notes_editor
                     if (pressedKey.Key == ConsoleKey.V)
                     {
                         // Paste functionality
-                        string clipboardText = TextCopy.ClipboardService.GetText();
-                        int pasteIndex = GetIndex(filecontent, cursorx, cursory);
-                        filecontent = filecontent.Insert(pasteIndex, clipboardText);
-                        cursorx += clipboardText.Length;
-                        maxCharactersPerLine.Clear();
-                        Console.Clear();
-                        Console.WriteLine("Pasting...");
-                        maxCharactersPerLine.Clear();
-                        // Precompute max characters for each line
-                        foreach (var line in filecontent.Split('\n'))
+                        var clipboardText = TextCopy.ClipboardService.GetText();
+                        if (!string.IsNullOrEmpty(clipboardText))
                         {
-                            maxCharactersPerLine.Add(line.Length + 1);
+                            int pasteIndex = GetIndex(filecontent, cursorx, cursory);
+                            filecontent = filecontent.Insert(pasteIndex, clipboardText);
+                            cursorx += clipboardText.Length;
+                            maxCharactersPerLine.Clear();
+                            Console.Clear();
+                            Console.WriteLine("Pasting...");
+                            maxCharactersPerLine.Clear();
+                            // Precompute max characters for each line
+                            foreach (var line in filecontent.Split('\n'))
+                            {
+                                maxCharactersPerLine.Add(line.Length + 1);
+                            }
                         }
                     }
 
