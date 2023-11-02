@@ -90,12 +90,12 @@ namespace windows_console_notes_editor
                         var clipboardText = TextCopy.ClipboardService.GetText();
                         if (!string.IsNullOrEmpty(clipboardText))
                         {
+                            Console.Clear();
+                            Console.WriteLine("Pasting...");
                             int pasteIndex = GetIndex(filecontent, cursorx, cursory);
                             filecontent = filecontent.Insert(pasteIndex, clipboardText);
                             cursorx += clipboardText.Length;
                             maxCharactersPerLine.Clear();
-                            Console.Clear();
-                            Console.WriteLine("Pasting...");
                             maxCharactersPerLine.Clear();
                             // Precompute max characters for each line
                             foreach (var line in filecontent.Split('\n'))
@@ -153,6 +153,7 @@ namespace windows_console_notes_editor
                             }
 
                             break;
+                        case ConsoleKey.PageUp when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                         case ConsoleKey.UpArrow
                             when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Move to start of file
                             if (!isSelection)
@@ -169,6 +170,7 @@ namespace windows_console_notes_editor
                             }
 
                             break;
+                        case ConsoleKey.PageDown when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                         case ConsoleKey.DownArrow
                             when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of file
                             cursory = maxline - 1;
@@ -180,6 +182,7 @@ namespace windows_console_notes_editor
                             }
 
                             break;
+                        case ConsoleKey.PageDown:
                         case ConsoleKey.DownArrow: //Movement
                             if (cursory < maxline - 1)
                             {
@@ -208,7 +211,7 @@ namespace windows_console_notes_editor
                             }
 
                             break;
-
+                        case ConsoleKey.PageUp:
                         case ConsoleKey.UpArrow:
                             if (cursory > 0)
                             {
@@ -374,8 +377,6 @@ namespace windows_console_notes_editor
                         case ConsoleKey.Tab:
                         case ConsoleKey.Home:
                         case ConsoleKey.End:
-                        case ConsoleKey.PageUp:
-                        case ConsoleKey.PageDown:
                         case ConsoleKey.Insert:
                         case ConsoleKey.F1:
                         case ConsoleKey.F2:
