@@ -6,7 +6,7 @@ namespace windows_console_notes_editor
 {
     internal partial class Program
     {
-        private static List<string> sidePanelContent = new()
+        static List<string> sidePanelContent = new()
         {
             "┌────────────────────────────────────┐",
             "|            noteconsole             |",
@@ -37,6 +37,9 @@ namespace windows_console_notes_editor
 
         public static void FileManager(string filepath)
         {
+            Console.Clear();
+            Console.WriteLine("Loading...");
+
             string filecontent = "";
             try
             {
@@ -49,13 +52,11 @@ namespace windows_console_notes_editor
 
             int cursorx = 0;
             int cursory = 0;
-            bool sidePanel = false;
+            bool isSidePanel = false;
 
             Console.CursorVisible = true;
 
             List<int> maxCharactersPerLine = new List<int>();
-            Console.Clear();
-            Console.WriteLine("Loading...");
             // Precompute max characters for each line
             foreach (var line in filecontent.Split('\n'))
             {
@@ -70,7 +71,7 @@ namespace windows_console_notes_editor
                 int maxheight = Console.WindowHeight;
 
                 (List<string> formatedtext, int startLine, int startChar) =
-                    FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight, sidePanel);
+                    FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight, isSidePanel);
                 FileRender(formatedtext);
 
                 int displayedCursorX = Math.Min(Math.Max(cursorx - startChar, 0), maxwidth - 1);
@@ -410,15 +411,7 @@ namespace windows_console_notes_editor
                             break;
 
                         case ConsoleKey.P:
-                            if (sidePanel)
-                            {
-                                sidePanel = false;
-                            }
-                            else
-                            {
-                                sidePanel = true;
-                            }
-
+                            isSidePanel = !isSidePanel;
                             break;
                         default: // Default case is a character key
                             char keyChar = pressedKey.KeyChar;
@@ -575,7 +568,7 @@ namespace windows_console_notes_editor
         }
 
         static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight,
-            bool sidePanel)
+            bool isSidePanel)
         {
             List<string> lines = filecontent.Split('\n').ToList();
             List<string> formattedLines = new List<string>();
@@ -631,7 +624,7 @@ namespace windows_console_notes_editor
             }
 
             // If Sidepanl is activated replace right side with the panel
-            if (sidePanel)
+            if (isSidePanel)
             {
                 for (int i = 0; i < formattedLines.Count; i++)
                 {
