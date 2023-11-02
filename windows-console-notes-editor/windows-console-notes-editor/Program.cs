@@ -132,6 +132,11 @@
                     if (filepath == "") break;
                     Console.Clear();
                     Console.WriteLine($"{filepath} is opening...");
+                    if (filepath == null || filepath == "")
+                    {
+                        continue;
+                    }
+
                     //Save it in lastaccessed
                     if (GetValueForKey(cacheData, "last") != null)
                     {
@@ -158,11 +163,6 @@
                     {
                         AddToChache($"last = {filepath}|:|");
                     }
-                }
-
-                if (filepath == null || filepath == "")
-                {
-                    continue;
                 }
 
                 FileManager(filepath);

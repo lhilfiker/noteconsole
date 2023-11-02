@@ -174,7 +174,6 @@
                             break;
                         case var _ when (pressedKey.Key == ConsoleKey.Escape):
                             return "";
-                            break;
                         case var _ when (pressedKey.Key == ConsoleKey.C && folderselection):
                             Console.Clear();
                             Console.Write("Please enter a name for the new folder: ");
