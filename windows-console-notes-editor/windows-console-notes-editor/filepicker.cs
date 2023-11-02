@@ -175,6 +175,24 @@
                         case var _ when (pressedKey.Key == ConsoleKey.Escape):
                             return "";
                             break;
+                        case var _ when (pressedKey.Key == ConsoleKey.C && folderselection):
+                            Console.Clear();
+                            Console.Write("Please enter a name for the new folder: ");
+                            string folderName = Console.ReadLine();
+                            if (!Directory.Exists(Path.Combine(path, folderName)))
+                            {
+                                try
+                                {
+                                    Directory.CreateDirectory(Path.Combine(path, folderName));
+                                    path = Path.Combine(path, folderName);
+                                    FetchFolderData(true);
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            break;
                     }
 
                     FilePickRender(folderselection);
@@ -288,7 +306,8 @@
                 //Information when selecting folder
                 if (folderselection)
                 {
-                    buffer.Add(("Press 'N' to create the file in this folder.", ConsoleColor.White));
+                    buffer.Add(("Press 'N' to create the file in this folder. 'C' to create a new folder.",
+                        ConsoleColor.White));
                 }
 
                 // Display the entire buffer at once

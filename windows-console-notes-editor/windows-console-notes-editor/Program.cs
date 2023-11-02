@@ -82,6 +82,7 @@
                 {
                     string documentsPath = FilePicker(true);
                     if (documentsPath == "") break;
+                    Console.Clear();
                     Console.WriteLine($"A new file will be created in {documentsPath}");
                     Console.Write("Gib den Namen der neuen Notiz ein: ");
                     string fileName = Console.ReadLine();
