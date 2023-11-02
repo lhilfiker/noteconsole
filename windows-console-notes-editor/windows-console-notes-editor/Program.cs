@@ -129,7 +129,7 @@
                 else if (keyInfo.Key == ConsoleKey.S)
                 {
                     filepath = FilePicker(false);
-                    if (filepath == "") break;
+                    if (filepath == "") continue;
                     Console.Clear();
                     Console.WriteLine($"{filepath} is opening...");
                     if (filepath == null || filepath == "")
