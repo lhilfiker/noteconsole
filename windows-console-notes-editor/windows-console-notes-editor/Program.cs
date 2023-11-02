@@ -172,6 +172,7 @@
         {
             Console.Clear();
             Console.WriteLine("Kürzlich verwendete Notizen:");
+            LoadCache();
 
             string recentFilesData = GetValueForKey(cacheData, "last");
             List<string> recentFiles = recentFilesData?.Split("|:|").ToList() ?? new List<string>();
@@ -215,6 +216,7 @@
                 }
                 else if (key == ConsoleKey.Enter)
                 {
+                    string selectedFile = recentFiles[selectedIndex];
                     if (recentFiles.Contains(
                             recentFiles[selectedIndex])) // If the path is in the cache already move it to the top
                     {
@@ -229,7 +231,7 @@
                         ChangeCacheValue("last", updatedLastAccessed);
                     }
 
-                    return recentFiles[selectedIndex];
+                    return selectedFile;
                 }
                 else if (key == ConsoleKey.Escape)
                 {
