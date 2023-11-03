@@ -124,6 +124,32 @@
                     }
 
                     filepath = filePath;
+                    //Save it in lastaccessed
+                    if (GetValueForKey(cacheData, "last") != null)
+                    {
+                        List<string> recentFiles = GetValueForKey(cacheData, "last")?.Split("|:|").ToList() ??
+                                                   new List<string>();
+                        if (recentFiles.Contains(filepath)) // If the path is in the cache already move it to the top
+                        {
+                            recentFiles.RemoveAll(item => item == filepath);
+                            recentFiles.Insert(0, filepath);
+                            string updatedLastAccessed = "";
+                            foreach (string path in recentFiles)
+                            {
+                                updatedLastAccessed += path + "|:|";
+                            }
+
+                            ChangeCacheValue("last", updatedLastAccessed);
+                        }
+                        else
+                        {
+                            ChangeCacheValue("last", filepath + "|:|" + (GetValueForKey(cacheData, "last")));
+                        }
+                    }
+                    else
+                    {
+                        AddToChache($"last = {filepath}|:|");
+                    }
                 }
                 else if (keyInfo.Key == ConsoleKey.S)
                 {
