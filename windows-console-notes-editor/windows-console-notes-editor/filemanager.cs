@@ -656,12 +656,9 @@ namespace windows_console_notes_editor
 
         static void FileRender(List<string> text)
         {
+            string writebuffer = string.Join(Environment.NewLine, text);
             Console.Clear();
-            Console.SetCursorPosition(0, 0);
-            foreach (string line in text)
-            {
-                Console.WriteLine(line);
-            }
+            Console.Write(writebuffer);
 
             if (isSelection)
             {
