@@ -414,7 +414,7 @@ namespace windows_console_notes_editor
                             Console.WriteLine("File has been sent to the printer.");
                             break;
 
-                        case ConsoleKey.P:
+                        case ConsoleKey.N when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                             isSidePanel = !isSidePanel;
                             break;
                         default: // Default case is a character key
