@@ -36,7 +36,7 @@ writers, and anyone who appreciates the simplicity of console-based applications
 - N | Create new note
 - R | Open recent files
 - S | Pick a file from PC
-- P | Open the sidepanel
+- Ctrl N | Open the sidepanel
 
 ## Contributing
 
