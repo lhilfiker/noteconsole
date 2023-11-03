@@ -109,7 +109,6 @@
                     {
                         Console.WriteLine($"Die Datei '{fileName}' existiert bereits.");
                         Thread.Sleep(1000);
-                        continue;
                     }
                     else
                     {
