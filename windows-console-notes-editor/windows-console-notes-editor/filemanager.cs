@@ -393,6 +393,7 @@ namespace windows_console_notes_editor
                             {
                                 int spaceIndex = GetIndex(filecontent, cursorx, cursory);
                                 filecontent = filecontent.Insert(spaceIndex, " ");
+                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
                                 cursorx++;
                             }
 
@@ -430,7 +431,8 @@ namespace windows_console_notes_editor
                             {
                                 int spaceIndex = GetIndex(filecontent, cursorx, cursory);
                                 filecontent = filecontent.Insert(spaceIndex, "    ");
-                                cursorx = +4;
+                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                                cursorx = cursorx + 4;
                             }
 
                             break;
