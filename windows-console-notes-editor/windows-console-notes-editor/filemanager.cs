@@ -40,10 +40,23 @@ namespace windows_console_notes_editor
             Console.Clear();
             Console.WriteLine("Loading...");
 
+            string password = "";
+
             string filecontent = "";
             try
             {
-                filecontent = File.ReadAllText(filepath);
+                if (Path.GetExtension(filepath) == ".encrypted")
+                {
+                    byte[] decryptionBuffer = File.ReadAllBytes(filepath);
+                    Console.Clear();
+                    Console.Write("Please enter the password to decrypt the note: ");
+                    password = Console.ReadLine();
+                    filecontent = Convert.ToString(crypt.Decrypt(decryptionBuffer, password));
+                }
+                else
+                {
+                    filecontent = File.ReadAllText(filepath);    
+                }
             }
             catch
             {
@@ -225,7 +238,16 @@ namespace windows_console_notes_editor
 
                             break;
                         case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Save
-                            File.WriteAllText(filepath, filecontent);
+                            if (Path.GetExtension(filepath) == ".encrypted")
+                            {
+                                byte[] encryptionBuffer = Encoding.UTF8.GetBytes(filecontent);
+                                byte[] encryptedData = crypt.Encrypt(encryptionBuffer, password).GetAwaiter().GetResult();
+                            }
+                            else
+                            {
+                                File.WriteAllText(filepath, filecontent);
+                            }
+
                             break;
                         case ConsoleKey.Escape: // Go to welcome screen
                             Console.Clear();
