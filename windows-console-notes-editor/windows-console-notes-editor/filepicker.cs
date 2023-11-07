@@ -407,16 +407,15 @@
                 }
                 else
                 {
-                    foreach (var directory in Directory.GetDirectories(path))
-                    {
-                        data.Add(Path.GetFileName(directory));
-                    }
+                    var allowedExtensions = new List<string> { ".txt", ".md", ".html", ".css", ".json", ".xml", ".csv", ".log", ".sql", ".yml", ".yaml", ".conf", ".cfg", ".ini", ".properties", ".bat", ".sh", ".php", ".js", ".py", ".pl" };
 
-                    if (!folderpicker)
+                    foreach (var file in Directory.GetFiles(path))
                     {
-                        foreach (var file in Directory.GetFiles(path))
+                        string fileName = Path.GetFileName(file);
+                        string extension = Path.GetExtension(file).ToLower();
+                        if (allowedExtensions.Contains(extension))
                         {
-                            data.Add(Path.GetFileName(file));
+                            data.Add(fileName);
                         }
                     }
 
