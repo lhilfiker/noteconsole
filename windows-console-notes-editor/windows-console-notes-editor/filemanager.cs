@@ -55,7 +55,7 @@ namespace windows_console_notes_editor
                 }
                 else
                 {
-                    filecontent = File.ReadAllText(filepath);    
+                    filecontent = File.ReadAllText(filepath);
                 }
             }
             catch
@@ -241,7 +241,8 @@ namespace windows_console_notes_editor
                             if (Path.GetExtension(filepath) == ".encrypted")
                             {
                                 byte[] encryptionBuffer = Encoding.UTF8.GetBytes(filecontent);
-                                byte[] encryptedData = crypt.Encrypt(encryptionBuffer, password).GetAwaiter().GetResult();
+                                byte[] encryptedData =
+                                    crypt.Encrypt(encryptionBuffer, password).GetAwaiter().GetResult();
                             }
                             else
                             {
@@ -397,6 +398,42 @@ namespace windows_console_notes_editor
 
                             break;
                         case ConsoleKey.Tab:
+                            if (isSelection) // Check if selection is true
+                            {
+                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
+                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+
+                                if (startIndex > endIndex) // If selecting behind the start change values
+                                {
+                                    int buffer = endIndex;
+                                    endIndex = startIndex;
+                                    startIndex = buffer;
+                                    selectionStartX = selectionEndX;
+                                    selectionStartY = selectionEndY;
+                                }
+
+                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+
+                                cursorx = selectionStartX;
+                                cursory = selectionStartY;
+
+                                // Precompute max characters for each line
+                                maxCharactersPerLine.Clear();
+                                foreach (var lineincontent in filecontent.Split('\n'))
+                                {
+                                    maxCharactersPerLine.Add(lineincontent.Length + 1);
+                                }
+
+                                isSelection = false;
+                            }
+                            else
+                            {
+                                int spaceIndex = GetIndex(filecontent, cursorx, cursory);
+                                filecontent = filecontent.Insert(spaceIndex, "    ");
+                                cursorx = +4;
+                            }
+
+                            break;
                         case ConsoleKey.Home:
                         case ConsoleKey.End:
                         case ConsoleKey.Insert:
