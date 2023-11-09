@@ -218,7 +218,7 @@
                 extension == ".sql" || extension == ".yml" || extension == ".yaml" || extension == ".conf" ||
                 extension == ".cfg" || extension == ".ini" || extension == ".properties" || extension == ".bat" ||
                 extension == ".sh" || extension == ".php" || extension == ".js" || extension == ".py" ||
-                extension == ".pl") return true;
+                extension == ".pl" || extension == ".encrypted") return true;
             return false;
         }
 
