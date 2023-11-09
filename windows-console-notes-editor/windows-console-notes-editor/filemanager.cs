@@ -51,7 +51,8 @@ namespace windows_console_notes_editor
                     Console.Clear();
                     Console.Write("Please enter the password to decrypt the note: ");
                     password = Console.ReadLine();
-                    filecontent = Convert.ToString(crypt.Decrypt(decryptionBuffer, password));
+                    filecontent =
+                        Encoding.UTF8.GetString(crypt.Decrypt(decryptionBuffer, password).GetAwaiter().GetResult());
                 }
                 else
                 {
@@ -254,11 +255,20 @@ namespace windows_console_notes_editor
                             Console.Clear();
                             if (filecontent != File.ReadAllText(filepath))
                             {
-                                Console.WriteLine("SSave changes? (Y/N)");
+                                Console.WriteLine("Save changes? (Y/N)");
                                 ConsoleKeyInfo saveKey = Console.ReadKey();
                                 if (saveKey.Key == ConsoleKey.Y)
                                 {
-                                    File.WriteAllText(filepath, filecontent);
+                                    if (Path.GetExtension(filepath) == ".encrypted")
+                                    {
+                                        byte[] encryptionBuffer = Encoding.UTF8.GetBytes(filecontent);
+                                        byte[] encryptedData =
+                                            crypt.Encrypt(encryptionBuffer, password).GetAwaiter().GetResult();
+                                    }
+                                    else
+                                    {
+                                        File.WriteAllText(filepath, filecontent);
+                                    }
                                 }
                             }
 
