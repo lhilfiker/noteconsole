@@ -34,7 +34,7 @@ writers, and anyone who appreciates the simplicity of console-based applications
 
 ## Installation
 
-Download the latest release from here: https://github.com/RebelCoderJames/console-windows-notes-editor/releases
+Download the latest release from here: https://github.com/RebelCoderJames/noteconsole/releases
 
 ### Additional Installation Information
 
