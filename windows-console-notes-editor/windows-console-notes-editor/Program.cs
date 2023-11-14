@@ -207,6 +207,9 @@
             string recentFilesData = GetValueForKey(cacheData, "last");
             List<string> recentFiles = recentFilesData?.Split("|:|").ToList() ?? new List<string>();
 
+            //Remove Empty Values
+            recentFiles.RemoveAll(item => item == "");
+
             if (recentFiles.Count == 0)
             {
                 Console.WriteLine("No recently used notes found.");
