@@ -189,6 +189,10 @@
                         AddToChache($"last = {filepath}|:|");
                     }
                 }
+                else
+                {
+                    filepath = "";
+                }
 
                 FileManager(filepath);
             }
