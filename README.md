@@ -36,6 +36,24 @@ writers, and anyone who appreciates the simplicity of console-based applications
 
 Download the latest release from here: https://github.com/RebelCoderJames/noteconsole/releases
 
+For Linux:
+
+Add the GPG Key:
+```
+wget -qO - http://rep.rebelcoderjames.tech/repo-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/rebelcoderjames.gpg
+```
+
+Add the Repository:
+```
+echo "deb [signed-by=/usr/share/keyrings/rebelcoderjames.gpg] http://rep.rebelcoderjames.tech/ stable main" | sudo tee /etc/apt/sources.list.d/rebelcoderjames.list
+```
+
+Install it:
+```
+sudo apt update && sudo apt install noteconsole
+```
+
+
 ### Additional Installation Information
 
 For Windows:
