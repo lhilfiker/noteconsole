@@ -8,6 +8,7 @@
 
 - [Introduction](#introduction)
 - [Features](#features)
+- [Installation] (#installation)
 - [Keyboard Shortcuts](#keyboard-shortcuts)
 - [Contributing](#contributing)
 - [License](#license)
