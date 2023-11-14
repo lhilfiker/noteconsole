@@ -84,7 +84,7 @@
                     if (documentsPath == "") break;
                     Console.Clear();
                     Console.WriteLine($"A new file will be created in {documentsPath}");
-                    Console.Write("Gib den Namen der neuen Notiz ein: ");
+                    Console.Write("Enter the name of the new note: ");
                     string fileName = Console.ReadLine();
 
                     //Check if an extension got added.
@@ -107,7 +107,7 @@
 
                     if (File.Exists(filePath))
                     {
-                        Console.WriteLine($"Die Datei '{fileName}' existiert bereits.");
+                        Console.WriteLine($"The file '{fileName}' already exists.");
                         Thread.Sleep(1000);
                     }
                     else
@@ -118,7 +118,7 @@
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine($"Fehler beim Erstellen der Datei: {ex.Message}");
+                            Console.WriteLine($"Error creating the file: {ex.Message}");
                             Thread.Sleep(1000);
                         }
                     }
@@ -201,7 +201,7 @@
         static string DisplayRecentFiles()
         {
             Console.Clear();
-            Console.WriteLine("Kürzlich verwendete Notizen:");
+            Console.WriteLine("Recently used notes:");
             LoadCache();
 
             string recentFilesData = GetValueForKey(cacheData, "last");
@@ -209,8 +209,8 @@
 
             if (recentFiles.Count == 0)
             {
-                Console.WriteLine("Keine kürzlich verwendeten Notizen gefunden.");
-                Console.WriteLine("Drücke Enter, um zur vorherigen Ansicht zurückzukehren.");
+                Console.WriteLine("No recently used notes found.");
+                Console.WriteLine("Press Enter to return to the previous view.");
                 while (true)
                 {
                     var key = Console.ReadKey().Key;
@@ -223,7 +223,7 @@
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Kürzlich verwendete Notizen:");
+                Console.WriteLine("Recently used notes:");
 
                 for (int i = 0; i < recentFiles.Count; i++)
                 {
@@ -232,8 +232,8 @@
                     Console.WriteLine($"{i + 1}. {recentFiles[i]}");
                 }
 
-                Console.WriteLine("Drücke 'UpArrow' für vorherige Datei, 'DownArrow' für nächste Datei,");
-                Console.WriteLine("'Enter', um auszuwählen, oder 'Esc', um zur vorherigen Ansicht zurückzukehren.");
+                Console.WriteLine(
+                    "Press 'UpArrow' for previous file, 'DownArrow' for next file, \n'Enter' to select, or 'Esc' to return to the previous view.");
 
                 var key = Console.ReadKey().Key;
                 if (key == ConsoleKey.UpArrow)
