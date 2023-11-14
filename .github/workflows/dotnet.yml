@@ -22,13 +22,13 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore "windows-console-notes-editor/windows-console-notes-editor.sln"
+      run: dotnet restore "noteconsole.sln"
     - name: Build and Publish as Self-Contained
-      run: dotnet publish "windows-console-notes-editor/windows-console-notes-editor/windows-console-notes-editor.csproj" --configuration Release --self-contained true -r win-x64 -o ./publish /p:PublishSingleFile=true
+      run: dotnet publish "noteconsole/noteconsole/noteconsole.csproj" --configuration Release --self-contained true -r win-x64 -o ./publish /p:PublishSingleFile=true
     - name: Test
-      run: dotnet test "windows-console-notes-editor/windows-console-notes-editor/windows-console-notes-editor.csproj" --no-build --verbosity normal
+      run: dotnet test "noteconsole/noteconsole/noteconsole.csproj" --no-build --verbosity normal
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Windows-Console-Notes-Editor_vX_selfcontained
+        name: noteconsole
         path: ./publish/
