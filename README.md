@@ -33,8 +33,15 @@ writers, and anyone who appreciates the simplicity of console-based applications
 
 ## Installation
 
+Downlaod the latest release from here: https://github.com/RebelCoderJames/console-windows-notes-editor/releases
+
+### Additional Installation Information
+
+For Windows:
+- none
+
 For Linux:
-Be sure to have `xsel`installed.
+- For Copy/Paste to work, be sure to have `xsel` installed.
 
 ## Keyboard Shortcuts
 
