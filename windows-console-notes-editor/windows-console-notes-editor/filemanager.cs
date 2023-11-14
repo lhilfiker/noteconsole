@@ -207,6 +207,16 @@ namespace windows_console_notes_editor
                                     selectionEndY = cursory;
                                 }
                             }
+                            else if (cursory == maxline - 1 && formatedtext[cursory - startLine] != "")
+                            {
+                                int enterIndex = GetIndex(filecontent, maxcharacter, cursory);
+                                string line = filecontent.Substring(enterIndex);
+                                filecontent = filecontent.Insert(enterIndex, "\n");
+                                cursory++;
+                                cursorx = 0;
+                                maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
+                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1);
+                            }
 
                             break;
                         case ConsoleKey.LeftArrow:
