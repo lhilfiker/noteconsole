@@ -22,7 +22,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore "noteconsole.sln"
+      run: dotnet restore "noteconsole/noteconsole.sln"
     - name: Build and Publish as Self-Contained
       run: dotnet publish "noteconsole/noteconsole/noteconsole.csproj" --configuration Release --self-contained true -r win-x64 -o ./publish /p:PublishSingleFile=true
     - name: Test

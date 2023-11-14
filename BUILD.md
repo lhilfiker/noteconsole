@@ -19,7 +19,7 @@ For Debian/Linux .deb:
     - Create the Directory:
         `mkdir -p noteconsole/DEBIAN noteconsole/usr/local/bin`
     - Copy the application inside:
-        `cp -r bin/Release/net6.0/linux-x64/publish/* noteconsole/usr/local/bin/`
+        `cp -r noteconsole/bin/Release/net6.0/linux-x64/publish/* noteconsole/usr/local/bin/`
 
 5. Create a Debian Control File
     - Create and open it:
