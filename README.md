@@ -8,7 +8,7 @@
 
 - [Introduction](#introduction)
 - [Features](#features)
-- [Installation] (#installation)
+- [Installation](#Installation)
 - [Keyboard Shortcuts](#keyboard-shortcuts)
 - [Contributing](#contributing)
 - [License](#license)
@@ -34,7 +34,7 @@ writers, and anyone who appreciates the simplicity of console-based applications
 
 ## Installation
 
-Downlaod the latest release from here: https://github.com/RebelCoderJames/console-windows-notes-editor/releases
+Download the latest release from here: https://github.com/RebelCoderJames/console-windows-notes-editor/releases
 
 ### Additional Installation Information
 
