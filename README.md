@@ -31,6 +31,11 @@ writers, and anyone who appreciates the simplicity of console-based applications
 - 📋 | Paste Text
 - 🖨️ | Print Text
 
+## Installation
+
+For Linux:
+Be sure to have `xsel`installed.
+
 ## Keyboard Shortcuts
 
 - N | Create new note
