@@ -81,7 +81,7 @@
                 else if (keyInfo.Key == ConsoleKey.N)
                 {
                     string documentsPath = FilePicker(true);
-                    if (documentsPath == "") break;
+                    if (documentsPath == "") continue;
                     Console.Clear();
                     Console.WriteLine($"A new file will be created in {documentsPath}");
                     Console.Write("Enter the name of the new note: ");
