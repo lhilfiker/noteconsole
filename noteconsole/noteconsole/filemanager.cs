@@ -261,6 +261,17 @@ namespace noteconsole
                                 Console.WriteLine("Encrypting file...");
                                 File.WriteAllBytes(encryptedFilePath, encrypteddata);
                                 File.Delete(filepath);
+                                // Change Last accessed item:
+                                List<string> lastaccessed = new();
+                                lastaccessed = GetValueForKey(cacheData, "last").Split("|:|").ToList();
+                                lastaccessed[0] = encryptedFilePath;
+                                string updatedLastAccessed = "";
+                                foreach (string recentpaths in lastaccessed)
+                                {
+                                    updatedLastAccessed += recentpaths + "|:|";
+                                }
+
+                                ChangeCacheValue("last", updatedLastAccessed);
                                 Console.WriteLine("Done. Press Any Key to exit.");
                                 Console.ReadKey();
                             }
