@@ -217,7 +217,7 @@
                 while (true)
                 {
                     var key = Console.ReadKey().Key;
-                    if (key == ConsoleKey.Enter)
+                    if (key == ConsoleKey.Enter || key == ConsoleKey.Escape)
                         return null;
                 }
             }
