@@ -248,6 +248,28 @@ namespace noteconsole
                             }
 
                             break;
+                        
+                        case ConsoleKey.E when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Encrypt
+                            Console.Clear();
+                            Console.WriteLine("Please enter a password to encrypt:");
+                            try
+                            {
+                                password = Console.ReadLine();
+                                byte[] toencrypt = File.ReadAllBytes(filepath);
+                                byte[] encrypteddata = crypt.Encrypt(toencrypt, password).GetAwaiter().GetResult();
+                                string encryptedFilePath = filepath + ".encrypted";
+                                Console.WriteLine("Encrypting file...");
+                                File.WriteAllBytes(encryptedFilePath, encrypteddata);
+                                File.Delete(filepath);
+                                Console.WriteLine("Done. Press Any Key to exit.");
+                                Console.ReadKey();
+                            }
+                            catch
+                            {
+                                Console.WriteLine("Error. Press Any Key to exit.");
+                                Console.ReadKey();
+                            }
+                            return;
                         case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Save
                             if (Path.GetExtension(filepath) == ".encrypted")
                             {
