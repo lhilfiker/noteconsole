@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 // For how to load/save to config see: https://github.com/RebelCoderJames/console-windows-file-explorer/blob/v3/Windows%20Terminal%20File%20Explorer/Windows%20Terminal%20File%20Explorer/config.cs
 // Author: RebelCoderJames
 
-namespace windows_console_notes_editor
+namespace noteconsole
 {
     internal partial class Program
 

@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace windows_console_notes_editor
+namespace noteconsole
 {
     internal partial class Program
     {

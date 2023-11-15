@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace windows_console_notes_editor
+namespace noteconsole
 {
     internal class crypt
     {
