@@ -280,7 +280,8 @@ namespace noteconsole
                                 Console.WriteLine("Error. Press Any Key to exit.");
                                 Console.ReadKey();
                             }
-                            return;
+
+                            break;
                         case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Save
                             if (Path.GetExtension(filepath) == ".encrypted")
                             {
