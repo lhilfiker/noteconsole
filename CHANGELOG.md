@@ -1,5 +1,9 @@
 # Changelog 
 
+## v.0.1.3 UNRELEASED
+Bug Fixes:
+ - Fix that the whole Terminal is off by one line(caused only on unix systems)
+
 ## v.0.1.2
 Bug fixes:
  - Clear the whole console in UNIX Terminals.
