@@ -15,8 +15,8 @@ cd noteconsole/noteconsole
 dotnet publish -c Release -r linux-x64 --self-contained # You can ignore the errors safely.
 
 # Create the Debian File Structure
-mkdir -p ../DEBIAN ../usr/local/bin
-cp -r noteconsole/bin/Release/net6.0/linux-x64/publish/* ../usr/local/bin/
+mkdir -p ../DEBIAN ../usr/share/noteconsole
+cp -r noteconsole/bin/Release/net6.0/linux-x64/publish/* ../usr/share/noteconsole/
 
 # Create a Debian Control File
 cat <<EOF >../DEBIAN/control

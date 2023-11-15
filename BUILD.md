@@ -19,9 +19,9 @@ For Debian/Linux .deb:
 
 4. Create the Debian File Structur
     - Create the Directory:
-        `mkdir -p noteconsole/DEBIAN noteconsole/usr/local/bin`
+        `mkdir -p noteconsole/DEBIAN noteconsole/usr/share/noteconsole`
     - Copy the application inside:
-        `cp -r noteconsole/bin/Release/net6.0/linux-x64/publish/* noteconsole/usr/local/bin/`
+        `cp -r noteconsole/bin/Release/net6.0/linux-x64/publish/* noteconsole/usr/share/noteconsole/`
 
 5. Create a Debian Control File
     - Create and open it:
