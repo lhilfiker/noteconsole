@@ -16,7 +16,7 @@ dotnet publish -c Release -r linux-x64 --self-contained # You can ignore the err
 
 # Create the Debian File Structure
 mkdir -p ../DEBIAN ../usr/local/bin
-cp -r bin/Release/net6.0/linux-x64/publish/* ../usr/local/bin/
+cp -r noteconsole/bin/Release/net6.0/linux-x64/publish/* ../usr/local/bin/
 
 # Create a Debian Control File
 cat <<EOF >../DEBIAN/control
