@@ -404,3 +404,5 @@ noteconsole/.idea/.idea.windows-console-notes-editor/.idea/workspace.xml
 noteconsole/.idea/.idea.windows-console-notes-editor/.idea/vcs.xml
 noteconsole/.idea/.idea.windows-console-notes-editor/.idea/projectSettingsUpdater.xml
 noteconsole/.idea/.idea.windows-console-notes-editor/.idea/indexLayout.xml
+noteconsole/noteconsole/DEBIAN/control
+noteconsole/noteconsole_0.1.0_amd64.deb

@@ -1,5 +1,7 @@
 How to build it:
 
+You can use the debian_build.sh script if you want.
+
 For Debian/Linux .deb:
 
 1. Download the Source Code:
