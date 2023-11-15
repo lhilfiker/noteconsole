@@ -35,6 +35,7 @@ For Debian/Linux .deb:
         Priority: optional
         Architecture: amd64
         Maintainer: RebelCoderJames <contact@rebelcoderjames.tech>
+        Recommends: xsel
         Description: A simple note editor for the console.
         ```
 
