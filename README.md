@@ -33,25 +33,36 @@ writers, and anyone who appreciates the simplicity of console-based applications
 - 🖨️ | Print Text
 
 ## Installation
+#### Download the Executable:
+      Download the latest release from here: https://github.com/RebelCoderJames/noteconsole/releases
 
-Download the latest release from here: https://github.com/RebelCoderJames/noteconsole/releases
 
-For Linux:
+#### Package Managers for Debian / Linux
 
-Add the GPG Key:
-```
-wget -qO - http://rep.rebelcoderjames.tech/repo-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/rebelcoderjames.gpg
-```
+1. **Add the GPG Key:**
+   ```bash
+   wget -qO - http://rep.rebelcoderjames.tech/repo-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/rebelcoderjames.gpg
+   ```
 
-Add the Repository:
-```
-echo "deb [signed-by=/usr/share/keyrings/rebelcoderjames.gpg] http://rep.rebelcoderjames.tech/ stable main" | sudo tee /etc/apt/sources.list.d/rebelcoderjames.list
-```
+2. **Add the Repository:**
+   ```bash
+   echo "deb [signed-by=/usr/share/keyrings/rebelcoderjames.gpg] http://rep.rebelcoderjames.tech/ stable main" | sudo tee /etc/apt/sources.list.d/rebelcoderjames.list
+   ```
 
-Install it:
-```
-sudo apt update && sudo apt install noteconsole
-```
+3. **Install the Package:**
+   ```bash
+   sudo apt update && sudo apt install noteconsole
+   ```
+
+### Building it on your own
+
+**Currently tested on Debian Linux only.**
+
+- **Manual Build:**
+  - Follow the instructions in [BUILD.md](./BUILD.md).
+
+- **Automated Build:**
+  - Use the provided script: [debian_build.sh](./debian_build.sh).
 
 
 ### Additional Installation Information
