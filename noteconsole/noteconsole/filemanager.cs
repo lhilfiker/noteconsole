@@ -37,7 +37,7 @@ namespace noteconsole
 
         public static void FileManager(string filepath)
         {
-            Console.Clear();
+            Terminal.Clear();
             Console.WriteLine("Loading...");
 
             string password = "";
@@ -48,7 +48,7 @@ namespace noteconsole
                 if (Path.GetExtension(filepath) == ".encrypted")
                 {
                     byte[] decryptionBuffer = File.ReadAllBytes(filepath);
-                    Console.Clear();
+                    Terminal.Clear();
                     Console.Write("Please enter the password to decrypt the note: ");
                     password = Console.ReadLine();
                     filecontent =
@@ -104,7 +104,7 @@ namespace noteconsole
                         var clipboardText = TextCopy.ClipboardService.GetText();
                         if (!string.IsNullOrEmpty(clipboardText))
                         {
-                            Console.Clear();
+                            Terminal.Clear();
                             Console.WriteLine("Pasting...");
                             int pasteIndex = GetIndex(filecontent, cursorx, cursory);
                             filecontent = filecontent.Insert(pasteIndex, clipboardText);
@@ -250,7 +250,7 @@ namespace noteconsole
                             break;
                         
                         case ConsoleKey.E when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Encrypt
-                            Console.Clear();
+                            Terminal.Clear();
                             Console.WriteLine("Please enter a password to encrypt:");
                             try
                             {
@@ -296,7 +296,7 @@ namespace noteconsole
 
                             break;
                         case ConsoleKey.Escape: // Go to welcome screen
-                            Console.Clear();
+                            Terminal.Clear();
                             if (filecontent != File.ReadAllText(filepath))
                             {
                                 Console.WriteLine("Save changes? (Y/N)");
@@ -651,7 +651,7 @@ namespace noteconsole
                 }
             }
 
-            Console.Clear();
+            Terminal.Clear();
             Console.WriteLine($"{selectedText.ToString()} will be copied. \nPress Enter to continue");
             Console.ReadLine();
 
@@ -772,7 +772,7 @@ namespace noteconsole
         static void FileRender(List<string> text)
         {
             string writebuffer = string.Join(Environment.NewLine, text);
-            Console.Clear();
+            Terminal.Clear();
             Console.Write(writebuffer);
 
             if (isSelection)

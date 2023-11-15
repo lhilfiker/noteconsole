@@ -22,7 +22,7 @@
             {
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.Black;
-                Console.Clear();
+                Terminal.Clear();
 
                 int consoleWidth = Console.WindowWidth;
                 int consoleHeight = Console.WindowHeight;
@@ -82,7 +82,7 @@
                 {
                     string documentsPath = FilePicker(true);
                     if (documentsPath == "") continue;
-                    Console.Clear();
+                    Terminal.Clear();
                     Console.WriteLine($"A new file will be created in {documentsPath}");
                     Console.Write("Enter the name of the new note: ");
                     string fileName = Console.ReadLine();
@@ -155,7 +155,7 @@
                 {
                     filepath = FilePicker(false);
                     if (filepath == "") continue;
-                    Console.Clear();
+                    Terminal.Clear();
                     Console.WriteLine($"{filepath} is opening...");
                     if (filepath == null || filepath == "")
                     {
@@ -200,7 +200,7 @@
 
         static string DisplayRecentFiles()
         {
-            Console.Clear();
+            Terminal.Clear();
             Console.WriteLine("Recently used notes:");
             LoadCache();
 
@@ -225,7 +225,7 @@
             int selectedIndex = 0;
             while (true)
             {
-                Console.Clear();
+                Terminal.Clear();
                 Console.WriteLine("Recently used notes:");
 
                 for (int i = 0; i < recentFiles.Count; i++)

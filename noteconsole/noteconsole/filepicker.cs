@@ -175,7 +175,7 @@
                         case var _ when (pressedKey.Key == ConsoleKey.Escape):
                             return "";
                         case var _ when (pressedKey.Key == ConsoleKey.C && folderselection):
-                            Console.Clear();
+                            Terminal.Clear();
                             Console.Write("Please enter a name for the new folder: ");
                             string folderName = Console.ReadLine();
                             if (!Directory.Exists(Path.Combine(path, folderName)))
@@ -310,7 +310,7 @@
                 }
 
                 // Display the entire buffer at once
-                Console.Clear();
+                Terminal.Clear();
                 foreach (var (text, color) in buffer)
                 {
                     string adjustedText = AdjustTextToFit(text, maxwidthConsole);
@@ -322,12 +322,12 @@
             }
             catch (Exception er)
             {
-                Console.Clear();
+                Terminal.Clear();
                 Console.WriteLine(
                     "Error Encountered\r\nYou may not have the necessary permissions for this folder or file. Please:\r\n\r\n    Check your permissions.\r\n    Consider running the program as an administrator.\r\n\r\nIf you believe this is a different issue, press [e] to retrieve the error code.");
                 if (Console.ReadKey().Key == ConsoleKey.E)
                 {
-                    Console.Clear();
+                    Terminal.Clear();
                     Console.WriteLine(
                         $"Here is your error code. If this isn't a permission error, please submit a bug report at https://github.com/RebelCoderJames/console-windows-notes-editor/issues.\nThank you.\n\n{er}");
                     Thread.Sleep(100000);
