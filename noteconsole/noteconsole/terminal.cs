@@ -18,7 +18,7 @@ namespace noteconsole
             try
             {
                 Console.Clear(); 
-                Console.WriteLine("\x1b[3J");
+                Console.Write("\x1b[3J");
             }
             catch
             {
