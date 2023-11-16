@@ -5,6 +5,7 @@ Bug Fixes:
  - Fix that the whole Terminal is off by one line(caused only on unix systems)
  - Build Linux Application into their own folder.
  - Fix that unneccecary files are included in the build.
+ - Make .net 6.0 runtime as a dependenicy to reduce package size and remove unnececary disk space when already installed.
 
 ## v.0.1.2
 Bug fixes:
