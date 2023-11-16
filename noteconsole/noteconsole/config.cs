@@ -33,7 +33,7 @@ namespace noteconsole
         public static string defaultconfig; // Default Configuration settings when loading them from the config File fails.
         public static void ChangeConfigValue(string key, string newValue)
         {
-            string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor", "config.conf");
+            string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "noteconsole", "config.conf");
 
             // Check if the file exists
             if (!File.Exists(configPath))
@@ -61,7 +61,7 @@ namespace noteconsole
         }
         static void loadConfig()
         {
-            string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor", "config.conf");
+            string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "noteconsole", "config.conf");
             try
             {
                 if (File.Exists(configPath)) //Load the config
@@ -91,7 +91,7 @@ namespace noteconsole
                 else //create the config
                 {
                     string defaultConfig = defaultconfig;
-                    string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor");
+                    string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "noteconsole");
                     if (!Directory.Exists(directoryPath))
                     {
                         Directory.CreateDirectory(directoryPath);

@@ -11,7 +11,7 @@ namespace noteconsole
     internal partial class Program
     {
         static string cacheData;
-        static string cachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor", "chache");
+        static string cachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "noteconsole", "chache");
         static void LoadCache()
         {
             string chachePath = cachePath;
@@ -22,7 +22,7 @@ namespace noteconsole
             }
             else //create the cache file
             {
-                string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor");
+                string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "noteconsole");
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);
@@ -55,7 +55,7 @@ namespace noteconsole
         public static void AddToChache(string data)
         {
             cacheData = cacheData + "\n" + data;
-            string chachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WindowsTerminalNoteEditor", "chache");
+            string chachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "noteconsole", "chache");
             File.WriteAllText(chachePath, cacheData);
         }
 
