@@ -1,8 +1,6 @@
-How to build it:
+# How to build it:
 
-You can use the debian_build.sh script if you want.
-
-For Debian/Linux .deb:
+## For Debian/Linux .deb:
 
 1. Download the Source Code:
     `git clone https://github.com/RebelCoderJames/noteconsole.git`
