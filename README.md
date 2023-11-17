@@ -34,7 +34,7 @@ writers, and anyone who appreciates the simplicity of console-based applications
 
 ## Installation
 #### Download the Executable:
-      Download the latest release from here: https://github.com/RebelCoderJames/noteconsole/releases
+Download the latest release from here: https://github.com/RebelCoderJames/noteconsole/releases
 
 
 #### Package Managers for Debian / Linux
