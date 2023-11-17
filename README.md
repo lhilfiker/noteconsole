@@ -37,7 +37,7 @@ writers, and anyone who appreciates the simplicity of console-based applications
 Download the latest release from here: https://github.com/RebelCoderJames/noteconsole/releases
 
 
-#### Package Managers for Debian / Linux
+#### Package Managers for Debian / Ubuntu / Linux
 
 1. **Add the GPG Key:**
    ```bash
