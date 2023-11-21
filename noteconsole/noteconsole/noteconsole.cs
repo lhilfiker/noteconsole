@@ -17,6 +17,9 @@
             }
 
             string filepath = "";
+            
+            // Start the Background Service:
+            Task.Run(() => StartBackgroundServices());
 
             while (true)
             {
