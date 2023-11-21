@@ -1,0 +1,9 @@
+Package: noteconsole
+Version: 0.1.3
+Section: editors
+Priority: optional
+Architecture: amd64
+Maintainer: RebelCoderJames <contact@rebelcoderjames.tech>
+Depends: dotnet-runtime-6.0
+Recommends: xsel
+Description: A simple note editor for the console.

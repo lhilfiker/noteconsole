@@ -4,6 +4,13 @@ using TextCopy;
 
 namespace noteconsole
 {
+    public class formated
+    {
+        public string Text { get; set; }
+        public ConsoleColor Color { get; set; }
+        public bool NewLine { get; set; }
+    }
+
     internal partial class Program
     {
         static List<string> sidePanelContent = new()
@@ -34,6 +41,7 @@ namespace noteconsole
         static int selectionStartY;
         static int selectionEndX;
         static int selectionEndY;
+        public static string filecontent;
 
         public static void FileManager(string filepath)
         {
@@ -42,7 +50,7 @@ namespace noteconsole
 
             string password = "";
 
-            string filecontent = "";
+            filecontent = "";
             try
             {
                 if (Path.GetExtension(filepath) == ".encrypted")
@@ -84,7 +92,7 @@ namespace noteconsole
                 int maxwidth = Console.WindowWidth;
                 int maxheight = Console.WindowHeight;
 
-                (List<string> formatedtext, int startLine, int startChar) =
+                (List<formated> formatedtext, int startLine, int startChar) =
                     FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight, isSidePanel);
                 FileRender(formatedtext);
 
@@ -207,7 +215,7 @@ namespace noteconsole
                                     selectionEndY = cursory;
                                 }
                             }
-                            else if (cursory == maxline - 1 && formatedtext[cursory - startLine] != "")
+                            else if (cursory == maxline - 1 && formatedtext[cursory - startLine].Text != "")
                             {
                                 int enterIndex = GetIndex(filecontent, maxcharacter, cursory);
                                 string line = filecontent.Substring(enterIndex);
@@ -248,7 +256,7 @@ namespace noteconsole
                             }
 
                             break;
-                        
+
                         case ConsoleKey.E when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Encrypt
                             Terminal.Clear();
                             Console.WriteLine("Please enter a password to encrypt:");
@@ -686,11 +694,12 @@ namespace noteconsole
             return index;
         }
 
-        static (List<string>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight,
+        static (List<formated>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight,
             bool isSidePanel)
         {
             List<string> lines = filecontent.Split('\n').ToList();
             List<string> formattedLines = new List<string>();
+            List<formated> formattedWithColor = new();
 
             // Ensure y is within boundaries
             y = Math.Min(y, lines.Count - 1);
@@ -734,12 +743,13 @@ namespace noteconsole
                     startChar = 0;
                 }
 
-                formattedLines.Add(line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar)));
+                List<formated> formattedLine = ProcessLineForColor(line, startChar, i, maxwidth);
+                formattedWithColor.AddRange(formattedLine);
             }
 
-            while (formattedLines.Count < maxheight - 2)
+            while (formattedWithColor.Count < maxheight - 2)
             {
-                formattedLines.Add("");
+                formattedWithColor.Add(new formated { Text = "", Color = ConsoleColor.White, NewLine = true });
             }
 
             // If Sidepanl is activated replace right side with the panel
@@ -765,15 +775,25 @@ namespace noteconsole
                 }
             }
 
-            return (formattedLines, startLine, startChar);
+            return (formattedWithColor, startLine, startChar);
         }
 
 
-        static void FileRender(List<string> text)
+        static void FileRender(List<formated> text)
         {
-            string writebuffer = string.Join(Environment.NewLine, text);
-            Terminal.Clear();
-            Console.Write(writebuffer);
+            foreach (var obj in text) // TODO: Optimze
+            {
+                if (obj.NewLine)
+                {
+                    Console.ForegroundColor = obj.Color;
+                    Console.WriteLine(obj.Text);
+                }
+                else
+                {
+                    Console.ForegroundColor = obj.Color;
+                    Console.Write(obj.Text);
+                }
+            }
 
             if (isSelection)
             {
@@ -798,5 +818,66 @@ namespace noteconsole
                 return 0;
             }
         }
+
+        private static List<formated> ProcessLineForColor(string line, int startChar, int i, int maxwidth)
+        {
+            List<formated> formattedLine = new List<formated>();
+            List<ColorsGlobal> ColorsForThisLine = new();
+            foreach (var obj in GlobalColorList)
+            {
+                if (obj.line == i)
+                {
+                    ColorsForThisLine.Add(obj);
+                }
+            }
+
+            string lineWithoutColor = line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar));
+    
+            for (int j = startChar; j < lineWithoutColor.Length; )
+            {
+                var colorItem = ColorsForThisLine.FirstOrDefault(item => item.StartChar == j);
+                if (colorItem != null)
+                {
+                    int length = Math.Min(colorItem.EndChar - j, lineWithoutColor.Length - j);
+                    formattedLine.Add(new formated
+                    {
+                        Text = line.Substring(j, length),
+                        Color = colorItem.Color,
+                        NewLine = (j + length) >= lineWithoutColor.Length
+                    });
+                    j += length;
+                }
+                else
+                {
+                    var nextColorItems = ColorsForThisLine.Where(item => item.StartChar > j);
+                    int nextColorStart;
+
+                    if (nextColorItems.Any())
+                    {
+                        nextColorStart = nextColorItems.Min(item => item.StartChar) - j;
+                    }
+                    else
+                    {
+                        // If there are no more color items, use the rest of the line
+                        nextColorStart = lineWithoutColor.Length - j;
+                    }
+
+                    int length = Math.Min(nextColorStart, lineWithoutColor.Length - j);
+                    formattedLine.Add(new formated
+                    {
+                        Text = line.Substring(j, length),
+                        // Default color or some logic to determine the color
+                        Color = ConsoleColor.White, 
+                        NewLine = (j + length) >= lineWithoutColor.Length
+                    });
+                    j += length;
+                }
+
+            }
+
+            return formattedLine;
+        }
+
+
     }
 }
