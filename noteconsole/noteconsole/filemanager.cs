@@ -781,6 +781,7 @@ namespace noteconsole
 
         static void FileRender(List<formated> text)
         {
+            Terminal.Clear();
             foreach (var obj in text) // TODO: Optimze
             {
                 if (obj.NewLine)
