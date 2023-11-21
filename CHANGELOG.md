@@ -4,6 +4,11 @@
 New Features:
  - Rendering colors, this will be then used by a background service which will run stuff like Spellchecker and will tell the filformater to make those stuff this color. Documentation will follow.
 
+Planned:
+ - Background Service
+ - Documentation for Background Service
+ - Initial Spellchecker implementation.
+
 ## v.0.1.3
 Bug Fixes:
  - Fix that the whole Terminal is off by one line(caused only on unix systems)
