@@ -1,5 +1,9 @@
 # Changelog 
 
+## v.0.2.0 UNRELEASED
+New Features:
+ - Rendering colors, this will be then used by a background service which will run stuff like Spellchecker and will tell the filformater to make those stuff this color. Documentation will follow.
+
 ## v.0.1.3
 Bug Fixes:
  - Fix that the whole Terminal is off by one line(caused only on unix systems)
