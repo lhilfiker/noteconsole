@@ -409,8 +409,13 @@ noteconsole/noteconsole_0.1.0_amd64.deb
 noteconsole/.idea/.idea.noteconsole/.idea/indexLayout.xml
 noteconsole/package/DEBIAN/control
 noteconsole/package/usr/lib/noteconsole/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+<<<<<<< Updated upstream
 noteconsole/package/usr/lib/noteconsole/noteconsole.deps.json
 noteconsole/package/usr/lib/noteconsole/noteconsole
+=======
+noteconsole/package/usr/lib/noteconsole/noteconsole
+noteconsole/package/usr/lib/noteconsole/noteconsole.deps.json
+>>>>>>> Stashed changes
 noteconsole/package/usr/lib/noteconsole/noteconsole.dll
 noteconsole/package/usr/lib/noteconsole/noteconsole.runtimeconfig.json
 noteconsole/package/usr/lib/noteconsole/TextCopy.dll
