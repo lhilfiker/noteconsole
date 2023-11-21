@@ -824,6 +824,7 @@ namespace noteconsole
         {
             List<formated> formattedLine = new List<formated>();
             List<ColorsGlobal> ColorsForThisLine = new();
+            // Add only the ones that manipulate this line.
             foreach (var obj in GlobalColorList)
             {
                 if (obj.line == i)
@@ -831,10 +832,10 @@ namespace noteconsole
                     ColorsForThisLine.Add(obj);
                 }
             }
-
+            // Make the formated line without colors.
             string lineWithoutColor = line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar));
     
-            for (int j = startChar; j < lineWithoutColor.Length; )
+            for (int j = startChar; j < lineWithoutColor.Length; ) // Go through each color change
             {
                 var colorItem = ColorsForThisLine.FirstOrDefault(item => item.StartChar == j);
                 if (colorItem != null)
@@ -859,7 +860,6 @@ namespace noteconsole
                     }
                     else
                     {
-                        // If there are no more color items, use the rest of the line
                         nextColorStart = lineWithoutColor.Length - j;
                     }
 
@@ -867,7 +867,6 @@ namespace noteconsole
                     formattedLine.Add(new formated
                     {
                         Text = line.Substring(j, length),
-                        // Default color or some logic to determine the color
                         Color = ConsoleColor.White, 
                         NewLine = (j + length) >= lineWithoutColor.Length
                     });
