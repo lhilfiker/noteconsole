@@ -18,8 +18,8 @@
 
             string filepath = "";
             
-            // Start the Background Service:
-            Task.Run(() => StartBackgroundServices());
+            // TODO: Start the Background Service:
+            
 
             while (true)
             {
