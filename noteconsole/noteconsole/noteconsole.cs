@@ -194,7 +194,7 @@
                     filepath = "";
                 }
 
-                FileManager(filepath);
+                if (filepath != "") FileManager(filepath);
             }
         }
 
