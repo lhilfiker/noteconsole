@@ -698,7 +698,6 @@ namespace noteconsole
             bool isSidePanel)
         {
             List<string> lines = filecontent.Split('\n').ToList();
-            List<string> formattedLines = new List<string>();
             List<formated> formattedWithColor = new();
 
             // Ensure y is within boundaries
@@ -753,25 +752,25 @@ namespace noteconsole
             }
 
             // If Sidepanl is activated replace right side with the panel
-            if (isSidePanel) // TODO: Support for Color
+            if (isSidePanel) // TODO: Reset Color to White for sidepanel content
             {
-                for (int i = 0; i < formattedLines.Count; i++)
+                for (int i = 0; i < formattedWithColor.Count; i++)
                 {
                     if (i >= sidePanelContent.Count) // Check if were beyond the length of sidepanel
                     {
                         break;
                     }
 
-                    int totalContentLength = formattedLines[i].Length + sidePanelContent[i].Length;
+                    int totalContentLength = formattedWithColor[i].Text.Length + sidePanelContent[i].Length;
                     int paddingLength = maxwidth - totalContentLength; // Calculate the number of spaces required
 
                     if (paddingLength < 0) // If content is longer than maxwidth
                     {
-                        formattedLines[i] = formattedLines[i].Substring(0, maxwidth - sidePanelContent[i].Length);
+                        formattedWithColor[i].Text = formattedWithColor[i].Text.Substring(0, maxwidth - sidePanelContent[i].Length);
                         paddingLength = 0;
                     }
 
-                    formattedLines[i] = formattedLines[i] + new string(' ', paddingLength) + sidePanelContent[i];
+                    formattedWithColor[i].Text = formattedWithColor[i].Text + new string(' ', paddingLength) + sidePanelContent[i];
                 }
             }
 
