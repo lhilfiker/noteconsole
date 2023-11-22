@@ -753,7 +753,7 @@ namespace noteconsole
             }
 
             // If Sidepanl is activated replace right side with the panel
-            if (isSidePanel)
+            if (isSidePanel) // TODO: Support for Color
             {
                 for (int i = 0; i < formattedLines.Count; i++)
                 {
@@ -782,18 +782,11 @@ namespace noteconsole
         static void FileRender(List<formated> text)
         {
             Terminal.Clear();
-            foreach (var obj in text) // TODO: Optimze
+            for (int i = 0; i < text.Count; i++)
             {
-                if (obj.NewLine)
-                {
-                    Console.ForegroundColor = obj.Color;
-                    Console.WriteLine(obj.Text);
-                }
-                else
-                {
-                    Console.ForegroundColor = obj.Color;
-                    Console.Write(obj.Text);
-                }
+                Console.ForegroundColor = text[i].Color;
+                if (text[i].NewLine) Console.WriteLine(text[i].Text);
+                else Console.Write(text[i].Text);
             }
 
             if (isSelection)
