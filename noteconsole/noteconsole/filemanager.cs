@@ -586,6 +586,7 @@ namespace noteconsole
                     }
 
                     //Make sure cursor is within boundaries
+                    maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
                     if (cursorx > maxCharactersPerLine[cursory])
                     {
                         cursorx = maxCharactersPerLine[cursory];
@@ -753,7 +754,7 @@ namespace noteconsole
             }
 
             // If Sidepanl is activated replace right side with the panel
-            if (isSidePanel) // TODO: Reset Color to White for sidepanel content
+            if (isSidePanel)
             {
                 for (int i = 0; i < formattedWithColor.Count; i++)
                 {
@@ -807,7 +808,7 @@ namespace noteconsole
             {
                 string[] lines = filecontent.Split('\n');
                 int numberOfCharacters = lines[line].Count();
-                return numberOfCharacters;
+                return numberOfCharacters + 1;
             }
             catch
             {
