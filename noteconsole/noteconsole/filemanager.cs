@@ -564,7 +564,7 @@ namespace noteconsole
                                 int charIndex = GetIndex(Filecontent, cursorX, cursorY);
                                 Filecontent = Filecontent.Insert(charIndex, keyChar.ToString());
                                 cursorX++;
-                                maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY) + 1;
+                                maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY);
                             }
 
                             break;
