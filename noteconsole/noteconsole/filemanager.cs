@@ -209,7 +209,7 @@ namespace noteconsole
                             if (cursory < maxline - 1)
                             {
                                 cursory++;
-                                cursorx = Math.Min(cursorx, maxcharacter);
+                                cursorx = Math.Min(cursorx, maxCharactersPerLine[cursory] - 1);
                                 if (isSelection)
                                 {
                                     selectionEndY = cursory;
@@ -248,7 +248,7 @@ namespace noteconsole
                             if (cursory > 0)
                             {
                                 cursory--;
-                                cursorx = Math.Min(cursorx, maxcharacter);
+                                cursorx = Math.Min(cursorx, maxCharactersPerLine[cursory] - 1);
                                 if (isSelection)
                                 {
                                     selectionEndY = cursory;
