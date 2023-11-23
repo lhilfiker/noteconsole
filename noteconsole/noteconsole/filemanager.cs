@@ -223,7 +223,7 @@ namespace noteconsole
                                 cursory++;
                                 cursorx = 0;
                                 maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
-                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1);
+                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1) + 1;
                             }
 
                             break;
@@ -374,7 +374,7 @@ namespace noteconsole
                                     cursory--;
                                     cursorx = maxCharactersPerLine[cursory];
                                     maxCharactersPerLine.RemoveAt(cursory + 1);
-                                    maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                                    maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory) + 1;
                                 }
                             }
 
@@ -417,7 +417,7 @@ namespace noteconsole
                                 cursory++;
                                 cursorx = 0;
                                 maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
-                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1);
+                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1) + 1;
                             }
 
                             break;
@@ -586,7 +586,6 @@ namespace noteconsole
                     }
 
                     //Make sure cursor is within boundaries
-                    maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
                     if (cursorx > maxCharactersPerLine[cursory])
                     {
                         cursorx = maxCharactersPerLine[cursory];
