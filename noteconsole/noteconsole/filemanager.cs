@@ -417,7 +417,7 @@ namespace noteconsole
                                 cursory++;
                                 cursorx = 0;
                                 maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
-                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1);
+                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1) + 1;
                             }
 
                             break;
@@ -455,7 +455,7 @@ namespace noteconsole
                             {
                                 int spaceIndex = GetIndex(filecontent, cursorx, cursory);
                                 filecontent = filecontent.Insert(spaceIndex, " ");
-                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory) + 1;
                                 cursorx++;
                             }
 
@@ -578,7 +578,7 @@ namespace noteconsole
                                 int charIndex = GetIndex(filecontent, cursorx, cursory);
                                 filecontent = filecontent.Insert(charIndex, keyChar.ToString());
                                 cursorx++;
-                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
+                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory) + 1;
                             }
 
                             break;
