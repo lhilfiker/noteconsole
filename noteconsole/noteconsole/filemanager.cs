@@ -417,11 +417,11 @@ namespace noteconsole
                                 cursory++;
                                 cursorx = 0;
                                 maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
-                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1) + 1;
+                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1);
                             }
 
                             break;
-
+ 
                         case ConsoleKey.Spacebar: // Space
                             if (isSelection) // Check if selection is true
                             {
@@ -453,6 +453,7 @@ namespace noteconsole
                             }
                             else
                             {
+                                
                                 int spaceIndex = GetIndex(filecontent, cursorx, cursory);
                                 filecontent = filecontent.Insert(spaceIndex, " ");
                                 maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory) + 1;
@@ -818,6 +819,15 @@ namespace noteconsole
         {
             List<formated> formattedLine = new List<formated>();
             List<ColorsGlobal> ColorsForThisLine = new();
+            if (line == "")
+            {
+                formattedLine.Add(new formated
+                {
+                    Text = line,
+                    Color = ConsoleColor.White,
+                    NewLine = true
+                });
+            }
             // Add only the ones that manipulate this line.
             foreach (var obj in GlobalColorList)
             {
