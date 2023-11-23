@@ -4,6 +4,9 @@
 New Features:
  - Rendering colors, this will be then used by a background service which will run stuff like Spellchecker and will tell the filformater to make those stuff this color. Documentation will follow.
 
+Bug fixes:
+ - Fix that it doesnt try to open nothing after pressing a key not n,r,s on the welcome screen causing slight lag.
+   
 Planned:
  - Background Service
  - Documentation for Background Service
