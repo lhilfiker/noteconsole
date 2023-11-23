@@ -6,6 +6,7 @@ New Features:
 
 Bug fixes:
  - Fix that it doesnt try to open nothing after pressing a key not n,r,s on the welcome screen causing slight lag.
+ - Fix that after writing a characcter you cant go to the last char in the line anymore.
    
 Planned:
  - Background Service
