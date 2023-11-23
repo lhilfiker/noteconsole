@@ -767,10 +767,12 @@ namespace noteconsole
                     if (paddingLength < 0) // If content is longer than maxwidth
                     {
                         formattedWithColor[i].Text = formattedWithColor[i].Text.Substring(0, maxwidth - sidePanelContent[i].Length);
+                        formattedWithColor[i].Color = ConsoleColor.White;
                         paddingLength = 0;
                     }
 
                     formattedWithColor[i].Text = formattedWithColor[i].Text + new string(' ', paddingLength) + sidePanelContent[i];
+                    formattedWithColor[i].Color = ConsoleColor.White;
                 }
             }
 
@@ -826,7 +828,6 @@ namespace noteconsole
             }
             // Make the formated line without colors.
             string lineWithoutColor = line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar));
-    
             for (int j = startChar; j < lineWithoutColor.Length; ) // Go through each color change
             {
                 var colorItem = ColorsForThisLine.FirstOrDefault(item => item.StartChar == j);
