@@ -9,7 +9,7 @@ namespace noteconsole
 {
     internal class crypt
     {
-        public static async Task<byte[]> Encrypt(byte[] dataToEncrypt, string key)
+        public static async Task<byte[]> Encrypt(byte[] dataToEncrypt, string? key)
         {
             if (dataToEncrypt == null || key == null)
             {
@@ -19,7 +19,7 @@ namespace noteconsole
             var instance = new crypt();
             return await instance.EncryptAsync(dataToEncrypt, key);
         }
-        public static async Task<byte[]> Decrypt(byte[] dataToDecrypt, string key)
+        public static async Task<byte[]> Decrypt(byte[] dataToDecrypt, string? key)
         {
             if (dataToDecrypt == null || key == null)
             {
@@ -30,7 +30,7 @@ namespace noteconsole
             return await instance.DecryptAsync(dataToDecrypt, key);
         }
 
-        private byte[] DeriveKeyFromPassword(string password)
+        private byte[] DeriveKeyFromPassword(string? password)
         {
             var emptySalt = Array.Empty<byte>();
             var iterations = 1000;
@@ -48,7 +48,7 @@ namespace noteconsole
         0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
         0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
         };
-        public async Task<byte[]> EncryptAsync(byte[] clearData, string passphrase)
+        public async Task<byte[]> EncryptAsync(byte[] clearData, string? passphrase)
         {
             using Aes aes = Aes.Create();
             aes.Key = DeriveKeyFromPassword(passphrase);
@@ -64,7 +64,7 @@ namespace noteconsole
         }
 
         // DecryptAsync now returns byte[] instead of string
-        public async Task<byte[]> DecryptAsync(byte[] encrypted, string passphrase)
+        public async Task<byte[]> DecryptAsync(byte[] encrypted, string? passphrase)
         {
             using Aes aes = Aes.Create();
             aes.Key = DeriveKeyFromPassword(passphrase);

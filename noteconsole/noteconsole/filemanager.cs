@@ -4,16 +4,16 @@ using TextCopy;
 
 namespace noteconsole
 {
-    public class formated
+    public class Formatted
     {
-        public string Text { get; set; }
+        public string? Text { get; set; }
         public ConsoleColor Color { get; set; }
-        public bool NewLine { get; set; }
+        public bool NewLine { get; init; }
     }
 
     internal partial class Program
     {
-        static List<string> sidePanelContent = new()
+        private static List<string> _sidePanelContent = new()
         {
             "┌────────────────────────────────────┐",
             "|            noteconsole             |",
@@ -36,35 +36,35 @@ namespace noteconsole
             "└────────────────────────────────────┘"
         };
 
-        static bool isSelection = false;
-        static int selectionStartX;
-        static int selectionStartY;
-        static int selectionEndX;
-        static int selectionEndY;
-        public static string filecontent;
+        static bool _isSelection = false;
+        static int _selectionStartX;
+        static int _selectionStartY;
+        static int _selectionEndX;
+        static int _selectionEndY;
+        public static string? Filecontent;
 
-        public static void FileManager(string filepath)
+        public static void FileManager(string filePath)
         {
             Terminal.Clear();
             Console.WriteLine("Loading...");
 
-            string password = "";
+            string? password = "";
 
-            filecontent = "";
+            Filecontent = "";
             try
             {
-                if (Path.GetExtension(filepath) == ".encrypted")
+                if (Path.GetExtension(filePath) == ".encrypted")
                 {
-                    byte[] decryptionBuffer = File.ReadAllBytes(filepath);
+                    byte[] decryptionBuffer = File.ReadAllBytes(filePath);
                     Terminal.Clear();
                     Console.Write("Please enter the password to decrypt the note: ");
                     password = Console.ReadLine();
-                    filecontent =
+                    Filecontent =
                         Encoding.UTF8.GetString(crypt.Decrypt(decryptionBuffer, password).GetAwaiter().GetResult());
                 }
                 else
                 {
-                    filecontent = File.ReadAllText(filepath);
+                    Filecontent = File.ReadAllText(filePath);
                 }
             }
             catch
@@ -72,32 +72,32 @@ namespace noteconsole
                 return;
             }
 
-            int cursorx = 0;
-            int cursory = 0;
+            int cursorX = 0;
+            int cursorY = 0;
             bool isSidePanel = false;
 
             Console.CursorVisible = true;
 
             List<int> maxCharactersPerLine = new List<int>();
             // Precompute max characters for each line
-            foreach (var line in filecontent.Split('\n'))
+            foreach (var line in Filecontent.Split('\n'))
             {
                 maxCharactersPerLine.Add(line.Length + 1);
             }
 
             while (true)
             {
-                int maxline = maxCharactersPerLine.Count();
-                int maxcharacter = maxCharactersPerLine[cursory];
+                int maxLine = maxCharactersPerLine.Count();
+                int maxCharacter = maxCharactersPerLine[cursorY];
                 int maxwidth = Console.WindowWidth;
                 int maxheight = Console.WindowHeight;
 
-                (List<formated> formatedtext, int startLine, int startChar) =
-                    FileFormater(filecontent, cursorx, cursory, maxwidth, maxheight, isSidePanel);
+                (List<Formatted> formatedtext, int startLine, int startChar) =
+                    FileFormater(Filecontent, cursorX, cursorY, maxwidth, maxheight, isSidePanel);
                 FileRender(formatedtext);
 
-                int displayedCursorX = Math.Min(Math.Max(cursorx - startChar, 0), maxwidth - 1);
-                int displayedCursorY = Math.Min(Math.Max(cursory - startLine, 0), maxheight - 1);
+                int displayedCursorX = Math.Min(Math.Max(cursorX - startChar, 0), maxwidth - 1);
+                int displayedCursorY = Math.Min(Math.Max(cursorY - startLine, 0), maxheight - 1);
 
                 Console.SetCursorPosition(displayedCursorX, displayedCursorY);
 
@@ -114,13 +114,13 @@ namespace noteconsole
                         {
                             Terminal.Clear();
                             Console.WriteLine("Pasting...");
-                            int pasteIndex = GetIndex(filecontent, cursorx, cursory);
-                            filecontent = filecontent.Insert(pasteIndex, clipboardText);
-                            cursorx += clipboardText.Length;
+                            int pasteIndex = GetIndex(Filecontent, cursorX, cursorY);
+                            Filecontent = Filecontent.Insert(pasteIndex, clipboardText);
+                            cursorX += clipboardText.Length;
                             maxCharactersPerLine.Clear();
                             maxCharactersPerLine.Clear();
                             // Precompute max characters for each line
-                            foreach (var line in filecontent.Split('\n'))
+                            foreach (var line in Filecontent.Split('\n'))
                             {
                                 maxCharactersPerLine.Add(line.Length + 1);
                             }
@@ -129,26 +129,26 @@ namespace noteconsole
 
                     else if (pressedKey.Key == ConsoleKey.C)
                     {
-                        if (cursorx > maxCharactersPerLine[cursory])
+                        if (cursorX > maxCharactersPerLine[cursorY])
                         {
-                            cursorx = maxCharactersPerLine[cursory];
+                            cursorX = maxCharactersPerLine[cursorY];
                         }
 
-                        ClipboardService.SetText(GetSelectedText(filecontent));
-                        isSelection = false;
+                        ClipboardService.SetText(GetSelectedText(Filecontent));
+                        _isSelection = false;
                     }
 
-                    else if (!isSelection)
+                    else if (!_isSelection)
                     {
-                        isSelection = true;
-                        selectionStartX = cursorx;
-                        selectionStartY = cursory;
-                        selectionEndX = cursorx;
-                        selectionEndY = cursory;
+                        _isSelection = true;
+                        _selectionStartX = cursorX;
+                        _selectionStartY = cursorY;
+                        _selectionEndX = cursorX;
+                        _selectionEndY = cursorY;
                     }
                     else
                     {
-                        isSelection = false;
+                        _isSelection = false;
                     }
                 }
                 else
@@ -157,101 +157,100 @@ namespace noteconsole
                     {
                         case ConsoleKey.LeftArrow
                             when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Move to start of line
-                            if (!isSelection) cursorx = 0;
+                            if (!_isSelection) cursorX = 0;
                             else
                             {
-                                cursorx = 0;
-                                selectionEndX = 0;
+                                cursorX = 0;
+                                _selectionEndX = 0;
                             }
 
                             break;
                         case ConsoleKey.RightArrow
                             when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of line
-                            if (!isSelection) cursorx = maxcharacter;
+                            if (!_isSelection) cursorX = maxCharacter;
                             else
                             {
-                                cursorx = maxcharacter;
-                                selectionEndX = maxcharacter;
+                                cursorX = maxCharacter;
+                                _selectionEndX = maxCharacter;
                             }
 
                             break;
                         case ConsoleKey.PageUp when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                         case ConsoleKey.UpArrow
                             when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Move to start of file
-                            if (!isSelection)
+                            if (!_isSelection)
                             {
-                                cursory = 0;
-                                cursorx = 0;
+                                cursorY = 0;
+                                cursorX = 0;
                             }
                             else
                             {
-                                cursory = 0;
-                                cursorx = 0;
-                                selectionEndX = 0;
-                                selectionEndY = 0;
+                                cursorY = 0;
+                                cursorX = 0;
+                                _selectionEndX = 0;
+                                _selectionEndY = 0;
                             }
 
                             break;
                         case ConsoleKey.PageDown when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                         case ConsoleKey.DownArrow
                             when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of file
-                            cursory = maxline - 1;
-                            cursorx = maxcharacter;
-                            if (isSelection)
+                            cursorY = maxLine - 1;
+                            cursorX = maxCharacter;
+                            if (_isSelection)
                             {
-                                selectionEndX = cursorx;
-                                selectionEndY = cursory;
+                                _selectionEndX = cursorX;
+                                _selectionEndY = cursorY;
                             }
 
                             break;
                         case ConsoleKey.PageDown:
                         case ConsoleKey.DownArrow: //Movement
-                            if (cursory < maxline - 1)
+                            if (cursorY < maxLine - 1)
                             {
-                                cursory++;
-                                cursorx = Math.Min(cursorx, maxCharactersPerLine[cursory] - 1);
-                                if (isSelection)
+                                cursorY++;
+                                cursorX = Math.Min(cursorX, maxCharactersPerLine[cursorY] - 1);
+                                if (_isSelection)
                                 {
-                                    selectionEndY = cursory;
+                                    _selectionEndY = cursorY;
                                 }
                             }
-                            else if (cursory == maxline - 1 && formatedtext[cursory - startLine].Text != "")
+                            else if (cursorY == maxLine - 1 && formatedtext[cursorY - startLine].Text != "")
                             {
-                                int enterIndex = GetIndex(filecontent, maxcharacter, cursory);
-                                string line = filecontent.Substring(enterIndex);
-                                filecontent = filecontent.Insert(enterIndex, "\n");
-                                cursory++;
-                                cursorx = 0;
-                                maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
-                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1) + 1;
+                                int enterIndex = GetIndex(Filecontent, maxCharacter, cursorY);
+                                Filecontent = Filecontent.Insert(enterIndex, "\n");
+                                cursorY++;
+                                cursorX = 0;
+                                maxCharactersPerLine.Insert(cursorY, GetMaxCharacter(Filecontent, cursorY));
+                                maxCharactersPerLine[cursorY - 1] = GetMaxCharacter(Filecontent, cursorY - 1) + 1;
                             }
 
                             break;
                         case ConsoleKey.LeftArrow:
-                            cursorx = Math.Max(0, cursorx - 1);
-                            if (isSelection)
+                            cursorX = Math.Max(0, cursorX - 1);
+                            if (_isSelection)
                             {
-                                selectionEndX = cursorx;
+                                _selectionEndX = cursorX;
                             }
 
                             break;
                         case ConsoleKey.RightArrow:
-                            cursorx = Math.Min(cursorx + 1, maxcharacter - 1);
-                            if (isSelection)
+                            cursorX = Math.Min(cursorX + 1, maxCharacter - 1);
+                            if (_isSelection)
                             {
-                                selectionEndX = cursorx;
+                                _selectionEndX = cursorX;
                             }
 
                             break;
                         case ConsoleKey.PageUp:
                         case ConsoleKey.UpArrow:
-                            if (cursory > 0)
+                            if (cursorY > 0)
                             {
-                                cursory--;
-                                cursorx = Math.Min(cursorx, maxCharactersPerLine[cursory] - 1);
-                                if (isSelection)
+                                cursorY--;
+                                cursorX = Math.Min(cursorX, maxCharactersPerLine[cursorY] - 1);
+                                if (_isSelection)
                                 {
-                                    selectionEndY = cursory;
+                                    _selectionEndY = cursorY;
                                 }
                             }
 
@@ -263,20 +262,20 @@ namespace noteconsole
                             try
                             {
                                 password = Console.ReadLine();
-                                byte[] toencrypt = File.ReadAllBytes(filepath);
-                                byte[] encrypteddata = crypt.Encrypt(toencrypt, password).GetAwaiter().GetResult();
-                                string encryptedFilePath = filepath + ".encrypted";
+                                byte[] toEncrypt = File.ReadAllBytes(filePath);
+                                byte[] encryptedData = crypt.Encrypt(toEncrypt, password).GetAwaiter().GetResult();
+                                string encryptedFilePath = filePath + ".encrypted";
                                 Console.WriteLine("Encrypting file...");
-                                File.WriteAllBytes(encryptedFilePath, encrypteddata);
-                                File.Delete(filepath);
+                                File.WriteAllBytes(encryptedFilePath, encryptedData);
+                                File.Delete(filePath);
                                 // Change Last accessed item:
-                                List<string> lastaccessed = new();
-                                lastaccessed = GetValueForKey(cacheData, "last").Split("|:|").ToList();
-                                lastaccessed[0] = encryptedFilePath;
+                                List<string> lastAccessed;
+                                lastAccessed = GetValueForKey(cacheData, "last").Split("|:|").ToList();
+                                lastAccessed[0] = encryptedFilePath;
                                 string updatedLastAccessed = "";
-                                foreach (string recentpaths in lastaccessed)
+                                foreach (string recentPaths in lastAccessed)
                                 {
-                                    updatedLastAccessed += recentpaths + "|:|";
+                                    updatedLastAccessed += recentPaths + "|:|";
                                 }
 
                                 ChangeCacheValue("last", updatedLastAccessed);
@@ -291,35 +290,33 @@ namespace noteconsole
 
                             break;
                         case ConsoleKey.S when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): // Save
-                            if (Path.GetExtension(filepath) == ".encrypted")
+                            if (Path.GetExtension(filePath) == ".encrypted")
                             {
-                                byte[] encryptionBuffer = Encoding.UTF8.GetBytes(filecontent);
-                                byte[] encryptedData =
-                                    crypt.Encrypt(encryptionBuffer, password).GetAwaiter().GetResult();
+                                byte[] encryptionBuffer = Encoding.UTF8.GetBytes(Filecontent);
+                                crypt.Encrypt(encryptionBuffer, password).GetAwaiter().GetResult();
                             }
                             else
                             {
-                                File.WriteAllText(filepath, filecontent);
+                                File.WriteAllText(filePath, Filecontent);
                             }
 
                             break;
                         case ConsoleKey.Escape: // Go to welcome screen
                             Terminal.Clear();
-                            if (filecontent != File.ReadAllText(filepath))
+                            if (Filecontent != File.ReadAllText(filePath))
                             {
                                 Console.WriteLine("Save changes? (Y/N)");
                                 ConsoleKeyInfo saveKey = Console.ReadKey();
                                 if (saveKey.Key == ConsoleKey.Y)
                                 {
-                                    if (Path.GetExtension(filepath) == ".encrypted")
+                                    if (Path.GetExtension(filePath) == ".encrypted")
                                     {
-                                        byte[] encryptionBuffer = Encoding.UTF8.GetBytes(filecontent);
-                                        byte[] encryptedData =
-                                            crypt.Encrypt(encryptionBuffer, password).GetAwaiter().GetResult();
+                                        byte[] encryptionBuffer = Encoding.UTF8.GetBytes(Filecontent);
+                                        crypt.Encrypt(encryptionBuffer, password).GetAwaiter().GetResult();
                                     }
                                     else
                                     {
-                                        File.WriteAllText(filepath, filecontent);
+                                        File.WriteAllText(filePath, Filecontent);
                                     }
                                 }
                             }
@@ -327,175 +324,166 @@ namespace noteconsole
                             return;
                         case ConsoleKey.Backspace: //Delete
                         case ConsoleKey.Delete:
-                            if (isSelection) // Check if selection is true
+                            if (_isSelection) // Check if selection is true
                             {
-                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
-                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+                                int startIndex = GetIndex(Filecontent, _selectionStartX, _selectionStartY);
+                                int endIndex = GetIndex(Filecontent, _selectionEndX, _selectionEndY);
 
                                 if (startIndex > endIndex) // If selecting behind the start change values
                                 {
-                                    int buffer = endIndex;
-                                    endIndex = startIndex;
-                                    startIndex = buffer;
-                                    selectionStartX = selectionEndX;
-                                    selectionStartY = selectionEndY;
+                                    (endIndex, startIndex) = (startIndex, endIndex);
+                                    _selectionStartX = _selectionEndX;
+                                    _selectionStartY = _selectionEndY;
                                 }
 
-                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+                                Filecontent = Filecontent.Remove(startIndex, endIndex - startIndex);
 
-                                cursorx = selectionStartX;
-                                cursory = selectionStartY;
+                                cursorX = _selectionStartX;
+                                cursorY = _selectionStartY;
 
                                 // Precompute max characters for each line
                                 maxCharactersPerLine.Clear();
-                                foreach (var lineincontent in filecontent.Split('\n'))
+                                foreach (var lineincontent in Filecontent.Split('\n'))
                                 {
                                     maxCharactersPerLine.Add(lineincontent.Length + 1);
                                 }
 
-                                isSelection = false;
+                                _isSelection = false;
                             }
                             else
                             {
                                 // Existing logic
-                                if (cursorx != 0)
+                                if (cursorX != 0)
                                 {
-                                    int deleteIndex = GetIndex(filecontent, cursorx, cursory);
-                                    filecontent = filecontent.Remove(deleteIndex - 1, 1);
-                                    cursorx--;
+                                    int deleteIndex = GetIndex(Filecontent, cursorX, cursorY);
+                                    Filecontent = Filecontent.Remove(deleteIndex - 1, 1);
+                                    cursorX--;
                                 }
                                 // Append the current line to the line above so there is only one line.
-                                else if (cursory != 0)
+                                else if (cursorY != 0)
                                 {
-                                    int deleteIndex = GetIndex(filecontent, cursorx, cursory);
-                                    string line2 = filecontent.Substring(deleteIndex);
-                                    filecontent = filecontent.Remove(deleteIndex);
-                                    filecontent = filecontent.Insert(deleteIndex - 1, line2);
-                                    cursory--;
-                                    cursorx = maxCharactersPerLine[cursory];
-                                    maxCharactersPerLine.RemoveAt(cursory + 1);
-                                    maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory) + 1;
+                                    int deleteIndex = GetIndex(Filecontent, cursorX, cursorY);
+                                    string line2 = Filecontent.Substring(deleteIndex);
+                                    Filecontent = Filecontent.Remove(deleteIndex);
+                                    Filecontent = Filecontent.Insert(deleteIndex - 1, line2);
+                                    cursorY--;
+                                    cursorX = maxCharactersPerLine[cursorY];
+                                    maxCharactersPerLine.RemoveAt(cursorY + 1);
+                                    maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY) + 1;
                                 }
                             }
 
                             break;
 
                         case ConsoleKey.Enter: // NewLine
-                            if (isSelection) // Check if selection is true
+                            if (_isSelection) // Check if selection is true
                             {
-                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
-                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+                                int startIndex = GetIndex(Filecontent, _selectionStartX, _selectionStartY);
+                                int endIndex = GetIndex(Filecontent, _selectionEndX, _selectionEndY);
 
                                 if (startIndex > endIndex) // If selecting behind the start change values
                                 {
-                                    int buffer = endIndex;
-                                    endIndex = startIndex;
-                                    startIndex = buffer;
-                                    selectionStartX = selectionEndX;
-                                    selectionStartY = selectionEndY;
+                                    (endIndex, startIndex) = (startIndex, endIndex);
+                                    _selectionStartX = _selectionEndX;
+                                    _selectionStartY = _selectionEndY;
                                 }
 
-                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+                                Filecontent = Filecontent.Remove(startIndex, endIndex - startIndex);
 
-                                cursorx = selectionStartX;
-                                cursory = selectionStartY;
+                                cursorX = _selectionStartX;
+                                cursorY = _selectionStartY;
 
                                 // Precompute max characters for each line
                                 maxCharactersPerLine.Clear();
-                                foreach (var lineincontent in filecontent.Split('\n'))
+                                foreach (var lineincontent in Filecontent.Split('\n'))
                                 {
                                     maxCharactersPerLine.Add(lineincontent.Length + 1);
                                 }
 
-                                isSelection = false;
+                                _isSelection = false;
                             }
                             else
                             {
-                                int enterIndex = GetIndex(filecontent, cursorx, cursory);
-                                string line = filecontent.Substring(enterIndex);
-                                filecontent = filecontent.Insert(enterIndex, "\n");
-                                cursory++;
-                                cursorx = 0;
-                                maxCharactersPerLine.Insert(cursory, GetMaxCharacter(filecontent, cursory));
-                                maxCharactersPerLine[cursory - 1] = GetMaxCharacter(filecontent, cursory - 1) + 1;
+                                int enterIndex = GetIndex(Filecontent, cursorX, cursorY);
+                                Filecontent = Filecontent.Insert(enterIndex, "\n");
+                                cursorY++;
+                                cursorX = 0;
+                                maxCharactersPerLine.Insert(cursorY, GetMaxCharacter(Filecontent, cursorY));
+                                maxCharactersPerLine[cursorY - 1] = GetMaxCharacter(Filecontent, cursorY - 1) + 1;
                             }
 
                             break;
  
                         case ConsoleKey.Spacebar: // Space
-                            if (isSelection) // Check if selection is true
+                            if (_isSelection) // Check if selection is true
                             {
-                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
-                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+                                int startIndex = GetIndex(Filecontent, _selectionStartX, _selectionStartY);
+                                int endIndex = GetIndex(Filecontent, _selectionEndX, _selectionEndY);
 
                                 if (startIndex > endIndex) // If selecting behind the start change values
                                 {
-                                    int buffer = endIndex;
-                                    endIndex = startIndex;
-                                    startIndex = buffer;
-                                    selectionStartX = selectionEndX;
-                                    selectionStartY = selectionEndY;
+                                    (endIndex, startIndex) = (startIndex, endIndex);
+                                    _selectionStartX = _selectionEndX;
+                                    _selectionStartY = _selectionEndY;
                                 }
 
-                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+                                Filecontent = Filecontent.Remove(startIndex, endIndex - startIndex);
 
-                                cursorx = selectionStartX;
-                                cursory = selectionStartY;
+                                cursorX = _selectionStartX;
+                                cursorY = _selectionStartY;
 
                                 // Precompute max characters for each line
                                 maxCharactersPerLine.Clear();
-                                foreach (var lineincontent in filecontent.Split('\n'))
+                                foreach (var lineincontent in Filecontent.Split('\n'))
                                 {
                                     maxCharactersPerLine.Add(lineincontent.Length + 1);
                                 }
 
-                                isSelection = false;
+                                _isSelection = false;
                             }
                             else
                             {
                                 
-                                int spaceIndex = GetIndex(filecontent, cursorx, cursory);
-                                filecontent = filecontent.Insert(spaceIndex, " ");
-                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory) + 1;
-                                cursorx++;
+                                int spaceIndex = GetIndex(Filecontent, cursorX, cursorY);
+                                Filecontent = Filecontent.Insert(spaceIndex, " ");
+                                maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY) + 1;
+                                cursorX++;
                             }
 
                             break;
                         case ConsoleKey.Tab:
-                            if (isSelection) // Check if selection is true
+                            if (_isSelection) // Check if selection is true
                             {
-                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
-                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+                                int startIndex = GetIndex(Filecontent, _selectionStartX, _selectionStartY);
+                                int endIndex = GetIndex(Filecontent, _selectionEndX, _selectionEndY);
 
                                 if (startIndex > endIndex) // If selecting behind the start change values
                                 {
-                                    int buffer = endIndex;
-                                    endIndex = startIndex;
-                                    startIndex = buffer;
-                                    selectionStartX = selectionEndX;
-                                    selectionStartY = selectionEndY;
+                                    (endIndex, startIndex) = (startIndex, endIndex);
+                                    _selectionStartX = _selectionEndX;
+                                    _selectionStartY = _selectionEndY;
                                 }
 
-                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+                                Filecontent = Filecontent.Remove(startIndex, endIndex - startIndex);
 
-                                cursorx = selectionStartX;
-                                cursory = selectionStartY;
+                                cursorX = _selectionStartX;
+                                cursorY = _selectionStartY;
 
                                 // Precompute max characters for each line
                                 maxCharactersPerLine.Clear();
-                                foreach (var lineincontent in filecontent.Split('\n'))
+                                foreach (var lineincontent in Filecontent.Split('\n'))
                                 {
                                     maxCharactersPerLine.Add(lineincontent.Length + 1);
                                 }
 
-                                isSelection = false;
+                                _isSelection = false;
                             }
                             else
                             {
-                                int spaceIndex = GetIndex(filecontent, cursorx, cursory);
-                                filecontent = filecontent.Insert(spaceIndex, "    ");
-                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory);
-                                cursorx = cursorx + 4;
+                                int spaceIndex = GetIndex(Filecontent, cursorX, cursorY);
+                                Filecontent = Filecontent.Insert(spaceIndex, "    ");
+                                maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY);
+                                cursorX = cursorX + 4;
                             }
 
                             break;
@@ -521,8 +509,7 @@ namespace noteconsole
                         case ConsoleKey.P when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                         case ConsoleKey.PrintScreen:
                             // Here comes the print logic
-                            string path = "print_file.txt";
-                            File.WriteAllText(path, filecontent);
+                            File.WriteAllText(path, Filecontent);
 
                             // Use a system command to print the file
                             ProcessStartInfo psi = new ProcessStartInfo()
@@ -544,81 +531,79 @@ namespace noteconsole
                         default: // Default case is a character key
                             char keyChar = pressedKey.KeyChar;
 
-                            if (isSelection) // Check if selection is true
+                            if (_isSelection) // Check if selection is true
                             {
-                                int startIndex = GetIndex(filecontent, selectionStartX, selectionStartY);
-                                int endIndex = GetIndex(filecontent, selectionEndX, selectionEndY);
+                                int startIndex = GetIndex(Filecontent, _selectionStartX, _selectionStartY);
+                                int endIndex = GetIndex(Filecontent, _selectionEndX, _selectionEndY);
 
                                 if (startIndex > endIndex) // If selecting behind the start change values
                                 {
-                                    int buffer = endIndex;
-                                    endIndex = startIndex;
-                                    startIndex = buffer;
-                                    selectionStartX = selectionEndX;
-                                    selectionStartY = selectionEndY;
+                                    (endIndex, startIndex) = (startIndex, endIndex);
+                                    _selectionStartX = _selectionEndX;
+                                    _selectionStartY = _selectionEndY;
                                 }
 
-                                filecontent = filecontent.Remove(startIndex, endIndex - startIndex);
+                                Filecontent = Filecontent.Remove(startIndex, endIndex - startIndex);
 
-                                filecontent = filecontent.Insert(startIndex, keyChar.ToString());
+                                Filecontent = Filecontent.Insert(startIndex, keyChar.ToString());
 
-                                cursorx = selectionStartX + 1;
-                                cursory = selectionStartY;
+                                cursorX = _selectionStartX + 1;
+                                cursorY = _selectionStartY;
 
                                 // Precompute max characters for each line
                                 maxCharactersPerLine.Clear();
-                                foreach (var lineincontent in filecontent.Split('\n'))
+                                foreach (var lineincontent in Filecontent.Split('\n'))
                                 {
                                     maxCharactersPerLine.Add(lineincontent.Length + 1);
                                 }
 
-                                isSelection = false;
+                                _isSelection = false;
                             }
                             else
                             {
-                                int charIndex = GetIndex(filecontent, cursorx, cursory);
-                                filecontent = filecontent.Insert(charIndex, keyChar.ToString());
-                                cursorx++;
-                                maxCharactersPerLine[cursory] = GetMaxCharacter(filecontent, cursory) + 1;
+                                int charIndex = GetIndex(Filecontent, cursorX, cursorY);
+                                Filecontent = Filecontent.Insert(charIndex, keyChar.ToString());
+                                cursorX++;
+                                maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY) + 1;
                             }
 
                             break;
                     }
 
                     //Make sure cursor is within boundaries
-                    if (cursorx > maxCharactersPerLine[cursory])
+                    if (cursorX > maxCharactersPerLine[cursorY])
                     {
-                        cursorx = maxCharactersPerLine[cursory];
+                        cursorX = maxCharactersPerLine[cursorY];
                     }
                 }
             }
         }
 
-        static string GetSelectedText(string filecontent)
+        static string GetSelectedText(string? filecontent)
         {
             // Determine the "true" start and end of the selection
-            int trueStartX = Math.Min(selectionStartX, selectionEndX);
-            int trueEndX = Math.Max(selectionStartX, selectionEndX);
-            int trueStartY = Math.Min(selectionStartY, selectionEndY);
-            int trueEndY = Math.Max(selectionStartY, selectionEndY);
+            int trueStartX = Math.Min(_selectionStartX, _selectionEndX);
+            int trueEndX = Math.Max(_selectionStartX, _selectionEndX);
+            int trueStartY = Math.Min(_selectionStartY, _selectionEndY);
+            int trueEndY = Math.Max(_selectionStartY, _selectionEndY);
 
             StringBuilder selectedText = new StringBuilder();
 
-            string[] lines = filecontent.Split('\n');
+            string[]? lines = filecontent?.Split('\n');
 
             for (int i = trueStartY; i <= trueEndY; i++)
             {
-                if (i >= lines.Length)
+                if (lines != null && i >= lines.Length)
                     break;
 
                 // If it's the start and end line of the selection
                 if (i == trueStartY && i == trueEndY)
                 {
-                    if (lines[i].Length >= trueEndX + 1)
+                    if (lines != null && lines[i].Length >= trueEndX + 1)
                     {
                         selectedText.Append(lines[i].Substring(trueStartX, trueEndX - trueStartX + 1));
                     }
-                    else if (lines[i].Length > trueStartX)
+                    else if (lines != null && lines[i].Length > trueStartX)
                     {
                         selectedText.Append(lines[i].Substring(trueStartX));
                     }
@@ -626,31 +611,31 @@ namespace noteconsole
                 // If it's the start line of the selection
                 else if (i == trueStartY)
                 {
-                    if (lines[i].Length > trueStartX)
+                    if (lines != null && lines[i].Length > trueStartX)
                     {
                         selectedText.Append(lines[i].Substring(trueStartX));
                     }
                     else
                     {
-                        selectedText.Append(lines[i]);
+                        selectedText.Append(lines?[i]);
                     }
                 }
                 // If it's the end line of the selection
                 else if (i == trueEndY)
                 {
-                    if (lines[i].Length >= trueEndX + 1)
+                    if (lines != null && lines[i].Length >= trueEndX + 1)
                     {
                         selectedText.Append(lines[i].Substring(0, trueEndX + 1));
                     }
                     else
                     {
-                        selectedText.Append(lines[i]);
+                        selectedText.Append(lines?[i]);
                     }
                 }
                 // Any line in between
                 else
                 {
-                    selectedText.Append(lines[i]);
+                    selectedText.Append(lines?[i]);
                 }
 
                 // Add a newline character for every line except the last one
@@ -668,18 +653,18 @@ namespace noteconsole
         }
 
 
-        static int GetIndex(string filecontent, int cursorx, int cursory)
+        static int GetIndex(string? filecontent, int cursorx, int cursory)
         {
-            string[] lines = filecontent.Split('\n');
+            string[]? lines = filecontent?.Split('\n');
 
             // Ensure cursory is within the number of lines
-            if (cursory >= lines.Length)
+            if (lines != null && cursory >= lines.Length)
             {
                 cursory = lines.Length - 1;
             }
 
             // Ensure cursorx is within the length of the line at cursory
-            if (cursory >= 0 && cursorx > lines[cursory].Length)
+            if (lines != null && cursory >= 0 && cursorx > lines[cursory].Length)
             {
                 cursorx = lines[cursory].Length;
             }
@@ -687,7 +672,7 @@ namespace noteconsole
             int index = 0;
             for (int i = 0; i < cursory; i++)
             {
-                index += lines[i].Length + 1; // +1 for the '\n' character
+                if (lines != null) index += lines[i].Length + 1; // +1 for the '\n' character
             }
 
             index += cursorx;
@@ -695,11 +680,11 @@ namespace noteconsole
             return index;
         }
 
-        static (List<formated>, int, int) FileFormater(string filecontent, int x, int y, int maxwidth, int maxheight,
+        static (List<Formatted>, int, int) FileFormater(string? filecontent, int x, int y, int maxwidth, int maxheight,
             bool isSidePanel)
         {
-            List<string> lines = filecontent.Split('\n').ToList();
-            List<formated> formattedWithColor = new();
+            List<string>? lines = filecontent?.Split('\n').ToList();
+            List<Formatted> formattedWithColor = new();
 
             // Ensure y is within boundaries
             y = Math.Min(y, lines.Count - 1);
@@ -729,27 +714,20 @@ namespace noteconsole
                 // Start line for horizontal scrolling
                 if (line.Length > maxwidth)
                 {
-                    if (i == y)
-                    {
-                        startChar = Math.Max(0, Math.Min(x - (maxwidth), line.Length - maxwidth));
-                    }
-                    else
-                    {
-                        startChar = 0;
-                    }
+                    startChar = i == y ? Math.Max(0, Math.Min(x - (maxwidth), line.Length - maxwidth)) : 0;
                 }
                 else
                 {
                     startChar = 0;
                 }
 
-                List<formated> formattedLine = ProcessLineForColor(line, startChar, i, maxwidth);
+                List<Formatted> formattedLine = ProcessLineForColor(line, startChar, i, maxwidth);
                 formattedWithColor.AddRange(formattedLine);
             }
 
             while (formattedWithColor.Count < maxheight - 2)
             {
-                formattedWithColor.Add(new formated { Text = "", Color = ConsoleColor.White, NewLine = true });
+                formattedWithColor.Add(new Formatted { Text = "", Color = ConsoleColor.White, NewLine = true });
             }
 
             // If Sidepanl is activated replace right side with the panel
@@ -757,22 +735,27 @@ namespace noteconsole
             {
                 for (int i = 0; i < formattedWithColor.Count; i++)
                 {
-                    if (i >= sidePanelContent.Count) // Check if were beyond the length of sidepanel
+                    if (i >= _sidePanelContent.Count) // Check if were beyond the length of sidepanel
                     {
                         break;
                     }
 
-                    int totalContentLength = formattedWithColor[i].Text.Length + sidePanelContent[i].Length;
-                    int paddingLength = maxwidth - totalContentLength; // Calculate the number of spaces required
-
-                    if (paddingLength < 0) // If content is longer than maxwidth
+                    var substring = formattedWithColor[i].Text;
+                    if (substring != null)
                     {
-                        formattedWithColor[i].Text = formattedWithColor[i].Text.Substring(0, maxwidth - sidePanelContent[i].Length);
-                        formattedWithColor[i].Color = ConsoleColor.White;
-                        paddingLength = 0;
+                        int totalContentLength = substring.Length + _sidePanelContent[i].Length;
+                        int paddingLength = maxwidth - totalContentLength; // Calculate the number of spaces required
+
+                        if (paddingLength < 0) // If content is longer than maxwidth
+                        {
+                            formattedWithColor[i].Text = substring.Substring(0, maxwidth - _sidePanelContent[i].Length);
+                            formattedWithColor[i].Color = ConsoleColor.White;
+                            paddingLength = 0;
+                        }
+
+                        formattedWithColor[i].Text = substring + new string(' ', paddingLength) + _sidePanelContent[i];
                     }
 
-                    formattedWithColor[i].Text = formattedWithColor[i].Text + new string(' ', paddingLength) + sidePanelContent[i];
                     formattedWithColor[i].Color = ConsoleColor.White;
                 }
             }
@@ -781,7 +764,7 @@ namespace noteconsole
         }
 
 
-        static void FileRender(List<formated> text)
+        static void FileRender(List<Formatted> text)
         {
             Terminal.Clear();
             for (int i = 0; i < text.Count; i++)
@@ -791,7 +774,7 @@ namespace noteconsole
                 else Console.Write(text[i].Text);
             }
 
-            if (isSelection)
+            if (_isSelection)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.Yellow;
@@ -801,11 +784,11 @@ namespace noteconsole
         }
 
 
-        static int GetMaxCharacter(string filecontent, int line)
+        static int GetMaxCharacter(string? filecontent, int line)
         {
             try
             {
-                string[] lines = filecontent.Split('\n');
+                string[]? lines = filecontent?.Split('\n');
                 int numberOfCharacters = lines[line].Count();
                 return numberOfCharacters + 1;
             }
@@ -815,13 +798,13 @@ namespace noteconsole
             }
         }
 
-        private static List<formated> ProcessLineForColor(string line, int startChar, int i, int maxwidth)
+        private static List<Formatted> ProcessLineForColor(string line, int startChar, int i, int maxwidth)
         {
-            List<formated> formattedLine = new List<formated>();
-            List<ColorsGlobal> ColorsForThisLine = new();
+            List<Formatted> formattedLine = new List<Formatted>();
+            List<ColorsGlobal> colorsForThisLine = new();
             if (line == "")
             {
-                formattedLine.Add(new formated
+                formattedLine.Add(new Formatted
                 {
                     Text = line,
                     Color = ConsoleColor.White,
@@ -833,18 +816,18 @@ namespace noteconsole
             {
                 if (obj.line == i)
                 {
-                    ColorsForThisLine.Add(obj);
+                    colorsForThisLine.Add(obj);
                 }
             }
             // Make the formated line without colors.
             string lineWithoutColor = line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar));
             for (int j = startChar; j < lineWithoutColor.Length; ) // Go through each color change
             {
-                var colorItem = ColorsForThisLine.FirstOrDefault(item => item.StartChar == j);
+                var colorItem = colorsForThisLine.FirstOrDefault(item => item.StartChar == j);
                 if (colorItem != null)
                 {
                     int length = Math.Min(colorItem.EndChar - j, lineWithoutColor.Length - j);
-                    formattedLine.Add(new formated
+                    formattedLine.Add(new Formatted
                     {
                         Text = line.Substring(j, length),
                         Color = colorItem.Color,
@@ -854,12 +837,13 @@ namespace noteconsole
                 }
                 else
                 {
-                    var nextColorItems = ColorsForThisLine.Where(item => item.StartChar > j);
+                    var nextColorItems = colorsForThisLine.Where(item => item.StartChar > j);
                     int nextColorStart;
 
-                    if (nextColorItems.Any())
+                    ColorsGlobal[] colorsGlobals = nextColorItems as ColorsGlobal[] ?? nextColorItems.ToArray();
+                    if (colorsGlobals.Any())
                     {
-                        nextColorStart = nextColorItems.Min(item => item.StartChar) - j;
+                        nextColorStart = colorsGlobals.Min(item => item.StartChar) - j;
                     }
                     else
                     {
@@ -867,7 +851,7 @@ namespace noteconsole
                     }
 
                     int length = Math.Min(nextColorStart, lineWithoutColor.Length - j);
-                    formattedLine.Add(new formated
+                    formattedLine.Add(new Formatted
                     {
                         Text = line.Substring(j, length),
                         Color = ConsoleColor.White, 

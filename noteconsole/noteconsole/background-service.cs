@@ -7,7 +7,7 @@ namespace noteconsole
         {
             while (true)
             {
-                string[] lines = filecontent.Split('\n');
+                string[] lines = Filecontent.Split('\n');
                 List<ColorsGlobal> ColorsListBuffer = new();
 
                 GlobalColorList.Add(new ColorsGlobal{line = 0, StartChar = 0, EndChar = 5, Color = ConsoleColor.Blue});
