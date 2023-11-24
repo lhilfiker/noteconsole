@@ -9,6 +9,7 @@ Bug fixes:
  - Fix that after writing a characcter you cant go to the last char in the line anymore.
  - Fix that when pressing up or downarrow and the cursorx is more than the line going to it would set cursorx one too far.
  - Fix multiple possible null refrences
+ - Fix that when scrolling horizontally the mouse pointer will be one off.
 
  Smaller Changes:
   - Minor Code Cleanup
