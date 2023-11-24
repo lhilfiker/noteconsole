@@ -803,14 +803,12 @@ namespace noteconsole
             List<Formatted> formattedLine = new List<Formatted>();
             List<ColorsGlobal> colorsForThisLine = new();
 
-            // Handle empty line
             if (line == "")
             {
                 formattedLine.Add(new Formatted { Text = line, Color = ConsoleColor.White, NewLine = true });
                 return formattedLine;
             }
 
-            // Add only the color items that affect this line
             foreach (var obj in GlobalColorList)
             {
                 if (obj.line == i)
@@ -819,15 +817,13 @@ namespace noteconsole
                 }
             }
 
-            // Create substring based on horizontal scroll and max width
             string lineWithoutColor = line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar));
 
-            // Iterate over the visible part of the line
             for (int j = 0; j < lineWithoutColor.Length;)
             {
                 int originalIndex = j + startChar; // Index in the original line
                 var colorItem = colorsForThisLine.FirstOrDefault(item =>
-                    item.StartChar <= originalIndex && item.EndChar >= originalIndex);
+                    originalIndex >= item.StartChar && originalIndex < item.EndChar);
 
                 int segmentLength;
                 if (colorItem != null)
@@ -857,7 +853,6 @@ namespace noteconsole
                 j += segmentLength;
             }
 
-            // Ensure the last formatted item marks the end of a line
             if (formattedLine.Any())
             {
                 formattedLine.Last().NewLine = true;
