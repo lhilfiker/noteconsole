@@ -8,7 +8,7 @@ namespace noteconsole
     {
         public string? Text { get; set; }
         public ConsoleColor Color { get; set; }
-        public bool NewLine { get; init; }
+        public bool NewLine { get; set; }
     }
 
     internal partial class Program
@@ -414,7 +414,7 @@ namespace noteconsole
                             }
 
                             break;
- 
+
                         case ConsoleKey.Spacebar: // Space
                             if (_isSelection) // Check if selection is true
                             {
@@ -444,7 +444,6 @@ namespace noteconsole
                             }
                             else
                             {
-                                
                                 int spaceIndex = GetIndex(Filecontent, cursorX, cursorY);
                                 Filecontent = Filecontent.Insert(spaceIndex, " ");
                                 maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY) + 1;
@@ -713,9 +712,9 @@ namespace noteconsole
             {
                 string line = lines[i];
                 // Start line for horizontal scrolling
-                if (line.Length > maxwidth)
+                if (line.Length > maxwidth - 1)
                 {
-                    startChar = i == y ? Math.Max(0, Math.Min(x - (maxwidth), line.Length - maxwidth)) : 0;
+                    startChar = i == y ? Math.Max(0, Math.Min(x - (maxwidth), line.Length - maxwidth) + 1) : 0;
                 }
                 else
                 {
@@ -803,16 +802,15 @@ namespace noteconsole
         {
             List<Formatted> formattedLine = new List<Formatted>();
             List<ColorsGlobal> colorsForThisLine = new();
+
+            // Handle empty line
             if (line == "")
             {
-                formattedLine.Add(new Formatted
-                {
-                    Text = line,
-                    Color = ConsoleColor.White,
-                    NewLine = true
-                });
+                formattedLine.Add(new Formatted { Text = line, Color = ConsoleColor.White, NewLine = true });
+                return formattedLine;
             }
-            // Add only the ones that manipulate this line.
+
+            // Add only the color items that affect this line
             foreach (var obj in GlobalColorList)
             {
                 if (obj.line == i)
@@ -820,52 +818,52 @@ namespace noteconsole
                     colorsForThisLine.Add(obj);
                 }
             }
-            // Make the formated line without colors.
+
+            // Create substring based on horizontal scroll and max width
             string lineWithoutColor = line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar));
-            for (int j = startChar; j < lineWithoutColor.Length; ) // Go through each color change
+
+            // Iterate over the visible part of the line
+            for (int j = 0; j < lineWithoutColor.Length;)
             {
-                var colorItem = colorsForThisLine.FirstOrDefault(item => item.StartChar == j);
+                int originalIndex = j + startChar; // Index in the original line
+                var colorItem = colorsForThisLine.FirstOrDefault(item =>
+                    item.StartChar <= originalIndex && item.EndChar >= originalIndex);
+
+                int segmentLength;
                 if (colorItem != null)
                 {
-                    int length = Math.Min(colorItem.EndChar - j, lineWithoutColor.Length - j);
+                    // Calculate the length of the colored segment
+                    int segmentEnd = Math.Min(colorItem.EndChar - startChar, lineWithoutColor.Length);
+                    segmentLength = segmentEnd - j;
                     formattedLine.Add(new Formatted
                     {
-                        Text = line.Substring(j, length),
-                        Color = colorItem.Color,
-                        NewLine = (j + length) >= lineWithoutColor.Length
+                        Text = lineWithoutColor.Substring(j, segmentLength), Color = colorItem.Color, NewLine = false
                     });
-                    j += length;
                 }
                 else
                 {
-                    var nextColorItems = colorsForThisLine.Where(item => item.StartChar > j);
-                    int nextColorStart;
-
-                    ColorsGlobal[] colorsGlobals = nextColorItems as ColorsGlobal[] ?? nextColorItems.ToArray();
-                    if (colorsGlobals.Any())
-                    {
-                        nextColorStart = colorsGlobals.Min(item => item.StartChar) - j;
-                    }
-                    else
-                    {
-                        nextColorStart = lineWithoutColor.Length - j;
-                    }
-
-                    int length = Math.Min(nextColorStart, lineWithoutColor.Length - j);
+                    // Find the next color change or the end of the line
+                    int nextColorStart = colorsForThisLine.Where(item => item.StartChar > originalIndex)
+                        .Select(item => item.StartChar - startChar)
+                        .DefaultIfEmpty(lineWithoutColor.Length)
+                        .Min();
+                    segmentLength = nextColorStart - j;
                     formattedLine.Add(new Formatted
                     {
-                        Text = line.Substring(j, length),
-                        Color = ConsoleColor.White, 
-                        NewLine = (j + length) >= lineWithoutColor.Length
+                        Text = lineWithoutColor.Substring(j, segmentLength), Color = ConsoleColor.White, NewLine = false
                     });
-                    j += length;
                 }
 
+                j += segmentLength;
+            }
+
+            // Ensure the last formatted item marks the end of a line
+            if (formattedLine.Any())
+            {
+                formattedLine.Last().NewLine = true;
             }
 
             return formattedLine;
         }
-
-
     }
 }
