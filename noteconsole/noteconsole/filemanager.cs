@@ -36,7 +36,7 @@ namespace noteconsole
             "└────────────────────────────────────┘"
         };
 
-        static bool _isSelection = false;
+        static bool _isSelection;
         static int _selectionStartX;
         static int _selectionStartY;
         static int _selectionEndX;
@@ -48,6 +48,7 @@ namespace noteconsole
             Terminal.Clear();
             Console.WriteLine("Loading...");
 
+            _isSelection = false;
             string? password = "";
 
             Filecontent = "";
@@ -109,7 +110,7 @@ namespace noteconsole
                     if (pressedKey.Key == ConsoleKey.V)
                     {
                         // Paste functionality
-                        var clipboardText = TextCopy.ClipboardService.GetText();
+                        var clipboardText = ClipboardService.GetText();
                         if (!string.IsNullOrEmpty(clipboardText))
                         {
                             Terminal.Clear();
@@ -646,7 +647,7 @@ namespace noteconsole
             }
 
             Terminal.Clear();
-            Console.WriteLine($"{selectedText.ToString()} will be copied. \nPress Enter to continue");
+            Console.WriteLine($"{selectedText} will be copied. \nPress Enter to continue");
             Console.ReadLine();
 
             return selectedText.ToString();
