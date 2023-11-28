@@ -19,7 +19,8 @@
             string filepath = "";
             
             // TODO: Start the Background Service:
-            
+            Thread BackgroundServices = new(StartBackgroundServices);
+            BackgroundServices.Start();
 
             while (true)
             {
