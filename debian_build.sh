@@ -9,7 +9,7 @@ rm -rf noteconsole/DEBIAN
 rm -rf package
 
 # Build the .Net Application
-dotnet publish -c Release -f net6.0 --self-contained
+dotnet publish -c Release -f net6.0 --self-contained -r linux-x64
 mkdir -p package/DEBIAN package/usr/lib/noteconsole
 cp -r noteconsole/bin/Release/net6.0/linux-x64/publish/* package/usr/lib/noteconsole/
 # Create Symbolic Link for Executable
@@ -24,7 +24,6 @@ Section: editors
 Priority: optional
 Architecture: amd64
 Maintainer: RebelCoderJames <contact@rebelcoderjames.tech>
-Depends: dotnet-runtime-6.0
 Recommends: xsel
 Description: A simple note editor for the console.
 EOF
