@@ -1,7 +1,8 @@
 # Changelog 
 
 ## v.0.2.1
-Remove DotNet 6.0 as a requirement as it is already selfcontained and it isn't in debian repositorys.
+- Remove DotNet 6.0 as a requirement as it is already selfcontained and it isn't in debian repositorys.
+- New Build and signing proceedure.
 
 ## v.0.2.0
 New Features:
