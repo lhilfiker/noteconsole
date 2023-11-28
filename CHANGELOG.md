@@ -1,5 +1,8 @@
 # Changelog 
 
+## v.0.2.1
+Remove DotNet 6.0 as a requirement as it is already selfcontained and it isn't in debian repositorys.
+
 ## v.0.2.0
 New Features:
  - Support for rendering Colors. in v0.3 a plugin system will get added that can then load diffrent display plugins which can set specific text to specific color.
