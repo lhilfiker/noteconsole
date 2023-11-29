@@ -814,13 +814,20 @@ namespace noteconsole
             }
 
             List<ColorsGlobal> globalColorListBuffer = GlobalColorList.ToList();
-            
-            foreach (var obj in globalColorListBuffer)
+
+            try
             {
-                if (obj.line == i)
+                foreach (var obj in globalColorListBuffer)
                 {
-                    colorsForThisLine.Add(obj);
+                    if (obj.line == i)
+                    {
+                        colorsForThisLine.Add(obj);
+                    }
                 }
+            }
+            catch
+            {
+                
             }
 
             string lineWithoutColor = line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar));
