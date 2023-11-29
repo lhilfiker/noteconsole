@@ -1,6 +1,8 @@
 # Changelog 
 
 ## v.0.2.2 UNRELEASED
+New:
+ - Add support for Background Color.
 Bug fixes:
  - Fix crash when window is too small.
  - Fix that background color will be white after going into selection mode in some terminals.

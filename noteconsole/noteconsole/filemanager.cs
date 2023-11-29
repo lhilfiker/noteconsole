@@ -8,6 +8,8 @@ namespace noteconsole
     {
         public string? Text { get; set; }
         public ConsoleColor Color { get; set; }
+        
+        public ConsoleColor BackgroundColor { get; set; }
         public bool NewLine { get; set; }
     }
 
@@ -771,6 +773,7 @@ namespace noteconsole
             for (int i = 0; i < text.Count; i++)
             {
                 Console.ForegroundColor = text[i].Color;
+                if (text[i].BackgroundColor != null) Console.BackgroundColor = text[i].BackgroundColor;
                 if (text[i].NewLine) Console.WriteLine(text[i].Text);
                 else Console.Write(text[i].Text);
             }
@@ -806,7 +809,7 @@ namespace noteconsole
 
             if (line == "")
             {
-                formattedLine.Add(new Formatted { Text = line, Color = ConsoleColor.White, NewLine = true });
+                formattedLine.Add(new Formatted { Text = line, Color = ConsoleColor.White, BackgroundColor = ConsoleColor.Black, NewLine = true });
                 return formattedLine;
             }
 
@@ -834,7 +837,7 @@ namespace noteconsole
                     segmentLength = segmentEnd - j;
                     formattedLine.Add(new Formatted
                     {
-                        Text = lineWithoutColor.Substring(j, segmentLength), Color = colorItem.Color, NewLine = false
+                        Text = lineWithoutColor.Substring(j, segmentLength), Color = colorItem.Color, BackgroundColor = colorItem.BackgroundColor == null ? ConsoleColor.Black : colorItem.BackgroundColor, NewLine = false
                     });
                 }
                 else
