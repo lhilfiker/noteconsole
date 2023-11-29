@@ -767,6 +767,7 @@ namespace noteconsole
         static void FileRender(List<Formatted> text)
         {
             Terminal.Clear();
+            Console.BackgroundColor = ConsoleColor.Black;
             for (int i = 0; i < text.Count; i++)
             {
                 Console.ForegroundColor = text[i].Color;

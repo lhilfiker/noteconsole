@@ -3,6 +3,7 @@
 ## v.0.2.2 UNRELEASED
 Bug fixes:
  - Fix crash when window is too small.
+ - Fix that background color will be white after going into selection mode in some terminals.
 
 ## v.0.2.1
 - Remove DotNet 6.0 as a requirement as it is already selfcontained and it isn't in debian repositorys.
