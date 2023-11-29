@@ -4,6 +4,7 @@
 New:
  - Add support for Background Color.
 Bug fixes:
+ - Fix that app crashes when GlobalColorsList is updated at the same time a line is proceded.
  - Fix crash when window is too small.
  - Fix that background color will be white after going into selection mode in some terminals.
 

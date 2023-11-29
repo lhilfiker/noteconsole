@@ -813,7 +813,9 @@ namespace noteconsole
                 return formattedLine;
             }
 
-            foreach (var obj in GlobalColorList)
+            List<ColorsGlobal> globalColorListBuffer = GlobalColorList.ToList();
+            
+            foreach (var obj in globalColorListBuffer)
             {
                 if (obj.line == i)
                 {
