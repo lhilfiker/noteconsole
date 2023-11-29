@@ -3,6 +3,7 @@
 ## v.0.2.2 UNRELEASED
 New:
  - Add support for Background Color.
+
 Bug fixes:
  - Fix that app crashes when GlobalColorsList is updated at the same time a line is proceded.
  - Fix crash when window is too small.
