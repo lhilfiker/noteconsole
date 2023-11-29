@@ -1,5 +1,9 @@
 # Changelog 
 
+## v.0.2.2 UNRELEASED
+Bug fixes:
+ - Fix crash when window is too small.
+
 ## v.0.2.1
 - Remove DotNet 6.0 as a requirement as it is already selfcontained and it isn't in debian repositorys.
 - New Build and signing proceedure.
