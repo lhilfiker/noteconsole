@@ -54,12 +54,19 @@
                 int verticalCenter = (consoleHeight - content.Length) / 2;
 
                 // Print content centered horizontally and vertically
-                for (int i = 0; i < content.Length; i++)
+                try
                 {
-                    string line = content[i];
-                    int horizontalPadding = (consoleWidth - line.Length) / 2;
-                    Console.SetCursorPosition(horizontalPadding, verticalCenter + i);
-                    Console.WriteLine(line);
+                    for (int i = 0; i < content.Length; i++)
+                    {
+                        string line = content[i];
+                        int horizontalPadding = (consoleWidth - line.Length) / 2;
+                        Console.SetCursorPosition(horizontalPadding, verticalCenter + i);
+                        Console.WriteLine(line);
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Window too small.");
                 }
 
                 ConsoleKeyInfo keyInfo;

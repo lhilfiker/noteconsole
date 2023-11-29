@@ -10,6 +10,9 @@ namespace noteconsole
                 List<ColorsGlobal> ColorsListBuffer = new();
                 
                 GlobalColorList.Add(new ColorsGlobal{line = 0, StartChar = 0, EndChar = 5, Color = ConsoleColor.Blue});
+                GlobalColorList.Add(new ColorsGlobal{line = 1, StartChar = 0, EndChar = 10, Color = ConsoleColor.Green});
+                GlobalColorList.Add(new ColorsGlobal{line = 1, StartChar = 11, EndChar = 20, Color = ConsoleColor.Red});
+                GlobalColorList.Add(new ColorsGlobal{line = 2, StartChar = 0, EndChar = 50, Color = ConsoleColor.DarkCyan});
 
                 Thread.Sleep(100); // TODO: Better mechanism
             }
