@@ -814,13 +814,7 @@ namespace noteconsole
                 return formattedLine;
             }
 
-            foreach (var obj in globalColorListBuffer)
-            {
-                if (obj.line == i)
-                {
-                    colorsForThisLine.Add(obj);
-                }
-            }
+            colorsForThisLine.AddRange(globalColorListBuffer.Where(obj => obj.line == i));
 
             string lineWithoutColor = line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar));
 
