@@ -1,6 +1,6 @@
 # Changelog 
 
-## v.0.2.2 UNRELEASED
+## v.0.2.2
 New:
  - Add support for Background Color.
 
