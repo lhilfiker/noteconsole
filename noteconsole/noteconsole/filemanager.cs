@@ -709,6 +709,7 @@ namespace noteconsole
 
             int endLine = Math.Min(lines.Count, startLine + maxheight - 1);
             int startChar = 0;
+            List<ColorsGlobal> globalColorListBuffer = GlobalColorList.ToList();
 
             for (int i = startLine; i < endLine; i++)
             {
@@ -723,7 +724,7 @@ namespace noteconsole
                     startChar = 0;
                 }
 
-                List<Formatted> formattedLine = ProcessLineForColor(line, startChar, i, maxwidth);
+                List<Formatted> formattedLine = ProcessLineForColor(line, startChar, i, maxwidth, globalColorListBuffer);
                 formattedWithColor.AddRange(formattedLine);
             }
 
@@ -802,7 +803,7 @@ namespace noteconsole
             }
         }
 
-        private static List<Formatted> ProcessLineForColor(string line, int startChar, int i, int maxwidth)
+        private static List<Formatted> ProcessLineForColor(string line, int startChar, int i, int maxwidth, List<ColorsGlobal> globalColorListBuffer)
         {
             List<Formatted> formattedLine = new List<Formatted>();
             List<ColorsGlobal> colorsForThisLine = new();
@@ -813,21 +814,12 @@ namespace noteconsole
                 return formattedLine;
             }
 
-            List<ColorsGlobal> globalColorListBuffer = GlobalColorList.ToList();
-
-            try
+            foreach (var obj in globalColorListBuffer)
             {
-                foreach (var obj in globalColorListBuffer)
+                if (obj.line == i)
                 {
-                    if (obj.line == i)
-                    {
-                        colorsForThisLine.Add(obj);
-                    }
+                    colorsForThisLine.Add(obj);
                 }
-            }
-            catch
-            {
-                
             }
 
             string lineWithoutColor = line.Substring(startChar, Math.Min(maxwidth, line.Length - startChar));
