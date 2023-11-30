@@ -200,6 +200,12 @@
                         AddToChache($"last = {filepath}|:|");
                     }
                 }
+                else if (keyInfo.Key == ConsoleKey.Q)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Bye");
+                    break;
+                }
                 else
                 {
                     filepath = "";

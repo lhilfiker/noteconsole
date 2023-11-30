@@ -3,6 +3,7 @@
 ## v.0.2.3
 Improvments:
  - Preperation: Background service wait for changes
+ - Q to leave app
 
 Bug Fixes:
  - Remove testing colors
