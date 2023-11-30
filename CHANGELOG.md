@@ -1,6 +1,9 @@
 # Changelog 
 
 ## v.0.2.3
+Improvments:
+ - Preperation: Background service wait for changes
+
 Bug Fixes:
  - Remove testing colors
 

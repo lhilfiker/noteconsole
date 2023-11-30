@@ -6,16 +6,20 @@ namespace noteconsole
         public static void StartBackgroundServices()
         {
             List<ColorsGlobal> ColorsListBuffer = new();
+            string buffer = Filecontent;
             while (true)
             {
                 ColorsListBuffer.Clear();
                 
                 GlobalColorList.Clear();
                 GlobalColorList = ColorsListBuffer.ToList();
-                
-                Thread.Sleep(100); // TODO: Better mechanism
+
+                while (Filecontent != buffer)
+                {
+                }
+
+                buffer = Filecontent;}
             }
-        }
         
         
     }
