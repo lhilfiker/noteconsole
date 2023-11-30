@@ -203,6 +203,7 @@
                 else if (keyInfo.Key == ConsoleKey.Q)
                 {
                     Console.Clear();
+                    Console.ResetColor();
                     Console.WriteLine("Bye");
                     break;
                 }
