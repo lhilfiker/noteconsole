@@ -213,6 +213,8 @@
 
                 if (filepath != "") FileManager(filepath);
             }
+            Environment.ExitCode = 0; // Exit application
+            Environment.Exit(Environment.ExitCode);
         }
 
         static string DisplayRecentFiles()
