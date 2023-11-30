@@ -4,6 +4,9 @@
 New:
  - Add support for Background Color.
 
+Improvements:
+ - Rendering optimization.
+
 Bug fixes:
  - Fix that app crashes when GlobalColorsList is updated at the same time a line is proceded.
  - Fix crash when window is too small.
