@@ -710,6 +710,7 @@ namespace noteconsole
             int endLine = Math.Min(lines.Count, startLine + maxheight - 1);
             int startChar = 0;
             List<ColorsGlobal> globalColorListBuffer = GlobalColorList.ToList();
+            List<Formatted> formattedLine = new();
 
             for (int i = startLine; i < endLine; i++)
             {
@@ -724,7 +725,7 @@ namespace noteconsole
                     startChar = 0;
                 }
 
-                List<Formatted> formattedLine = ProcessLineForColor(line, startChar, i, maxwidth, globalColorListBuffer);
+                formattedLine = ProcessLineForColor(line, startChar, i, maxwidth, globalColorListBuffer);
                 formattedWithColor.AddRange(formattedLine);
             }
 
