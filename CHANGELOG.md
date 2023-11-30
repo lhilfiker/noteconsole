@@ -1,6 +1,10 @@
 # Changelog 
 
-## v.0.2.2
+## v.0.2.3
+Bug Fixes:
+ - Remove testing colors
+
+## v.0.2.2 (30.11.2023)
 New:
  - Add support for Background Color.
 
