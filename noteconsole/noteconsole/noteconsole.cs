@@ -66,7 +66,7 @@
                 }
                 catch
                 {
-                    Console.WriteLine("Window too small.");
+                    Console.WriteLine("Noteconsole. N to create a new file. S to select a file. R to open recent files. Q to quit. NOTE: Window is to small to render welcome screen.");
                 }
 
                 ConsoleKeyInfo keyInfo;

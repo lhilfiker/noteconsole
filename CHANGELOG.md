@@ -4,6 +4,7 @@
 Improvments:
  - Preperation: Background service wait for changes
  - Q to leave app
+ - Better Message when window is too small
 
 Bug Fixes:
  - Remove testing colors
