@@ -1,6 +1,6 @@
 # Changelog 
 
-## v.0.2.3
+## v.0.2.3 (30.11.2023)
 Improvments:
  - Preperation: Background service wait for changes
  - Q to leave app
