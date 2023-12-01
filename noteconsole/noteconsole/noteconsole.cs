@@ -202,7 +202,7 @@
                 }
                 else if (keyInfo.Key == ConsoleKey.Q)
                 {
-                    Console.Clear();
+                    Terminal.Clear();
                     Console.ResetColor();
                     Console.WriteLine("Bye");
                     break;

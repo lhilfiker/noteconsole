@@ -1,5 +1,10 @@
 # Changelog 
 
+## v.0.3.0 UNRELEASED
+
+Bug Fixes:
+ - Clear Temrminal when leaving the app.
+
 ## v.0.2.3 (30.11.2023)
 Improvments:
  - Preperation: Background service wait for changes
