@@ -5,6 +5,9 @@ New:
  - Allow to enter file name / path in command line to open it.
  - Ctrl Delete Backspace or D to delete from start line to current Position on line.
 
+Improvments:
+ - Hide Cursor on Welcome Screen
+
 Bug Fixes:
  - Clear Temrminal when leaving the app.
  - Ctrl Right Arrow is one too far

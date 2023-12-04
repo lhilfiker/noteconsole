@@ -33,6 +33,8 @@
             }
             if (filepath != "") FileManager(filepath);
 
+            Console.CursorVisible = false;
+
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.White;
