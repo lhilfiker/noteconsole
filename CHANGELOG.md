@@ -3,6 +3,7 @@
 ## v.0.3.0 UNRELEASED
 New:
  - Allow to enter file name / path in command line to open it.
+ - Ctrl Delete Backspace or D to delete from start line to current Position on line.
 
 Bug Fixes:
  - Clear Temrminal when leaving the app.
