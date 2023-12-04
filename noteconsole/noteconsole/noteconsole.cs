@@ -21,6 +21,17 @@
             // TODO: Start the Background Service:
             Thread BackgroundServices = new(StartBackgroundServices);
             BackgroundServices.Start();
+            
+            // Check for filepath argument
+            if (args.Length > 0 && File.Exists(Path.Combine(Directory.GetCurrentDirectory(), args[0])))
+            {
+                filepath = Path.Combine(Directory.GetCurrentDirectory(), args[0]);
+            }
+            else if (args.Length > 0 && File.Exists(args[0]))
+            {
+                filepath = args[0];
+            }
+            if (filepath != "") FileManager(filepath);
 
             while (true)
             {
