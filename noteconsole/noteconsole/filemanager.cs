@@ -325,6 +325,52 @@ namespace noteconsole
                             }
 
                             return;
+                        // Delete whole line
+                        case ConsoleKey.Delete when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
+                        case ConsoleKey.Backspace when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
+                            if (_isSelection)
+                            {
+                                int startIndex = GetIndex(Filecontent, _selectionStartX, _selectionStartY);
+                                int endIndex = GetIndex(Filecontent, _selectionEndX, _selectionEndY);
+
+                                if (startIndex > endIndex) // If selecting behind the start change values
+                                {
+                                    (endIndex, startIndex) = (startIndex, endIndex);
+                                    _selectionStartX = _selectionEndX;
+                                    _selectionStartY = _selectionEndY;
+                                }
+
+                                Filecontent = Filecontent.Remove(startIndex, endIndex - startIndex);
+
+                                cursorX = _selectionStartX;
+                                cursorY = _selectionStartY;
+
+                                // Precompute max characters for each line
+                                maxCharactersPerLine.Clear();
+                                foreach (var lineincontent in Filecontent.Split('\n'))
+                                {
+                                    maxCharactersPerLine.Add(lineincontent.Length + 1);
+                                }
+
+                                _isSelection = false;
+                            }
+                            else
+                            {
+                                int lineStartIndex = GetIndex(Filecontent, 0, cursorY);
+                                int lineEndIndex = GetIndex(Filecontent, cursorX, cursorY);
+                                Filecontent = Filecontent.Remove(lineStartIndex, lineEndIndex - lineStartIndex);
+                                
+                                cursorX = 0;
+                                if (cursorY > 0) cursorY--;
+                                maxCharactersPerLine.Clear();
+                                foreach (var line in Filecontent.Split('\n'))
+                                {
+                                    maxCharactersPerLine.Add(line.Length + 1);
+                                }
+                            }
+                            
+                            break;
+                        
                         case ConsoleKey.Backspace: //Delete
                         case ConsoleKey.Delete:
                             if (_isSelection) // Check if selection is true
