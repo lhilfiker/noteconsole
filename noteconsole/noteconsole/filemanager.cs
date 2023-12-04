@@ -170,7 +170,7 @@ namespace noteconsole
                             break;
                         case ConsoleKey.RightArrow
                             when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control): //Move to end of line
-                            if (!_isSelection) cursorX = maxCharacter;
+                            if (!_isSelection) cursorX = maxCharacter - 1;
                             else
                             {
                                 cursorX = maxCharacter;
