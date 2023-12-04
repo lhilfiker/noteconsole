@@ -406,6 +406,7 @@ namespace noteconsole
                                 {
                                     int deleteIndex = GetIndex(Filecontent, cursorX, cursorY);
                                     Filecontent = Filecontent.Remove(deleteIndex - 1, 1);
+                                    maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY);
                                     cursorX--;
                                 }
                                 // Append the current line to the line above so there is only one line.

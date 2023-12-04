@@ -7,6 +7,7 @@ New:
 Bug Fixes:
  - Clear Temrminal when leaving the app.
  - Ctrl Right Arrow is one too far
+ - Fix that delete will not change max character limit.
 
 ## v.0.2.3 (30.11.2023)
 Improvments:
