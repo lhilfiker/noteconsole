@@ -9,6 +9,7 @@ Improvments:
  - Hide Cursor on Welcome Screen
 
 Bug Fixes:
+ - Fix that it prooperly sets cursorx
  - Clear Temrminal when leaving the app.
  - Ctrl Right Arrow is one too far
  - Fix that delete will not change max character limit.

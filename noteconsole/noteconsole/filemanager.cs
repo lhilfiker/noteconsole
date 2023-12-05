@@ -621,7 +621,7 @@ namespace noteconsole
                     //Make sure cursor is within boundaries
                     if (cursorX > maxCharactersPerLine[cursorY])
                     {
-                        cursorX = maxCharactersPerLine[cursorY];
+                        cursorX = maxCharactersPerLine[cursorY] - 1;
                     }
                 }
             }
