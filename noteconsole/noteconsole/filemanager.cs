@@ -416,7 +416,7 @@ namespace noteconsole
                                     Filecontent = Filecontent.Remove(deleteIndex);
                                     Filecontent = Filecontent.Insert(deleteIndex - 1, line2);
                                     cursorY--;
-                                    cursorX = maxCharactersPerLine[cursorY];
+                                    cursorX = maxCharactersPerLine[cursorY] - 1;
                                     maxCharactersPerLine.RemoveAt(cursorY + 1);
                                     maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY) + 1;
                                 }
@@ -458,7 +458,7 @@ namespace noteconsole
                                 cursorY++;
                                 cursorX = 0;
                                 maxCharactersPerLine.Insert(cursorY, GetMaxCharacter(Filecontent, cursorY));
-                                maxCharactersPerLine[cursorY - 1] = GetMaxCharacter(Filecontent, cursorY - 1) + 1;
+                                maxCharactersPerLine[cursorY - 1] = GetMaxCharacter(Filecontent, cursorY - 1);
                             }
 
                             break;
