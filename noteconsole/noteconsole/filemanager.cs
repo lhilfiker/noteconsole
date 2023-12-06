@@ -577,6 +577,7 @@ namespace noteconsole
                             isSidePanel = !isSidePanel;
                             break;
                         default: // Default case is a character key
+                            if (pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control) || pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt)) break;
                             char keyChar = pressedKey.KeyChar;
 
                             if (_isSelection) // Check if selection is true
