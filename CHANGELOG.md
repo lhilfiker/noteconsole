@@ -1,12 +1,13 @@
 # Changelog 
 
-## v.0.3.0 UNRELEASED
+## v.0.3.0 (6.12.2023)
 New:
  - Allow to enter file name / path in command line to open it.
  - Ctrl Delete Backspace or D to delete from start line to current Position on line.
 
 Improvments:
  - Hide Cursor on Welcome Screen
+ - Properly handle Ctrl and Alt Keys to prevent breaking.
 
 Bug Fixes:
  - Fix crash after enter and backspace on start of file.
