@@ -17,13 +17,13 @@ namespace noteconsole
         {
             // Load the Plugins
             List<PluginInfo> pluginInfoList;
-            List<IPlugin> pluginInstances;
+            List<dynamic> pluginInstances;
             (pluginInfoList, pluginInstances) = LoadDisplayPlugins();
             
             List<ColorsGlobal> ColorsListBuffer = new();
             string buffer = Filecontent;
             string extensionBuffer = Path.GetExtension(filepath);
-            IPlugin currentPlugin = null;
+            dynamic currentPlugin = null;
             
             while (true)
             {
@@ -57,7 +57,7 @@ namespace noteconsole
                 buffer = Filecontent;}
             }
         
-        private static IPlugin FindPluginForExtension(List<PluginInfo> pluginInfoList, List<IPlugin> pluginInstances, string extension)
+        private static dynamic FindPluginForExtension(List<PluginInfo> pluginInfoList, List<dynamic> pluginInstances, string extension)
         {
             for (int i = 0; i < pluginInfoList.Count; i++)
             {
@@ -69,11 +69,11 @@ namespace noteconsole
             return null;
         }
         
-        private static (List<PluginInfo>, List<IPlugin>) LoadDisplayPlugins()
+        private static (List<PluginInfo>, List<dynamic>) LoadDisplayPlugins()
         {
             string pluginPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "noteconsole", "plugins");
-            List<PluginInfo> pluginInfoList = new List<PluginInfo>();
-            List<IPlugin> pluginInstances = new List<IPlugin>();
+            var pluginInfoList = new List<PluginInfo>();
+            var pluginInstances = new List<dynamic>();
 
             try
             {
@@ -87,23 +87,32 @@ namespace noteconsole
                     Assembly pluginAssembly = Assembly.LoadFrom(file);
                     foreach (Type type in pluginAssembly.GetTypes())
                     {
-                        if (typeof(IPlugin).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                        if (TypeImplementsIPluginStructure(type) && !type.IsInterface && !type.IsAbstract)
                         {
-                            IPlugin pluginInstance = (IPlugin)Activator.CreateInstance(type);
-                            PluginInfo info = pluginInstance.GetPluginInfo();
+                            dynamic pluginInstance = Activator.CreateInstance(type);
+                            var info = pluginInstance.GetPluginInfo(); // Assuming GetPluginInfo is defined in plugin types
                             pluginInfoList.Add(info);
                             pluginInstances.Add(pluginInstance);
                         }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return (new List<PluginInfo>(), new List<IPlugin>());
+                return (new List<PluginInfo>(), new List<dynamic>());
             }
 
             return (pluginInfoList, pluginInstances);
         }
+
+        private static bool TypeImplementsIPluginStructure(Type type)
+        {
+            var getPluginInfoMethod = type.GetMethod("GetPluginInfo");
+            var mainFunctionMethod = type.GetMethod("MainFunction");
+
+            return getPluginInfoMethod != null && mainFunctionMethod != null;
+        }
+
 
     }
 

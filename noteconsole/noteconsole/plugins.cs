@@ -5,7 +5,4 @@ namespace noteconsole
         PluginInfo GetPluginInfo();
         List<ColorsGlobal> MainFunction(string buffer, int cursorX, int cursorY);
     }
-
-
-
 }
