@@ -1,5 +1,11 @@
 # Changelog 
 
+## v.0.4.0 UNRELEASED
+New:
+ - Load Plugins in /AppData/noteconsole/plugins.
+ - Use MainFunction of loaded Plugin to manipulate GlobalColorsList
+ - Find suitable Plugin for file extension.
+
 ## v.0.3.0 (6.12.2023)
 New:
  - Allow to enter file name / path in command line to open it.

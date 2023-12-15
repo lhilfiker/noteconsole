@@ -2,6 +2,7 @@
 {
     internal partial class Program
     {
+        public static string filepath;
         static void Main(string[] args)
         {
             //Loading Cache
@@ -16,7 +17,7 @@
                 lastaccessed.Add("Nothing in here. Sorry");
             }
 
-            string filepath = "";
+            filepath = "";
             
             // TODO: Start the Background Service:
             Thread BackgroundServices = new(StartBackgroundServices);
