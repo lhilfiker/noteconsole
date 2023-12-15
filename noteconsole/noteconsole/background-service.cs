@@ -40,7 +40,7 @@ namespace noteconsole
                 {
                     try
                     {
-                        ColorsListBuffer = currentPlugin.MainFunction();
+                        ColorsListBuffer = currentPlugin.MainFunction(buffer, cursorX, cursorY);
                     }
                     catch
                     {

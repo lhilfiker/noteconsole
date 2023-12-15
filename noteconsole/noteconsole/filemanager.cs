@@ -44,6 +44,8 @@ namespace noteconsole
         static int _selectionEndX;
         static int _selectionEndY;
         public static string? Filecontent;
+        public static int cursorX = 0;
+        public static int cursorY = 0;
 
         public static void FileManager(string filePath)
         {
@@ -74,9 +76,6 @@ namespace noteconsole
             {
                 return;
             }
-
-            int cursorX = 0;
-            int cursorY = 0;
             bool isSidePanel = false;
 
             Console.CursorVisible = true;
