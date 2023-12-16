@@ -39,7 +39,8 @@ public class DefaultHighlighting
                 // Hyperlinks
                 if (line.Contains("[") && line.Contains("]"))
                 {
-                    colorSettings.Add(CreateColorSetting(i, line.IndexOf("["), line.IndexOf("]") + 1, ConsoleColor.Blue, ConsoleColor.Black));
+                    colorSettings.Add(CreateColorSetting(i, line.IndexOf("["), line.IndexOf("]") + 1, ConsoleColor.Blue,
+                        ConsoleColor.Black));
                 }
 
                 // Quoted Text
@@ -58,14 +59,38 @@ public class DefaultHighlighting
                 var dateMatch = Regex.Match(line, @"\b\d{4}-\d{2}-\d{2}\b");
                 if (dateMatch.Success)
                 {
-                    colorSettings.Add(CreateColorSetting(i, dateMatch.Index, dateMatch.Index + dateMatch.Length, ConsoleColor.DarkYellow, ConsoleColor.Black));
+                    colorSettings.Add(CreateColorSetting(i, dateMatch.Index, dateMatch.Index + dateMatch.Length,
+                        ConsoleColor.DarkYellow, ConsoleColor.Black));
+                }
+
+                // Strong Text
+                var strongTextMatch = Regex.Match(line, @"\*\*(.+?)\*\*|__(.+?)__");
+                if (strongTextMatch.Success)
+                {
+                    colorSettings.Add(CreateColorSetting(i, strongTextMatch.Index, strongTextMatch.Index + strongTextMatch.Length, ConsoleColor.DarkRed, ConsoleColor.Black));
+                }
+
+                // Emphasized Text
+                var emphasizedMatch = Regex.Match(line, @"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)|_(.+?)_");
+                if (emphasizedMatch.Success)
+                {
+                    colorSettings.Add(CreateColorSetting(i, emphasizedMatch.Index, emphasizedMatch.Index + emphasizedMatch.Length, ConsoleColor.Magenta, ConsoleColor.Black));
+                }
+
+                // Task Lists
+                var taskListMatch = Regex.Match(line, @"\[.\]");
+                if (taskListMatch.Success)
+                {
+                    colorSettings.Add(CreateColorSetting(i, taskListMatch.Index,
+                        taskListMatch.Index + taskListMatch.Length, ConsoleColor.DarkGreen, ConsoleColor.Black));
                 }
             }
 
             return colorSettings;
         }
 
-        private Shared.ColorsGlobal CreateColorSetting(int line, int startChar, int endChar, ConsoleColor color, ConsoleColor backgroundColor)
+        private Shared.ColorsGlobal CreateColorSetting(int line, int startChar, int endChar, ConsoleColor color,
+            ConsoleColor backgroundColor)
         {
             return new Shared.ColorsGlobal
             {
