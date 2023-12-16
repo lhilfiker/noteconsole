@@ -15,7 +15,7 @@ namespace noteconsole
             (pluginInfoList, pluginInstances) = LoadDisplayPlugins();
             
             List<Shared.ColorsGlobal> ColorsListBuffer = new();
-            string buffer = Filecontent;
+            string? buffer = Filecontent;
             string extensionBuffer = Path.GetExtension(filepath);
             dynamic currentPlugin = null;
             
@@ -35,11 +35,9 @@ namespace noteconsole
                     try
                     {
                         ColorsListBuffer = currentPlugin.MainFunction(buffer, cursorX, cursorY);
-                        Console.WriteLine($"Plugin used successfully.");
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error using plugin: {ex.Message}");
                     }
                 }
 
@@ -47,11 +45,13 @@ namespace noteconsole
                 GlobalColorList.Clear();
                 GlobalColorList.AddRange(ColorsListBuffer);
 
-                while (Filecontent != buffer)
+                while (Filecontent == buffer)
                 {
                 }
 
-                buffer = Filecontent;}
+                buffer = Filecontent;
+                
+            }
             }
         
         private static dynamic FindPluginForExtension(List<Shared.PluginInfo> pluginInfoList, List<dynamic> pluginInstances, string extension)
