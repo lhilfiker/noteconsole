@@ -618,13 +618,13 @@ namespace noteconsole
 
                             break;
                     }
-
-                    //Make sure cursor is within boundaries
-                    if (cursorX > maxCharactersPerLine[cursorY])
-                    {
-                        cursorX = maxCharactersPerLine[cursorY] - 1;
-                    }
                 }
+                //Make sure cursor is within boundaries
+                if (cursorX > maxCharactersPerLine[cursorY])
+                {
+                    cursorX = maxCharactersPerLine[cursorY] - 1;
+                }
+                
                 fileContentUpdatedEvent.WaitOne();
             }
         }
