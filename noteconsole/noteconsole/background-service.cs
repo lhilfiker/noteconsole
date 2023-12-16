@@ -1,5 +1,7 @@
 using System.Reflection;
 using PluginShared;
+using System.IO;
+using System.Threading;
 
 namespace noteconsole
 {
@@ -7,6 +9,10 @@ namespace noteconsole
     internal partial class Program
     {
         public static List<Shared.ColorsGlobal> GlobalColorList = new();
+        
+        private static AutoResetEvent fileContentUpdatedEvent = new AutoResetEvent(false);
+
+        
         public static void StartBackgroundServices()
         {
             // Load the Plugins
@@ -45,9 +51,7 @@ namespace noteconsole
                 GlobalColorList.Clear();
                 GlobalColorList.AddRange(ColorsListBuffer);
 
-                while (Filecontent == buffer)
-                {
-                }
+                fileContentUpdatedEvent.WaitOne();
 
                 buffer = Filecontent;
                 
