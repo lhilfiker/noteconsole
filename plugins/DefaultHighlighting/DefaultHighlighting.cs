@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using PluginShared;
 
 namespace DefaultHighlighting;
@@ -23,23 +24,57 @@ public class DefaultHighlighting
         {
             List<Shared.ColorsGlobal> colorSettings = new List<Shared.ColorsGlobal>();
 
-            // Create a Random object
-            Random rnd = new Random();
+            var lines = buffer.Split(new[] { '\n' }, StringSplitOptions.None);
 
-            // Generate a random ConsoleColor, excluding Black as it's often used for background
-            ConsoleColor randomColor = (ConsoleColor)rnd.Next(1, 16); // Enum values of ConsoleColor range from 0 to 15
-
-            // Highlight characters 1 to 10 of the first line in a random color
-            colorSettings.Add(new Shared.ColorsGlobal
+            for (int i = 0; i < lines.Length; i++)
             {
-                line = 1, // Assuming lines are 1-indexed
-                StartChar = 1,
-                EndChar = 10,
-                Color = randomColor,
-                BackgroundColor = ConsoleColor.Black
-            });
+                var line = lines[i].Trim();
+
+                // Headings
+                if (line.StartsWith("#"))
+                {
+                    colorSettings.Add(CreateColorSetting(i, 0, line.Length, ConsoleColor.Cyan, ConsoleColor.Black));
+                }
+
+                // Hyperlinks
+                if (line.Contains("[") && line.Contains("]"))
+                {
+                    colorSettings.Add(CreateColorSetting(i, line.IndexOf("["), line.IndexOf("]") + 1, ConsoleColor.Blue, ConsoleColor.Black));
+                }
+
+                // Quoted Text
+                if (line.StartsWith(">"))
+                {
+                    colorSettings.Add(CreateColorSetting(i, 0, line.Length, ConsoleColor.DarkGray, ConsoleColor.Black));
+                }
+
+                // Bullet Points
+                if (line.StartsWith("*") || line.StartsWith("-") || line.StartsWith("+"))
+                {
+                    colorSettings.Add(CreateColorSetting(i, 0, line.Length, ConsoleColor.Green, ConsoleColor.Black));
+                }
+
+                // Dates
+                var dateMatch = Regex.Match(line, @"\b\d{4}-\d{2}-\d{2}\b");
+                if (dateMatch.Success)
+                {
+                    colorSettings.Add(CreateColorSetting(i, dateMatch.Index, dateMatch.Index + dateMatch.Length, ConsoleColor.DarkYellow, ConsoleColor.Black));
+                }
+            }
 
             return colorSettings;
+        }
+
+        private Shared.ColorsGlobal CreateColorSetting(int line, int startChar, int endChar, ConsoleColor color, ConsoleColor backgroundColor)
+        {
+            return new Shared.ColorsGlobal
+            {
+                line = line,
+                StartChar = startChar,
+                EndChar = endChar,
+                Color = color,
+                BackgroundColor = backgroundColor
+            };
         }
     }
 }

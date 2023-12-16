@@ -7,7 +7,7 @@ read -p "Enter version: " version
 BUILD_DIR="./bin/Release/net6.0"
 DEB_DIR="./deb_package"
 DEB_CONTROL_FILE="$DEB_DIR/DEBIAN/control"
-pkgname="packagename"
+pkgname="defaulthighlighting"
 
 rm -rf $BUILD_DIR
 rm -rf $DEB_DIR
@@ -29,7 +29,7 @@ Priority: optional
 Architecture: amd64
 Depends: noteconsole
 Maintainer: RebelCoderJames <contact@rebelcoderjames.tech>
-Description: Plugin for noteconsole.
+Description: Default Highlighting Plugin for noteconsole.
 EOT
 
 # Copy the DLL to a temporary directory in the package
