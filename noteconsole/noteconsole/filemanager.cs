@@ -625,7 +625,7 @@ namespace noteconsole
                     cursorX = maxCharactersPerLine[cursorY] - 1;
                 }
                 
-                fileContentUpdatedEvent.WaitOne();
+                fileContentUpdatedEvent.Set();
             }
         }
 
