@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using PluginShared;
 using TextCopy;
 
 namespace noteconsole
@@ -755,7 +756,7 @@ namespace noteconsole
 
             int endLine = Math.Min(lines.Count, startLine + maxheight - 1);
             int startChar = 0;
-            List<ColorsGlobal> globalColorListBuffer = GlobalColorList.ToList();
+            List<Shared.ColorsGlobal> globalColorListBuffer = GlobalColorList.ToList();
             List<Formatted> formattedLine = new();
 
             for (int i = startLine; i < endLine; i++)
@@ -850,10 +851,10 @@ namespace noteconsole
             }
         }
 
-        private static List<Formatted> ProcessLineForColor(string line, int startChar, int i, int maxwidth, List<ColorsGlobal> globalColorListBuffer)
+        private static List<Formatted> ProcessLineForColor(string line, int startChar, int i, int maxwidth, List<Shared.ColorsGlobal> globalColorListBuffer)
         {
             List<Formatted> formattedLine = new List<Formatted>();
-            List<ColorsGlobal> colorsForThisLine = new();
+            List<Shared.ColorsGlobal> colorsForThisLine = new();
 
             if (line == "")
             {

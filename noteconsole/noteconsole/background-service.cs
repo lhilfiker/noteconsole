@@ -1,26 +1,20 @@
 using System.Reflection;
+using PluginShared;
 
 namespace noteconsole
 {
-    public class PluginInfo
-    {
-        public string Name { get; set; }
-        public string FunctionName { get; set; }
-        public List<string> FileExtensionDefault { get; set; }
-        public string Version { get; set; }
-    }
 
     internal partial class Program
     {
-        public static List<ColorsGlobal> GlobalColorList = new();
+        public static List<Shared.ColorsGlobal> GlobalColorList = new();
         public static void StartBackgroundServices()
         {
             // Load the Plugins
-            List<PluginInfo> pluginInfoList;
+            List<Shared.PluginInfo> pluginInfoList;
             List<dynamic> pluginInstances;
             (pluginInfoList, pluginInstances) = LoadDisplayPlugins();
             
-            List<ColorsGlobal> ColorsListBuffer = new();
+            List<Shared.ColorsGlobal> ColorsListBuffer = new();
             string buffer = Filecontent;
             string extensionBuffer = Path.GetExtension(filepath);
             dynamic currentPlugin = null;
@@ -41,11 +35,14 @@ namespace noteconsole
                     try
                     {
                         ColorsListBuffer = currentPlugin.MainFunction(buffer, cursorX, cursorY);
+                        Console.WriteLine($"Plugin used successfully.");
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        Console.WriteLine($"Error using plugin: {ex.Message}");
                     }
                 }
+
 
                 GlobalColorList.Clear();
                 GlobalColorList.AddRange(ColorsListBuffer);
@@ -57,7 +54,7 @@ namespace noteconsole
                 buffer = Filecontent;}
             }
         
-        private static dynamic FindPluginForExtension(List<PluginInfo> pluginInfoList, List<dynamic> pluginInstances, string extension)
+        private static dynamic FindPluginForExtension(List<Shared.PluginInfo> pluginInfoList, List<dynamic> pluginInstances, string extension)
         {
             for (int i = 0; i < pluginInfoList.Count; i++)
             {
@@ -69,10 +66,10 @@ namespace noteconsole
             return null;
         }
         
-        private static (List<PluginInfo>, List<dynamic>) LoadDisplayPlugins()
+        private static (List<Shared.PluginInfo>, List<dynamic>) LoadDisplayPlugins()
         {
             string pluginPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "noteconsole", "plugins");
-            var pluginInfoList = new List<PluginInfo>();
+            var pluginInfoList = new List<Shared.PluginInfo>();
             var pluginInstances = new List<dynamic>();
 
             try
@@ -89,17 +86,25 @@ namespace noteconsole
                     {
                         if (TypeImplementsIPluginStructure(type) && !type.IsInterface && !type.IsAbstract)
                         {
-                            dynamic pluginInstance = Activator.CreateInstance(type);
-                            var info = pluginInstance.GetPluginInfo(); // Assuming GetPluginInfo is defined in plugin types
-                            pluginInfoList.Add(info);
-                            pluginInstances.Add(pluginInstance);
+                            try
+                            {
+                                dynamic pluginInstance = Activator.CreateInstance(type);
+                                Shared.PluginInfo info = pluginInstance.GetPluginInfo();
+                                pluginInfoList.Add(info);
+                                pluginInstances.Add(pluginInstance);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Failed to load plugin {type.FullName}: {ex.Message}");
+                            }
                         }
                     }
                 }
+
             }
             catch (Exception ex)
             {
-                return (new List<PluginInfo>(), new List<dynamic>());
+                return (new List<Shared.PluginInfo>(), new List<dynamic>());
             }
 
             return (pluginInfoList, pluginInstances);
@@ -112,18 +117,7 @@ namespace noteconsole
 
             return getPluginInfoMethod != null && mainFunctionMethod != null;
         }
-
-
     }
-
-    public class ColorsGlobal
-    {
-        public int line { get; set; }
-        public int StartChar { get; set; } 
-        public int EndChar { get; set; } 
-        public ConsoleColor Color { get; set; }
-        
-        public ConsoleColor BackgroundColor { get; set; }
-    }
+    
 
 }    
