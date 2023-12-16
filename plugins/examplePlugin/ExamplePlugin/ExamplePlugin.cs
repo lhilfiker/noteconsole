@@ -4,7 +4,6 @@ using PluginShared;
 
 namespace ExamplePlugin 
 {
-    
     public class MyColorPlugin : Shared.IPlugin
     {
         public Shared.PluginInfo GetPluginInfo()
@@ -22,17 +21,23 @@ namespace ExamplePlugin
         {
             List<Shared.ColorsGlobal> colorSettings = new List<Shared.ColorsGlobal>();
 
-            colorSettings.Add(new Shared.ColorsGlobal 
+            // Create a Random object
+            Random rnd = new Random();
+
+            // Generate a random ConsoleColor, excluding Black as it's often used for background
+            ConsoleColor randomColor = (ConsoleColor)rnd.Next(1, 16); // Enum values of ConsoleColor range from 0 to 15
+
+            // Highlight characters 1 to 10 of the first line in a random color
+            colorSettings.Add(new Shared.ColorsGlobal
             {
-                line = 1,
-                StartChar = 0,
+                line = 1, // Assuming lines are 1-indexed
+                StartChar = 1,
                 EndChar = 10,
-                Color = ConsoleColor.Red,
+                Color = randomColor,
                 BackgroundColor = ConsoleColor.Black
             });
 
             return colorSettings;
         }
     }
-
 }
