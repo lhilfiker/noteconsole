@@ -4,7 +4,7 @@
 read -p "Enter version: " version
 
 # Define paths
-BUILD_DIR="./bin/Release/net6.0"
+BUILD_DIR="./bin/Release/net8.0"
 DEB_DIR="./deb_package"
 DEB_CONTROL_FILE="$DEB_DIR/DEBIAN/control"
 pkgname="packagename"
