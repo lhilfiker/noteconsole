@@ -9,7 +9,7 @@ namespace noteconsole
     {
         public string? Text { get; set; }
         public ConsoleColor Color { get; set; }
-        
+
         public ConsoleColor BackgroundColor { get; set; }
         public bool NewLine { get; set; }
     }
@@ -77,6 +77,7 @@ namespace noteconsole
             {
                 return;
             }
+
             bool isSidePanel = false;
 
             Console.CursorVisible = true;
@@ -364,12 +365,10 @@ namespace noteconsole
                                 Filecontent = Filecontent.Remove(lineStartIndex, lengthToRemove);
                                 cursorX = 0;
                                 maxCharactersPerLine[cursorY] = GetMaxCharacter(Filecontent, cursorY);
-
-
                             }
-                            
+
                             break;
-                        
+
                         case ConsoleKey.Backspace: //Delete
                         case ConsoleKey.Delete:
                             if (_isSelection) // Check if selection is true
@@ -577,7 +576,8 @@ namespace noteconsole
                             isSidePanel = !isSidePanel;
                             break;
                         default: // Default case is a character key
-                            if (pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control) || pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt)) break;
+                            if (pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control) ||
+                                pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt)) break;
                             char keyChar = pressedKey.KeyChar;
 
                             if (_isSelection) // Check if selection is true
@@ -619,12 +619,13 @@ namespace noteconsole
                             break;
                     }
                 }
+
                 //Make sure cursor is within boundaries
                 if (cursorX > maxCharactersPerLine[cursorY])
                 {
                     cursorX = maxCharactersPerLine[cursorY] - 1;
                 }
-                
+
                 fileContentUpdatedEvent.Set();
             }
         }
@@ -815,19 +816,31 @@ namespace noteconsole
             return (formattedWithColor, startLine, startChar);
         }
 
-
         static void FileRender(List<Formatted> text)
         {
             Terminal.Clear();
             Console.BackgroundColor = ConsoleColor.Black;
-            for (int i = 0; i < text.Count; i++)
+            StringBuilder buffer = new StringBuilder();
+            ConsoleColor currentForeColor = ConsoleColor.White;
+            ConsoleColor? currentBackColor = null;
+
+            foreach (var formattedText in text)
             {
-                Console.ForegroundColor = text[i].Color;
-                if (text[i].BackgroundColor != null) Console.BackgroundColor = text[i].BackgroundColor;
-                if (text[i].NewLine) Console.WriteLine(text[i].Text);
-                else Console.Write(text[i].Text);
+                if (formattedText.Color != currentForeColor || formattedText.BackgroundColor != currentBackColor)
+                {
+                    FlushBuffer(buffer, currentForeColor, currentBackColor);
+                    currentForeColor = formattedText.Color;
+                    currentBackColor = formattedText.BackgroundColor;
+                }
+
+                buffer.Append(formattedText.Text);
+                if (formattedText.NewLine)
+                {
+                    buffer.AppendLine();
+                }
             }
 
+            FlushBuffer(buffer, currentForeColor, currentBackColor);
             if (_isSelection)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
@@ -837,6 +850,20 @@ namespace noteconsole
             }
         }
 
+        static void FlushBuffer(StringBuilder buffer, ConsoleColor foreground, ConsoleColor? background)
+        {
+            if (buffer.Length > 0)
+            {
+                Console.ForegroundColor = foreground;
+                if (background.HasValue)
+                {
+                    Console.BackgroundColor = background.Value;
+                }
+
+                Console.Write(buffer.ToString());
+                buffer.Clear();
+            }
+        }
 
         static int GetMaxCharacter(string? filecontent, int line)
         {
@@ -852,14 +879,16 @@ namespace noteconsole
             }
         }
 
-        private static List<Formatted> ProcessLineForColor(string line, int startChar, int i, int maxwidth, List<Shared.ColorsGlobal> globalColorListBuffer)
+        private static List<Formatted> ProcessLineForColor(string line, int startChar, int i, int maxwidth,
+            List<Shared.ColorsGlobal> globalColorListBuffer)
         {
             List<Formatted> formattedLine = new List<Formatted>();
             List<Shared.ColorsGlobal> colorsForThisLine = new();
 
             if (line == "")
             {
-                formattedLine.Add(new Formatted { Text = line, Color = ConsoleColor.White, BackgroundColor = ConsoleColor.Black, NewLine = true });
+                formattedLine.Add(new Formatted
+                    { Text = line, Color = ConsoleColor.White, BackgroundColor = ConsoleColor.Black, NewLine = true });
                 return formattedLine;
             }
 
@@ -881,7 +910,11 @@ namespace noteconsole
                     segmentLength = segmentEnd - j;
                     formattedLine.Add(new Formatted
                     {
-                        Text = lineWithoutColor.Substring(j, segmentLength), Color = colorItem.Color, BackgroundColor = colorItem.BackgroundColor == null ? ConsoleColor.Black : colorItem.BackgroundColor, NewLine = false
+                        Text = lineWithoutColor.Substring(j, segmentLength), Color = colorItem.Color,
+                        BackgroundColor = colorItem.BackgroundColor == null
+                            ? ConsoleColor.Black
+                            : colorItem.BackgroundColor,
+                        NewLine = false
                     });
                 }
                 else
