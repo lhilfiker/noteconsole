@@ -12,6 +12,25 @@ namespace noteconsole
 
         public ConsoleColor BackgroundColor { get; set; }
         public bool NewLine { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            var other = (Formatted)obj;
+            return Text == other.Text
+                   && Color == other.Color
+                   && BackgroundColor == other.BackgroundColor
+                   && NewLine == other.NewLine;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Text, Color, BackgroundColor, NewLine);
+        }
     }
 
     internal partial class Program
@@ -816,37 +835,43 @@ namespace noteconsole
             return (formattedWithColor, startLine, startChar);
         }
 
+        private static List<Formatted> _lastWrite = new();
+
         static void FileRender(List<Formatted> text)
         {
-            Terminal.Clear();
-            Console.BackgroundColor = ConsoleColor.Black;
-            StringBuilder buffer = new StringBuilder();
-            ConsoleColor currentForeColor = ConsoleColor.White;
-            ConsoleColor? currentBackColor = null;
-
-            foreach (var formattedText in text)
+            if (!AreListsEqual(text, _lastWrite))
             {
-                if (formattedText.Color != currentForeColor || formattedText.BackgroundColor != currentBackColor)
+                _lastWrite = new List<Formatted>(text);
+                Terminal.Clear();
+                Console.BackgroundColor = ConsoleColor.Black;
+                StringBuilder buffer = new StringBuilder();
+                ConsoleColor currentForeColor = ConsoleColor.White;
+                ConsoleColor? currentBackColor = null;
+
+                foreach (var formattedText in text)
                 {
-                    FlushBuffer(buffer, currentForeColor, currentBackColor);
-                    currentForeColor = formattedText.Color;
-                    currentBackColor = formattedText.BackgroundColor;
+                    if (formattedText.Color != currentForeColor || formattedText.BackgroundColor != currentBackColor)
+                    {
+                        FlushBuffer(buffer, currentForeColor, currentBackColor);
+                        currentForeColor = formattedText.Color;
+                        currentBackColor = formattedText.BackgroundColor;
+                    }
+
+                    buffer.Append(formattedText.Text);
+                    if (formattedText.NewLine)
+                    {
+                        buffer.AppendLine();
+                    }
                 }
 
-                buffer.Append(formattedText.Text);
-                if (formattedText.NewLine)
+                FlushBuffer(buffer, currentForeColor, currentBackColor);
+                if (_isSelection)
                 {
-                    buffer.AppendLine();
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    Console.Write("[Selection Mode]");
+                    Console.ResetColor();
                 }
-            }
-
-            FlushBuffer(buffer, currentForeColor, currentBackColor);
-            if (_isSelection)
-            {
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.BackgroundColor = ConsoleColor.Yellow;
-                Console.Write("[Selection Mode]");
-                Console.ResetColor();
             }
         }
 
@@ -859,10 +884,30 @@ namespace noteconsole
                 {
                     Console.BackgroundColor = background.Value;
                 }
+                else
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
 
                 Console.Write(buffer.ToString());
                 buffer.Clear();
             }
+        }
+
+        static bool AreListsEqual(List<Formatted> list1, List<Formatted> list2)
+        {
+            if (list1 == null || list2 == null)
+                return list1 == list2;
+            if (list1.Count != list2.Count)
+                return false;
+
+            for (int i = 0; i < list1.Count; i++)
+            {
+                if (!list1[i].Equals(list2[i]))
+                    return false;
+            }
+
+            return true;
         }
 
         static int GetMaxCharacter(string? filecontent, int line)
