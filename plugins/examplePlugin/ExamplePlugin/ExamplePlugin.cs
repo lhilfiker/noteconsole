@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using PluginShared;
 
-// Make sure this namespace matches with where you've defined the IPlugin interface
 namespace ExamplePlugin 
 {
     
@@ -21,10 +20,8 @@ namespace ExamplePlugin
 
         public List<Shared.ColorsGlobal> MainFunction(string buffer, int cursorX, int cursorY)
         {
-            // Here, implement your logic to analyze the buffer and determine color settings
             List<Shared.ColorsGlobal> colorSettings = new List<Shared.ColorsGlobal>();
 
-            // Example: Change the color of a specific line
             colorSettings.Add(new Shared.ColorsGlobal 
             {
                 line = 1,
@@ -38,5 +35,4 @@ namespace ExamplePlugin
         }
     }
 
-    // Assuming ColorsGlobal and PluginInfo classes are defined in your main application
 }
