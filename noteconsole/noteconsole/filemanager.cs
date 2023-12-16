@@ -96,6 +96,7 @@ namespace noteconsole
             {
                 return;
             }
+            fileContentUpdatedEvent.Set();
 
             bool isSidePanel = false;
 
