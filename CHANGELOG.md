@@ -6,9 +6,10 @@ New:
  - Use MainFunction of loaded Plugin to manipulate GlobalColorsList
  - Find suitable Plugin for file extension.
  - Default Highlighting Plugin
+ - Upgraded to Dot NET 8.0 SDK for better performance.
 
 Improvments:
- -Rendering is now much faster and less flickering
+ - Rendering is now much faster and less flickering
 
 ## v.0.3.0 (6.12.2023)
 New:
