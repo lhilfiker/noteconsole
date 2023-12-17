@@ -641,9 +641,10 @@ namespace noteconsole
                 }
 
                 //Make sure cursor is within boundaries
-                if (cursorX > maxCharactersPerLine[cursorY])
+                int maxChar = maxCharactersPerLine[cursorY];
+                if (cursorX >= maxChar)
                 {
-                    cursorX = maxCharactersPerLine[cursorY] - 1;
+                    cursorX = maxChar - 1;
                 }
 
                 fileContentUpdatedEvent.Set();
@@ -913,10 +914,20 @@ namespace noteconsole
 
         static int GetMaxCharacter(string? filecontent, int line)
         {
+            if (filecontent == null) 
+            {
+                return 0;
+            }
+
+            string[] lines = filecontent.Split('\n');
+            if (line < 0 || line >= lines.Length) 
+            {
+                return 0;
+            }
+
             try
             {
-                string[]? lines = filecontent?.Split('\n');
-                int numberOfCharacters = lines[line].Count();
+                int numberOfCharacters = lines[line].Length;
                 return numberOfCharacters + 1;
             }
             catch
@@ -924,6 +935,7 @@ namespace noteconsole
                 return 0;
             }
         }
+
 
         private static List<Formatted> ProcessLineForColor(string line, int startChar, int i, int maxwidth,
             List<Shared.ColorsGlobal> globalColorListBuffer)
