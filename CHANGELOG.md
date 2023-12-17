@@ -13,6 +13,9 @@ New:
 Improvments:
  - Rendering is now much faster and less flickering
 
+Bug Fixes:
+ - Do not allow to go one over when last char is space.
+
 ## v.0.3.0 (6.12.2023)
 New:
  - Allow to enter file name / path in command line to open it.
