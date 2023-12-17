@@ -5,6 +5,7 @@ New:
  - Load Plugins in /AppData/noteconsole/plugins.
  - Use MainFunction of loaded Plugin to manipulate GlobalColorsList
  - Find suitable Plugin for file extension.
+ - Only load plugins with supported version.
  - Default Highlighting Plugin
  - Upgraded to Dot NET 8.0 SDK for better performance.
 
