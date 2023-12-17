@@ -779,7 +779,12 @@ namespace noteconsole
 
             int endLine = Math.Min(lines.Count, startLine + maxheight - 1);
             int startChar = 0;
-            List<Shared.ColorsGlobal> globalColorListBuffer = GlobalColorList.ToList();
+            List<Shared.ColorsGlobal> globalColorListBuffer = new List<Shared.ColorsGlobal>();
+            if (_isSelection == true)
+            {
+                globalColorListBuffer.AddRange(selectionHighlighting(_selectionStartX, _selectionStartY, _selectionEndX, _selectionEndY).ToList());
+            }
+            globalColorListBuffer.AddRange(GlobalColorList.ToList());
             List<Formatted> formattedLine = new();
 
             for (int i = startLine; i < endLine; i++)
@@ -835,6 +840,41 @@ namespace noteconsole
             }
 
             return (formattedWithColor, startLine, startChar);
+        }
+
+        private static List<Shared.ColorsGlobal> selectionHighlighting(int selectionStartX, int selectionStartY, int selectionEndX, int selectionEndY)
+        {
+            List<int> maxCharactersPerLine = new List<int>();
+            foreach (var line in Filecontent.Split('\n'))
+            {
+                maxCharactersPerLine.Add(line.Length + 1);
+            }
+            List<Shared.ColorsGlobal> highlights = new List<Shared.ColorsGlobal>();
+
+            if (selectionEndY < selectionStartY || (selectionEndY == selectionStartY && selectionEndX < selectionStartX))
+            {
+                (selectionStartX, selectionEndX) = (selectionEndX, selectionStartX);
+                (selectionStartY, selectionEndY) = (selectionEndY, selectionStartY);
+            }
+
+            for (int y = selectionStartY; y <= selectionEndY; y++)
+            {
+                int startChar = y == selectionStartY ? selectionStartX : 0;
+                int endChar = y == selectionEndY ? selectionEndX : maxCharactersPerLine[y] - 1;
+
+                Shared.ColorsGlobal highlight = new Shared.ColorsGlobal
+                {
+                    line = y,
+                    StartChar = startChar,
+                    EndChar = endChar,
+                    Color = ConsoleColor.White,
+                    BackgroundColor = ConsoleColor.Blue
+                };
+
+                highlights.Add(highlight);
+            }
+
+            return highlights;
         }
 
         private static List<Formatted> _lastWrite = new();
