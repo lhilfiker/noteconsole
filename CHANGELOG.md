@@ -8,6 +8,7 @@ New:
  - Only load plugins with supported version.
  - Default Highlighting Plugin
  - Upgraded to Dot NET 8.0 SDK for better performance.
+ - Selection in Selection Mode is now color highlighted.
 
 Improvments:
  - Rendering is now much faster and less flickering
