@@ -878,12 +878,14 @@ namespace noteconsole
         }
 
         private static List<Formatted> _lastWrite = new();
+        private static bool selectionModeLast = false;
 
         static void FileRender(List<Formatted> text)
         {
-            if (!AreListsEqual(text, _lastWrite))
+            if (!AreListsEqual(text, _lastWrite) || selectionModeLast != _isSelection)
             {
                 _lastWrite = new List<Formatted>(text);
+                selectionModeLast = _isSelection;
                 Terminal.Clear();
                 Console.BackgroundColor = ConsoleColor.Black;
                 StringBuilder buffer = new StringBuilder();
