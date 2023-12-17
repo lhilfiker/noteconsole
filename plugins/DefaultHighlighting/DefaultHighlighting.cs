@@ -16,7 +16,7 @@ public class DefaultHighlighting
                 Name = "DefaultHighlighting",
                 FunctionName = nameof(MainFunction),
                 FileExtensionDefault = new List<string> { ".txt", ".md" },
-                Version = "1.0"
+                Version = 040
             };
         }
 
