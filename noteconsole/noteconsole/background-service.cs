@@ -94,8 +94,11 @@ namespace noteconsole
                             {
                                 dynamic pluginInstance = Activator.CreateInstance(type);
                                 Shared.PluginInfo info = pluginInstance.GetPluginInfo();
-                                pluginInfoList.Add(info);
-                                pluginInstances.Add(pluginInstance);
+                                if (info.Version >= global.latestSupportedPluginVersion && info.Version <= global.version)
+                                {
+                                    pluginInfoList.Add(info);
+                                    pluginInstances.Add(pluginInstance);    
+                                }
                             }
                             catch (Exception ex)
                             {

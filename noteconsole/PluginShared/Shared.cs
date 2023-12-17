@@ -23,6 +23,6 @@ public class Shared
         public string Name { get; set; }
         public string FunctionName { get; set; }
         public List<string> FileExtensionDefault { get; set; }
-        public string Version { get; set; }
+        public int Version { get; set; }
     }
 }
