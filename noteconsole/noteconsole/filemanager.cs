@@ -780,11 +780,18 @@ namespace noteconsole
             int endLine = Math.Min(lines.Count, startLine + maxheight - 1);
             int startChar = 0;
             List<Shared.ColorsGlobal> globalColorListBuffer = new List<Shared.ColorsGlobal>();
-            if (_isSelection == true)
+            try
             {
-                globalColorListBuffer.AddRange(selectionHighlighting(_selectionStartX, _selectionStartY, _selectionEndX, _selectionEndY).ToList());
+                if (_isSelection == true)
+                {
+                    globalColorListBuffer.AddRange(selectionHighlighting(_selectionStartX, _selectionStartY, _selectionEndX, _selectionEndY).ToList());
+                }
+                globalColorListBuffer.AddRange(GlobalColorList.ToList());
             }
-            globalColorListBuffer.AddRange(GlobalColorList.ToList());
+            catch
+            {
+                
+            }
             List<Formatted> formattedLine = new();
 
             for (int i = startLine; i < endLine; i++)
