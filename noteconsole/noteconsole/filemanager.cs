@@ -903,9 +903,9 @@ namespace noteconsole
                 {
                     if (formattedText.Color != currentForeColor || formattedText.BackgroundColor != currentBackColor)
                     {
-                        FlushBuffer(buffer, currentForeColor, currentBackColor);
                         currentForeColor = formattedText.Color;
                         currentBackColor = formattedText.BackgroundColor;
+                        FlushBuffer(buffer, currentForeColor, currentBackColor);
                     }
 
                     buffer.Append(formattedText.Text);
@@ -1015,12 +1015,13 @@ namespace noteconsole
                     // Calculate the length of the colored segment
                     int segmentEnd = Math.Min(colorItem.EndChar - startChar, lineWithoutColor.Length);
                     segmentLength = segmentEnd - j;
+                    ConsoleColor? backgroundColor = colorItem.BackgroundColor;
                     formattedLine.Add(new Formatted
                     {
                         Text = lineWithoutColor.Substring(j, segmentLength), Color = colorItem.Color,
-                        BackgroundColor = colorItem.BackgroundColor == null
-                            ? ConsoleColor.Black
-                            : colorItem.BackgroundColor,
+                        BackgroundColor = backgroundColor.HasValue
+                            ? colorItem.BackgroundColor
+                            : ConsoleColor.Black,
                         NewLine = false
                     });
                 }
