@@ -13,4 +13,8 @@
    cd noteconsole
    ./debian_build.sh
    ```
-
+4. Install
+    ```
+    cd noteconsole
+    sudo dpkg -i noteconsole_Version_amd64.deb
+    ```
