@@ -27,33 +27,41 @@ namespace noteconsole
             
             while (true)
             {
-                ColorsListBuffer.Clear();
-                // Check if extension changed and if so load a new plugin
-                string currentExtension = Path.GetExtension(filepath);
-                if (currentExtension != extensionBuffer)
+                if (global.plugins == true)
                 {
-                    extensionBuffer = currentExtension;
-                    currentPlugin = FindPluginForExtension(pluginInfoList, pluginInstances, currentExtension);
-                }
+                    ColorsListBuffer.Clear();
+                    // Check if extension changed and if so load a new plugin
+                    string currentExtension = Path.GetExtension(filepath);
+                    if (currentExtension != extensionBuffer)
+                    {
+                        extensionBuffer = currentExtension;
+                        currentPlugin = FindPluginForExtension(pluginInfoList, pluginInstances, currentExtension);
+                    }
                 
-                if (currentPlugin != null)
-                {
-                    try
+                    if (currentPlugin != null)
                     {
-                        ColorsListBuffer = currentPlugin.MainFunction(buffer, cursorX, cursorY);
+                        try
+                        {
+                            ColorsListBuffer = currentPlugin.MainFunction(buffer, cursorX, cursorY);
+                        }
+                        catch (Exception ex)
+                        {
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                    }
+
+
+                    GlobalColorList.Clear();
+                    GlobalColorList.AddRange(ColorsListBuffer);
+
+                    fileContentUpdatedEvent.WaitOne();
+
+                    buffer = Filecontent;
                 }
-
-
-                GlobalColorList.Clear();
-                GlobalColorList.AddRange(ColorsListBuffer);
-
-                fileContentUpdatedEvent.WaitOne();
-
-                buffer = Filecontent;
+                else
+                {
+                    GlobalColorList.Clear();
+                    Thread.Sleep(1000); // If plugins are disabled.
+                }
                 
             }
             }
