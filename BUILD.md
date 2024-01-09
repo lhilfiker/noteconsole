@@ -6,7 +6,7 @@
     `git clone https://github.com/RebelCoderJames/noteconsole.git`
 
 2. Install Dependencies:
-    `sudo apt-get update && sudo apt-get install -y dotnet-sdk-6.0 dpkg-dev debhelper gpg fakeroot`
+    `sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0 dpkg-dev debhelper gpg fakeroot`
 
 3. Build it:
    ```
