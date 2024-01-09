@@ -57,13 +57,7 @@ Download the latest release from here: https://github.com/RebelCoderJames/noteco
 ### Building it on your own
 
 **Currently tested on Debian Linux only.**
-
-- **Manual Build:**
-  - Follow the instructions in [BUILD.md](./BUILD.md).
-
-- **Automated Build:**
-  - Use the provided script: [debian_build.sh](./debian_build.sh).
-
+Follow the instructions BUILD.md
 
 ### Additional Installation Information
 
@@ -79,6 +73,9 @@ For Linux:
 - R | Open recent files
 - S | Pick a file from PC
 - Ctrl N | Open the sidepanel
+- Esc | to exit
+- Ctrl S | saving the file
+- Ctrl P | Disable/Enable Plugins
 
 ## Contributing
 
