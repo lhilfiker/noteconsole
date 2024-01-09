@@ -595,6 +595,9 @@ namespace noteconsole
                         case ConsoleKey.N when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                             isSidePanel = !isSidePanel;
                             break;
+                        case ConsoleKey.P when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
+                            global.plugins = !global.plugins; // Disable / Enable Plugins
+                            break;
                         default: // Default case is a character key
                             if (pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control) ||
                                 pressedKey.Modifiers.HasFlag(ConsoleModifiers.Alt)) break;
