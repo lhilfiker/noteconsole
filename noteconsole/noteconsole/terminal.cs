@@ -9,7 +9,7 @@ namespace noteconsole
         public static void Clear()
         {
             // Check if it is running windows
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (global.os)
             {
                 Console.Clear();
                 return;
