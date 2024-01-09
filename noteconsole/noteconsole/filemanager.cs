@@ -573,6 +573,7 @@ namespace noteconsole
                             // Do nothing for these special keys to prevent unwanted behavior
                             break;
 
+                        /*
                         case ConsoleKey.P when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                         case ConsoleKey.PrintScreen:
                             // Here comes the print logic
@@ -591,6 +592,7 @@ namespace noteconsole
                             Process.Start(psi);
                             Console.WriteLine("File has been sent to the printer.");
                             break;
+                            */
 
                         case ConsoleKey.N when pressedKey.Modifiers.HasFlag(ConsoleModifiers.Control):
                             isSidePanel = !isSidePanel;
