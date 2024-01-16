@@ -43,7 +43,7 @@ namespace noteconsole
             "| Hello!                             |",
             "|                                    |",
             "| Ctrl + S - Save                    |",
-            "| Ctrl + P - Enable/Disable Plugins  1|",
+            "| Ctrl + P - Enable/Disable Plugins  |",
             "| Ctrl + E - Encrypt                 |",
             "| Esc - Escape                       |",
             "|────────────────────────────────────|",
