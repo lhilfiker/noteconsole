@@ -43,7 +43,7 @@ namespace noteconsole
             "| Hello!                             |",
             "|                                    |",
             "| Ctrl + S - Save                    |",
-            "| Ctrl + P - Enable/Disable Plugins  |",
+            "| Ctrl + P - Enable/Disable Plugins  1|",
             "| Ctrl + E - Encrypt                 |",
             "| Esc - Escape                       |",
             "|────────────────────────────────────|",
@@ -856,37 +856,8 @@ namespace noteconsole
 
         private static List<Shared.ColorsGlobal> selectionHighlighting(int selectionStartX, int selectionStartY, int selectionEndX, int selectionEndY)
         {
-            List<int> maxCharactersPerLine = new List<int>();
-            foreach (var line in Filecontent.Split('\n'))
-            {
-                maxCharactersPerLine.Add(line.Length + 1);
-            }
-            List<Shared.ColorsGlobal> highlights = new List<Shared.ColorsGlobal>();
-
-            if (selectionEndY < selectionStartY || (selectionEndY == selectionStartY && selectionEndX < selectionStartX))
-            {
-                (selectionStartX, selectionEndX) = (selectionEndX, selectionStartX);
-                (selectionStartY, selectionEndY) = (selectionEndY, selectionStartY);
-            }
-
-            for (int y = selectionStartY; y <= selectionEndY; y++)
-            {
-                int startChar = y == selectionStartY ? selectionStartX : 0;
-                int endChar = y == selectionEndY ? selectionEndX : maxCharactersPerLine[y] - 1;
-
-                Shared.ColorsGlobal highlight = new Shared.ColorsGlobal
-                {
-                    line = y,
-                    StartChar = startChar,
-                    EndChar = endChar,
-                    Color = ConsoleColor.White,
-                    BackgroundColor = ConsoleColor.Blue
-                };
-
-                highlights.Add(highlight);
-            }
-
-            return highlights;
+            // Needs to be rewritten.
+            return null;
         }
 
         private static List<Formatted> _lastWrite = new();
