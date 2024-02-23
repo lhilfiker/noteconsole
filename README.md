@@ -1,4 +1,4 @@
-# 📝 noteconsole™
+# 📝 noteconsole
 
 💻 | Welcome to the Console-Based Notes App, a minimalistic text editor that runs in your console. 
       This app allows you to create, edit, and manage your text-based notes with ease. 
